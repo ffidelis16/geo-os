@@ -6,6 +6,8 @@ Auditar se autoria, organização, fontes, datas, metodologia, evidência primá
 
 `[FRAMEWORK PRÓPRIO]` Confiança é verificabilidade e transparência observáveis. Não é tom de autoridade, reputação presumida ou presença de schema isolada.
 
+A auditoria separa autoridade de autor, autoridade da organização e qualidade da evidência. Esses sinais podem se reforçar, mas não são intercambiáveis.
+
 ## Quando usar
 
 - Em conteúdo informativo, comparativo, técnico ou de alto risco.
@@ -31,21 +33,24 @@ Ausência no material fornecido deve ser descrita como `não observado`, não co
 
 1. Registrar origem, versão, data e limitações.
 2. Identificar autor, credenciais e relação com o tema.
-3. Identificar organização responsável e responsabilidade editorial.
-4. Inventariar fontes e avaliar:
+3. Avaliar autoridade de autor por experiência demonstrada, credenciais verificáveis, produção relevante e consistência de identidade.
+4. Identificar organização responsável e responsabilidade editorial.
+5. Avaliar autoridade da organização por escopo declarado, políticas, histórico, reconhecimento externo e consistência entre páginas e perfis.
+6. Inventariar fontes e avaliar:
    - pertinência;
    - primariedade;
    - independência;
    - atualidade;
    - correspondência claim-fonte.
-5. Verificar publicação, atualização e validade temporal.
-6. Verificar metodologia para dados, testes e comparações.
-7. Identificar evidência primária e experiência real.
-8. Verificar transparência de limitações, conflitos de interesse e revisões.
-9. Comparar claims internos para consistência factual.
-10. Separar linguagem factual, calibrada e especulativa.
-11. Mapear lacunas para evidence ledger e citation engineering.
-12. Priorizar riscos de credibilidade e melhorias.
+7. Verificar publicação, atualização e validade temporal.
+8. Verificar metodologia para dados, testes e comparações.
+9. Identificar evidência primária e experiência real.
+10. Verificar transparência de limitações, conflitos de interesse e revisões.
+11. Comparar claims internos para consistência factual.
+12. Separar linguagem factual, calibrada e especulativa.
+13. Em tema sensível, identificar quando a página deve encaminhar a fonte ou especialista qualificado em vez de simular expertise.
+14. Mapear lacunas para evidence ledger e citation engineering.
+15. Priorizar riscos de credibilidade e melhorias.
 
 ## Outputs
 
@@ -62,6 +67,7 @@ Ausência no material fornecido deve ser descrita como `não observado`, não co
 
 - Cada sinal tem evidência ou status `não observado`.
 - Credenciais são verificáveis, não apenas declaradas.
+- Autoridade de autor e autoridade da organização são avaliadas separadamente.
 - Fonte e claim são avaliados juntos.
 - Frescor considera necessidade do tema.
 - Conflitos e limitações permanecem visíveis.
@@ -71,6 +77,7 @@ Ausência no material fornecido deve ser descrita como `não observado`, não co
 
 - Tratar E-E-A-T como checklist decorativo.
 - Dar confiança alta por tom ou design.
+- Transferir automaticamente a reputação da organização para qualquer autor ou claim.
 - Confundir citação com endorsement.
 - Aceitar `dateModified` sem revisão real observável.
 - Considerar toda fonte externa independente.

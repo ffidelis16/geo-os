@@ -40,13 +40,16 @@ Opcionais: página-alvo, formato, limite editorial, links, CTA e requisitos regu
 
 1. Confirmar uma intenção principal por bloco.
 2. Consultar o intent map e o evidence ledger.
-3. Escrever a resposta direta sem introdução promocional.
-4. Delimitar condição, período, local ou audiência.
-5. Associar cada claim à sua evidência.
-6. Separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
-7. Incluir ressalvas que alterem a decisão.
-8. Fechar com takeaway proporcional à evidência.
-9. Preencher a checklist do template.
+3. Escolher entre definição, passos, lista, tabela, critérios ou mini-FAQ.
+4. Aplicar o contrato `claim + contexto + evidência + takeaway`.
+5. Fazer front-loading da resposta, sem introdução promocional.
+6. Delimitar condição, período, local ou audiência.
+7. Associar cada claim à sua evidência.
+8. Separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
+9. Incluir ressalvas que alterem a decisão.
+10. Usar answer sandwich somente quando a síntese final acrescentar orientação.
+11. Posicionar CTA contextual depois da resposta, quando houver próxima ação válida.
+12. Preencher a checklist do template.
 
 Exemplo mínimo:
 
@@ -70,6 +73,7 @@ Exemplo mínimo:
 - Mantém fonte próxima ao claim.
 - Preserva contexto e exceções materiais.
 - Usa nomes de entidades canônicos.
+- Entrega valor antes de qualquer CTA.
 
 ## Erros comuns
 

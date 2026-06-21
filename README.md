@@ -71,6 +71,8 @@ geo-os/
 
 Detalhes: [docs/architecture.md](docs/architecture.md).
 
+O projeto também suporta um overlay privado opcional para sínteses e playbooks pessoais. Ele não faz parte do contrato público nem é necessário para usar as skills. Consulte [docs/private-overlay.md](docs/private-overlay.md).
+
 ## Skills
 
 | Skill | Uso |

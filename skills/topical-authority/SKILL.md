@@ -47,7 +47,7 @@ Ler `modules/topical-authority.md`. Usar `templates/topical-authority-map.csv`.
 
 1. Confirmar entidade principal, audiência, locale e fronteira.
 2. Consultar `modules/intent-map.md` e o entity map.
-3. Mapear subentidades e relações direcionais.
+3. Mapear subentidades e relações direcionais dentro da página, entre páginas e com fontes externas.
 4. Relacionar perguntas e estágios de decisão.
 5. Auditar cobertura e profundidade.
 6. Definir trust signals e evidências necessárias.
@@ -68,6 +68,7 @@ Ler `modules/topical-authority.md`. Usar `templates/topical-authority-map.csv`.
 
 - Fronteira e entidade principal são explícitas.
 - Relações justificam cada tópico.
+- Relações locais, internas e externas permanecem coerentes.
 - Cobertura e profundidade usam estados controlados.
 - Evidências e trust signals são verificáveis.
 - Clusters reduzem lacunas sem criar redundância.

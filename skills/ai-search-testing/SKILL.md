@@ -46,10 +46,14 @@ Opcionais: páginas-alvo, respostas anteriores, screenshots, parâmetros de cont
    - suporte real da citação ao claim;
    - absorção de evidência ou estrutura;
    - precisão de nomes e atributos;
-   - posição relativa de concorrentes.
+   - posição relativa de concorrentes;
+   - continuação em follow-ups, quando testada;
+   - hand-off para uma próxima ação observável, quando houver dados.
 6. Registrar indisponibilidade, bloqueio ou ausência de busca como estado próprio.
-7. Agregar resultados por prompt, intenção, engine e rodada.
-8. Comparar versões apenas quando o protocolo permanecer compatível.
+7. Separar métricas da resposta de métricas posteriores: presença e atribuição não substituem analytics; hand-off e conversão exigem instrumentação própria.
+8. Agregar resultados por prompt, intenção, engine e rodada.
+9. Comparar versões apenas quando o protocolo permanecer compatível.
+10. Tratar qualquer delta como observação do protocolo. Correlação temporal não implica causalidade da intervenção.
 
 ## Outputs
 
@@ -57,6 +61,7 @@ Opcionais: páginas-alvo, respostas anteriores, screenshots, parâmetros de cont
 - resumo por engine e intenção;
 - lista de fontes recorrentes;
 - incidentes de atribuição ou entidade;
+- sinais de continuação e hand-off, quando medidos;
 - hipóteses para intervenção e plano de re-teste.
 
 ## Critérios de qualidade
@@ -67,6 +72,7 @@ Opcionais: páginas-alvo, respostas anteriores, screenshots, parâmetros de cont
 - Citação é verificada contra o conteúdo da fonte.
 - Comparações usam o mesmo denominador e condições equivalentes.
 - Limitações de personalização, volatilidade e acesso estão explícitas.
+- Métricas de resposta, analytics e resultados de negócio permanecem separadas.
 
 ## Erros comuns
 

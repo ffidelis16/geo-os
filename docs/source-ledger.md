@@ -62,6 +62,10 @@ As entradas abaixo registram influência metodológica sem expor caminho local, 
 | DEC-018 | `[FATO]` | Oportunidades de schema devem representar conteúdo visível e não garantem exibição. | SRC-005, SRC-006 e SRC-007 |
 | DEC-019 | `[FRAMEWORK PRÓPRIO]` | Publicar apenas síntese autoral, templates próprios e exemplos fictícios; fontes privadas permanecem fora do Git. | Política de publicação e limites de direitos autorais |
 | DEC-020 | `[INFERÊNCIA]` | Medição GEO deve complementar analytics e SEO, e não substituir instrumentos existentes. | LOC-006 e limites metodológicos do projeto |
+| DEC-021 | `[FRAMEWORK PRÓPRIO]` | Usar um overlay privado e opcional, preferencialmente em repositório irmão privado, para preservar heurísticas, playbooks e referências voláteis sem criar dependência no núcleo público. | LOC-003, LOC-004, LOC-005, LOC-006 e política de publicação |
+| DEC-022 | `[FRAMEWORK PRÓPRIO]` | Operacionalizar answer units como `claim + contexto + evidência + takeaway`, com front-loading, formato adequado e CTA posterior à resposta. | LOC-001, LOC-002, LOC-006 e DEC-009 |
+| DEC-023 | `[FRAMEWORK PRÓPRIO]` | Avaliar autoridade tópica em relações dentro da página, entre páginas e com fontes externas. | LOC-006, DEC-011 e síntese metodológica |
+| DEC-024 | `[FRAMEWORK PRÓPRIO]` | Separar autoridade de autor, autoridade da organização e qualidade da evidência em auditorias de confiança. | LOC-006, DEC-015 e política de evidência |
 
 ## Fila de fontes para pesquisas estratégicas
 

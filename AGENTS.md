@@ -43,6 +43,22 @@ Manter um sistema operacional modular, auditável e seguro para publicação pú
 - Não criar linguagem de venda, proposta comercial ou promessa de resultado como parte da arquitetura principal.
 - Seguir `docs/publishing-notes.md` e `docs/limitations-and-ethics.md`.
 
+## Overlay privado local
+
+O repositório funciona em dois modos:
+
+- **Modo público:** usar somente arquivos versionados no `geo-os`. Nenhuma tarefa deve falhar, perder contrato ou produzir resultado incompleto porque o overlay não existe.
+- **Modo privado/local:** procurar primeiro `private/README.md` e depois `../geo-os-private/README.md`. Se um deles existir, consultar suas instruções antes de trabalhos metodológicos extensos.
+
+Regras:
+
+- Tratar o overlay privado como fonte complementar e opcional, nunca como dependência obrigatória.
+- Não referenciar o overlay em contratos de `SKILL.md`, módulos, templates, scripts ou testes públicos.
+- Tratar qualquer uso do overlay como síntese interna, não como citação pública.
+- Não copiar automaticamente conteúdo, caminhos, números voláteis ou fontes fechadas para outputs públicos ou arquivos rastreados pelo Git.
+- Ao promover conhecimento privado para o núcleo público, criar síntese autoral, registrar a decisão em `docs/source-ledger.md` e exigir fonte primária para claims técnicos.
+- Seguir `docs/private-overlay.md` para armazenamento, migração e conferência de publicação.
+
 ## Contratos das skills
 
 Cada `SKILL.md` deve conter:

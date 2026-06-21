@@ -2,6 +2,13 @@
 
 O projeto usa histórico Git como fonte detalhada. Este arquivo resume as camadas publicáveis.
 
+## 2026-06-21 — Consolidação da base de conhecimento
+
+- Aprofundados answer blocks, intent map, topical authority, trust signals e AI Search testing.
+- Adicionado suporte opcional a um overlay privado local sem criar dependência nas skills públicas.
+- Formalizada a separação entre método durável e heurísticas voláteis por plataforma.
+- Documentada a migração segura do overlay para um repositório privado separado.
+
 ## 2026-06-21 — Publicação e documentação
 
 - Adicionada documentação de início, arquitetura, uso, contribuição, publicação, limitações e ética.

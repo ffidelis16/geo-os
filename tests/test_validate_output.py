@@ -354,6 +354,7 @@ PUBLICATION_FILES = {
     "docs/contribution-guide.md",
     "docs/publishing-notes.md",
     "docs/limitations-and-ethics.md",
+    "docs/private-overlay.md",
     "examples/sample-geo-audit.md",
     "examples/sample-entity-map.csv",
     "examples/sample-scorecard.md",
@@ -410,6 +411,15 @@ LIMITATIONS_ETHICS_SECTIONS = (
     "evidência e rastreabilidade",
     "usos proibidos",
     "revisão humana",
+)
+
+PRIVATE_OVERLAY_SECTIONS = (
+    "finalidade",
+    "modos de operação",
+    "estrutura recomendada",
+    "migração segura",
+    "uso pelo codex",
+    "prevenção de publicação acidental",
 )
 
 SAMPLE_AUDIT_SECTIONS = (
@@ -1015,6 +1025,58 @@ description: Use quando for necessário testar uma skill de exemplo.
 
         self.assertIn("[RECOMENDAÇÃO]", agents_content)
 
+    def test_agents_declares_optional_private_knowledge_overlay(self) -> None:
+        agents_content = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8").lower()
+
+        self.assertIn("private/readme.md", agents_content)
+        self.assertIn("../geo-os-private/readme.md", agents_content)
+        self.assertIn("overlay privado", agents_content)
+        self.assertIn("opcional", agents_content)
+        self.assertIn("modo público", agents_content)
+        self.assertIn("modo privado/local", agents_content)
+        self.assertIn("nenhuma tarefa deve falhar", agents_content)
+        self.assertIn("síntese interna", agents_content)
+        self.assertIn("citação pública", agents_content)
+
+    def test_course_knowledge_is_operationalized_in_public_core(self) -> None:
+        contracts = {
+            "modules/answer-blocks.md": (
+                "claim + contexto + evidência + takeaway",
+                "front-loading",
+                "answer sandwich",
+                "cta contextual",
+            ),
+            "modules/intent-map.md": (
+                "próxima ação",
+                "formato de resposta",
+            ),
+            "modules/topical-authority.md": (
+                "dentro da página",
+                "entre páginas",
+                "fontes externas",
+            ),
+            "modules/trust-signal-audit.md": (
+                "autoridade de autor",
+                "autoridade da organização",
+                "especialista qualificado",
+            ),
+            "skills/ai-search-testing/SKILL.md": (
+                "continuação",
+                "hand-off",
+                "não implica causalidade",
+            ),
+        }
+
+        for relative_path, required_terms in contracts.items():
+            content = (REPO_ROOT / relative_path).read_text(encoding="utf-8").lower()
+            for term in required_terms:
+                self.assertIn(term, content, relative_path)
+
+    def test_public_skills_do_not_require_private_overlay(self) -> None:
+        for skill_path in (REPO_ROOT / "skills").glob("*/SKILL.md"):
+            content = skill_path.read_text(encoding="utf-8").lower()
+            self.assertNotIn("private/", content, skill_path)
+
     def test_publication_files_are_required(self) -> None:
         self.assertTrue(PUBLICATION_FILES.issubset(set(self.validator.REQUIRED_FILES)))
 
@@ -1033,6 +1095,7 @@ description: Use quando for necessário testar uma skill de exemplo.
             "architecture.md": ARCHITECTURE_SECTIONS,
             "usage-examples.md": USAGE_EXAMPLES_SECTIONS,
             "limitations-and-ethics.md": LIMITATIONS_ETHICS_SECTIONS,
+            "private-overlay.md": PRIVATE_OVERLAY_SECTIONS,
         }
         for document_name, sections in contracts.items():
             document_path = REPO_ROOT / "docs" / document_name
@@ -1040,6 +1103,22 @@ description: Use quando for necessário testar uma skill de exemplo.
             content = document_path.read_text(encoding="utf-8").lower()
             for section in sections:
                 self.assertIn(f"## {section}", content, document_path)
+
+    def test_private_overlay_doc_defines_safe_separate_repo_migration(self) -> None:
+        document_path = REPO_ROOT / "docs" / "private-overlay.md"
+        content = document_path.read_text(encoding="utf-8").lower()
+
+        self.assertIn("geo-os-private", content)
+        self.assertIn("copiar antes de remover", content)
+        self.assertIn("repositório privado", content)
+        self.assertIn("git status --ignored", content)
+        self.assertIn("git ls-files", content)
+        self.assertIn("não mover automaticamente", content)
+
+    def test_readme_links_to_private_overlay_guidance(self) -> None:
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("docs/private-overlay.md", readme)
 
     def test_public_examples_have_required_contracts(self) -> None:
         markdown_contracts = {

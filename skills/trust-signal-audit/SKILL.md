@@ -46,14 +46,15 @@ Ler `modules/trust-signal-audit.md`. Usar `templates/trust-signal-audit-template
 ## Processo
 
 1. Confirmar origem e escopo.
-2. Auditar autor, credenciais e experiência.
-3. Auditar organização e responsabilidade editorial.
+2. Auditar autoridade de autor, credenciais e experiência demonstrada.
+3. Auditar autoridade da organização e responsabilidade editorial sem transferi-la automaticamente ao autor.
 4. Relacionar fontes aos claims no `evidence-ledger`.
 5. Avaliar frescor e metodologia.
 6. Identificar evidência primária, transparência e conflitos.
 7. Verificar consistência factual e linguagem especulativa.
-8. Encaminhar lacunas para `citation-engineering`.
-9. Registrar sinais no `geo-scorecard`.
+8. Em conteúdo sensível, indicar quando encaminhar a fonte ou especialista qualificado.
+9. Encaminhar lacunas para `citation-engineering`.
+10. Registrar sinais no `geo-scorecard`.
 
 ## Restrições
 

@@ -37,6 +37,7 @@ Opcionais: keywords, pesquisas internas, tickets, entrevistas, concorrentes, dad
 8. Definir evidências exigidas e nível de risco factual.
 9. Mapear página existente, página candidata ou lacuna.
 10. Indicar formato de resposta: definição, lista, tabela, passos, critérios, ressalvas ou combinação.
+11. Definir a próxima ação plausível depois da resposta: aprofundar, comparar, verificar elegibilidade, consultar fonte, testar, contratar ou encerrar sem CTA.
 
 Não criar uma pergunta diferente para favorecer a marca. Não misturar intents incompatíveis em um único bloco.
 
@@ -47,6 +48,7 @@ Não criar uma pergunta diferente para favorecer a marca. Não misturar intents 
 - perguntas para benchmark;
 - requisitos de evidência;
 - formatos de resposta;
+- próxima ação e CTA contextual, quando aplicável;
 - relação entre intent, página e entidade.
 
 ## Critérios de qualidade
@@ -57,6 +59,7 @@ Não criar uma pergunta diferente para favorecer a marca. Não misturar intents 
 - A página-alvo consegue responder à intenção principal.
 - Evidência necessária é definida antes da redação.
 - Intents semelhantes podem ser agrupadas sem perder diferenças materiais.
+- A próxima ação decorre da intenção e não interrompe a resposta.
 
 ## Erros comuns
 

@@ -107,6 +107,7 @@ REQUIRED_FILES = (
     "docs/contribution-guide.md",
     "docs/publishing-notes.md",
     "docs/limitations-and-ethics.md",
+    "docs/private-overlay.md",
     "examples/sample-geo-audit.md",
     "examples/sample-entity-map.csv",
     "examples/sample-scorecard.md",
