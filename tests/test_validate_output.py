@@ -1037,6 +1037,10 @@ description: Use quando for necessário testar uma skill de exemplo.
         self.assertIn("nenhuma tarefa deve falhar", agents_content)
         self.assertIn("síntese interna", agents_content)
         self.assertIn("citação pública", agents_content)
+        self.assertLess(
+            agents_content.index("../geo-os-private/readme.md"),
+            agents_content.index("private/readme.md"),
+        )
 
     def test_course_knowledge_is_operationalized_in_public_core(self) -> None:
         contracts = {
@@ -1114,6 +1118,10 @@ description: Use quando for necessário testar uma skill de exemplo.
         self.assertIn("git status --ignored", content)
         self.assertIn("git ls-files", content)
         self.assertIn("não mover automaticamente", content)
+        self.assertLess(
+            content.index("../geo-os-private/readme.md"),
+            content.index("private/readme.md"),
+        )
 
     def test_readme_links_to_private_overlay_guidance(self) -> None:
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")

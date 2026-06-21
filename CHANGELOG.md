@@ -8,6 +8,7 @@ O projeto usa histórico Git como fonte detalhada. Este arquivo resume as camada
 - Adicionado suporte opcional a um overlay privado local sem criar dependência nas skills públicas.
 - Formalizada a separação entre método durável e heurísticas voláteis por plataforma.
 - Documentada a migração segura do overlay para um repositório privado separado.
+- Priorizado o repositório irmão versionado sobre a cópia local de compatibilidade.
 
 ## 2026-06-21 — Publicação e documentação
 

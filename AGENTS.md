@@ -48,7 +48,7 @@ Manter um sistema operacional modular, auditável e seguro para publicação pú
 O repositório funciona em dois modos:
 
 - **Modo público:** usar somente arquivos versionados no `geo-os`. Nenhuma tarefa deve falhar, perder contrato ou produzir resultado incompleto porque o overlay não existe.
-- **Modo privado/local:** procurar primeiro `private/README.md` e depois `../geo-os-private/README.md`. Se um deles existir, consultar suas instruções antes de trabalhos metodológicos extensos.
+- **Modo privado/local:** procurar primeiro `../geo-os-private/README.md`, usando o repositório privado versionado. Consultar `private/README.md` somente como fallback de compatibilidade. Se um deles existir, ler suas instruções antes de trabalhos metodológicos extensos.
 
 Regras:
 

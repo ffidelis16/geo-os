@@ -16,8 +16,8 @@ O Codex usa somente os arquivos versionados no `geo-os`. A ausência de um overl
 
 O Codex procura, nesta ordem:
 
-1. `private/README.md`, para compatibilidade com uma pasta local ainda não migrada;
-2. `../geo-os-private/README.md`, para um repositório privado irmão.
+1. `../geo-os-private/README.md`, como repositório privado irmão e versionado;
+2. `private/README.md`, apenas como fallback para uma pasta local ainda não migrada.
 
 Quando encontrado, o overlay pode complementar a análise. Seu conteúdo deve ser tratado como síntese interna, não como citação pública. Claims técnicos continuam exigindo fontes publicáveis e verificáveis.
 
