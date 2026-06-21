@@ -1,0 +1,2 @@
+opportunity_id,page_url,section,claim_without_evidence,evidence_needed,suggested_source_type,suggested_source,priority,risk,owner,status,notes
+EXAMPLE-OPP-001,https://example.com/page,Example section,Claim fictício sem evidência,Dado primário com período e metodologia,primary-source,,medium,low,,example,Remover esta linha antes do uso

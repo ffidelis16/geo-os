@@ -16,6 +16,75 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_output.py"
 
+ITERATION_TWO_FILES = {
+    "modules/intent-map.md",
+    "modules/evidence-ledger.md",
+    "modules/answer-blocks.md",
+    "modules/citation-engineering.md",
+    "templates/evidence-ledger.csv",
+    "templates/answer-block-template.md",
+    "templates/citation-opportunity-map.csv",
+    "skills/answer-blocks/SKILL.md",
+    "skills/citation-engineering/SKILL.md",
+}
+
+EVIDENCE_LEDGER_HEADERS = (
+    "claim_id",
+    "page_url",
+    "section",
+    "claim",
+    "classification",
+    "source_url",
+    "source_title",
+    "source_type",
+    "evidence_type",
+    "published_at",
+    "accessed_at",
+    "reliability",
+    "confidence",
+    "allowed_use",
+    "risk",
+    "contradiction_status",
+    "owner",
+    "status",
+    "notes",
+)
+
+CITATION_OPPORTUNITY_HEADERS = (
+    "opportunity_id",
+    "page_url",
+    "section",
+    "claim_without_evidence",
+    "evidence_needed",
+    "suggested_source_type",
+    "suggested_source",
+    "priority",
+    "risk",
+    "owner",
+    "status",
+    "notes",
+)
+
+MODULE_SECTIONS = (
+    "objetivo",
+    "quando usar",
+    "inputs",
+    "processo",
+    "outputs",
+    "critérios de qualidade",
+    "erros comuns",
+)
+
+ANSWER_BLOCK_SECTIONS = (
+    "metadados",
+    "intenção e contexto",
+    "resposta direta",
+    "evidência e suporte",
+    "ressalvas e limites",
+    "takeaway",
+    "revisão de qualidade",
+)
+
 
 def load_validator():
     """Carrega o validador diretamente do repositório."""
@@ -149,6 +218,70 @@ description: Use quando for necessário testar uma skill de exemplo.
             )
 
         self.assertTrue(any("entity_type" in error for error in errors))
+
+    def test_validate_markdown_sections_detects_missing_heading(self) -> None:
+        validator = getattr(self.validator, "validate_markdown_sections", None)
+        self.assertTrue(callable(validator))
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            markdown_path = Path(temp_dir) / "module.md"
+            markdown_path.write_text(
+                "# Módulo\n\n## Objetivo\n\nConteúdo.\n",
+                encoding="utf-8",
+            )
+
+            errors = validator(markdown_path, ("objetivo", "processo"))
+
+        self.assertTrue(any("processo" in error for error in errors))
+
+    def test_iteration_two_files_are_required(self) -> None:
+        self.assertTrue(
+            ITERATION_TWO_FILES.issubset(set(self.validator.REQUIRED_FILES))
+        )
+
+    def test_iteration_two_skills_are_registered(self) -> None:
+        self.assertTrue(
+            {"answer-blocks", "citation-engineering"}.issubset(
+                set(self.validator.SKILL_NAMES)
+            )
+        )
+
+    def test_iteration_two_modules_have_required_sections(self) -> None:
+        for module_name in (
+            "intent-map.md",
+            "evidence-ledger.md",
+            "answer-blocks.md",
+            "citation-engineering.md",
+        ):
+            module_path = REPO_ROOT / "modules" / module_name
+            self.assertTrue(module_path.is_file(), module_path)
+            content = module_path.read_text(encoding="utf-8").lower()
+            for section in MODULE_SECTIONS:
+                self.assertIn(f"## {section}", content, module_path)
+
+    def test_answer_block_template_has_required_sections(self) -> None:
+        template_path = REPO_ROOT / "templates" / "answer-block-template.md"
+        self.assertTrue(template_path.is_file(), template_path)
+        content = template_path.read_text(encoding="utf-8").lower()
+
+        for section in ANSWER_BLOCK_SECTIONS:
+            self.assertIn(f"## {section}", content)
+
+    def test_evidence_ledger_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "evidence-ledger.csv",
+            EVIDENCE_LEDGER_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_citation_opportunity_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "citation-opportunity-map.csv",
+            CITATION_OPPORTUNITY_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
 
     def test_repository_contract_is_valid(self) -> None:
         errors = self.validator.validate_repository(REPO_ROOT)

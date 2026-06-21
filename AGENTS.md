@@ -8,6 +8,7 @@ Manter um sistema operacional modular e auditável para GEO. O repositório deve
 
 - Manter cada skill focada em um único trabalho.
 - Usar `skills/` como fonte canônica e `.agents/skills/` apenas como camada de descoberta.
+- Usar `modules/` para metodologia operacional compartilhada; skills devem apontar para módulos em vez de duplicá-los.
 - Evitar prompts monolíticos, duplicação de regras e dependências pesadas.
 - Preferir instruções em Markdown; usar scripts apenas para comportamento determinístico.
 - Preservar compatibilidade com o padrão Agent Skills: diretório em kebab-case e `SKILL.md` com `name` e `description`.
@@ -21,6 +22,7 @@ Manter um sistema operacional modular e auditável para GEO. O repositório deve
 - Tratar preprints, cursos, relatórios de vendors e estudos observacionais como evidência limitada.
 - Não converter correlação, teste isolado ou opinião de mercado em causalidade.
 - Registrar conflitos entre fontes; não escolher silenciosamente a versão mais conveniente.
+- Em evidence ledgers, registrar confiabilidade da fonte, confiança na relação claim-evidência, uso permitido e risco como campos distintos.
 
 ## Limites comerciais e éticos
 
@@ -44,6 +46,15 @@ Cada `SKILL.md` deve conter:
 - erros comuns.
 
 A descrição deve ser curta, ter escopo claro e permitir acionamento correto. Não duplicar metodologia extensa dentro de todas as skills.
+
+## Contratos da camada de conteúdo
+
+- Criar intent map antes de redigir quando houver múltiplas intenções ou contextos.
+- Não criar answer block com claim bloqueado, sem evidência ou sem uso público permitido.
+- Tratar cada linha do evidence ledger como claim atômico.
+- Em citation engineering, descrever a evidência necessária antes de sugerir uma fonte específica.
+- Manter atribuição próxima ao claim e preservar ressalvas materiais.
+- Usar `templates/evidence-ledger.csv`, `templates/citation-opportunity-map.csv` e `templates/answer-block-template.md`.
 
 ## Rubricas
 
@@ -77,4 +88,5 @@ O validador verifica estrutura e contratos de arquivo. Ele não substitui revis�
 - Atualizar `docs/source-ledger.md` ao adicionar ou alterar claims metodológicos.
 - Seguir `docs/update-policy.md` para mudanças de versão.
 - Documentar mudanças incompatíveis nos contratos de CSV, JSON ou YAML.
+- Atualizar módulos canônicos antes de ajustar skills que dependem deles.
 - Manter nomes de arquivos em inglês e conteúdo em português brasileiro.

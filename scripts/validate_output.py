@@ -13,7 +13,13 @@ from typing import Any
 import yaml
 
 
-SKILL_NAMES = ("geo-diagnosis", "entity-map", "ai-search-testing")
+SKILL_NAMES = (
+    "geo-diagnosis",
+    "entity-map",
+    "ai-search-testing",
+    "answer-blocks",
+    "citation-engineering",
+)
 
 REQUIRED_FILES = (
     "README.md",
@@ -21,12 +27,21 @@ REQUIRED_FILES = (
     "skills/geo-diagnosis/SKILL.md",
     "skills/entity-map/SKILL.md",
     "skills/ai-search-testing/SKILL.md",
+    "skills/answer-blocks/SKILL.md",
+    "skills/citation-engineering/SKILL.md",
+    "modules/intent-map.md",
+    "modules/evidence-ledger.md",
+    "modules/answer-blocks.md",
+    "modules/citation-engineering.md",
     "rubrics/geo-readiness.yaml",
     "rubrics/citation-readiness.yaml",
     "rubrics/entity-authority.yaml",
     "templates/audit-report.md",
     "templates/entity-map.csv",
     "templates/ai-search-benchmark.csv",
+    "templates/evidence-ledger.csv",
+    "templates/answer-block-template.md",
+    "templates/citation-opportunity-map.csv",
     "datasets/golden/benchmark-prompts-pt-br.json",
     "scripts/validate_output.py",
     "tests/test_validate_output.py",
@@ -44,6 +59,26 @@ REQUIRED_SKILL_SECTIONS = (
     "outputs",
     "critérios de qualidade",
     "erros comuns",
+)
+
+REQUIRED_MODULE_SECTIONS = (
+    "objetivo",
+    "quando usar",
+    "inputs",
+    "processo",
+    "outputs",
+    "critérios de qualidade",
+    "erros comuns",
+)
+
+ANSWER_BLOCK_TEMPLATE_SECTIONS = (
+    "metadados",
+    "intenção e contexto",
+    "resposta direta",
+    "evidência e suporte",
+    "ressalvas e limites",
+    "takeaway",
+    "revisão de qualidade",
 )
 
 ENTITY_MAP_HEADERS = (
@@ -89,6 +124,43 @@ BENCHMARK_HEADERS = (
     "response_file",
     "evidence_file",
     "reviewer",
+    "notes",
+)
+
+EVIDENCE_LEDGER_HEADERS = (
+    "claim_id",
+    "page_url",
+    "section",
+    "claim",
+    "classification",
+    "source_url",
+    "source_title",
+    "source_type",
+    "evidence_type",
+    "published_at",
+    "accessed_at",
+    "reliability",
+    "confidence",
+    "allowed_use",
+    "risk",
+    "contradiction_status",
+    "owner",
+    "status",
+    "notes",
+)
+
+CITATION_OPPORTUNITY_HEADERS = (
+    "opportunity_id",
+    "page_url",
+    "section",
+    "claim_without_evidence",
+    "evidence_needed",
+    "suggested_source_type",
+    "suggested_source",
+    "priority",
+    "risk",
+    "owner",
+    "status",
     "notes",
 )
 
@@ -330,6 +402,32 @@ def validate_csv_headers(csv_path: Path, required_headers: list[str] | tuple[str
     return []
 
 
+def validate_markdown_sections(
+    markdown_path: Path,
+    required_sections: list[str] | tuple[str, ...],
+) -> list[str]:
+    """Valida headings de nível 2 em um contrato Markdown."""
+    try:
+        content = markdown_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        return [f"{markdown_path}: {exc}"]
+
+    headings = {
+        heading.strip().lower()
+        for heading in re.findall(r"^##\s+(.+?)\s*$", content, re.MULTILINE)
+    }
+    errors = [
+        f"{markdown_path}: seção obrigatória ausente: {section}"
+        for section in required_sections
+        if section not in headings
+    ]
+
+    if "TODO" in content or "[TODO" in content:
+        errors.append(f"{markdown_path}: contém placeholder TODO")
+
+    return errors
+
+
 def validate_agents_discovery(root: Path) -> list[str]:
     """Valida a camada .agents/skills contra a fonte canônica."""
     errors: list[str] = []
@@ -387,6 +485,19 @@ def validate_repository(root: Path) -> list[str]:
     for skill_name in SKILL_NAMES:
         errors.extend(validate_skill(root / "skills" / skill_name / "SKILL.md"))
 
+    for module_name in (
+        "intent-map.md",
+        "evidence-ledger.md",
+        "answer-blocks.md",
+        "citation-engineering.md",
+    ):
+        errors.extend(
+            validate_markdown_sections(
+                root / "modules" / module_name,
+                REQUIRED_MODULE_SECTIONS,
+            )
+        )
+
     for rubric_name in (
         "geo-readiness.yaml",
         "citation-readiness.yaml",
@@ -409,6 +520,24 @@ def validate_repository(root: Path) -> list[str]:
         validate_csv_headers(
             root / "templates" / "ai-search-benchmark.csv",
             BENCHMARK_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "templates" / "evidence-ledger.csv",
+            EVIDENCE_LEDGER_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "templates" / "citation-opportunity-map.csv",
+            CITATION_OPPORTUNITY_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "answer-block-template.md",
+            ANSWER_BLOCK_TEMPLATE_SECTIONS,
         )
     )
     errors.extend(validate_agents_discovery(root))

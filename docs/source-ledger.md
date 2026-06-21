@@ -44,6 +44,10 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | DEC-003 | `[FRAMEWORK PRÓPRIO]` | Aplicar rubricas 0–4 com pesos e cobertura de evidência. | Necessidade operacional do projeto; inspirada em LOC-001 e LOC-003 |
 | DEC-004 | `[INFERÊNCIA]` | Avaliar critérios esperados em benchmarks, não respostas exatas. | SRC-008, SRC-009 e variabilidade observada das engines |
 | DEC-005 | `[FATO]` | Dados estruturados devem corresponder ao conteúdo da página e não garantem exibição. | SRC-005, SRC-006 |
+| DEC-006 | `[FRAMEWORK PRÓPRIO]` | Usar intent map como contrato entre demanda, página, entidades, evidências e formato de resposta. | LOC-001, LOC-002 e síntese operacional do projeto |
+| DEC-007 | `[FRAMEWORK PRÓPRIO]` | Separar confiabilidade da fonte, confiança na relação claim-evidência, uso permitido e risco no evidence ledger. | SRC-009 e necessidade de governança factual |
+| DEC-008 | `[INFERÊNCIA]` | Descrever a evidência necessária antes de sugerir uma fonte específica em citation engineering. | SRC-009 e política de prevenção de citation theatre |
+| DEC-009 | `[FRAMEWORK PRÓPRIO]` | Criar answer blocks somente após mapear intenção e liberar claims no evidence ledger. | LOC-001, LOC-002, DEC-006 e DEC-007 |
 
 ## Manutenção
 

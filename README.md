@@ -20,6 +20,7 @@ geo-os/
 ├── AGENTS.md
 ├── skills/                 # Fonte canônica das skills
 ├── .agents/skills/         # Descoberta nativa pelo Codex
+├── modules/                # Método operacional reutilizável
 ├── rubrics/                # Critérios de pontuação 0–4
 ├── templates/              # Contratos de entregáveis
 ├── datasets/golden/        # Prompts de benchmark reutilizáveis
@@ -37,6 +38,27 @@ Cada skill executa um trabalho específico. As rubricas definem critérios; os t
 | `geo-diagnosis` | Produzir diagnóstico de maturidade, evidências e prioridades GEO. |
 | `entity-map` | Normalizar entidades, aliases, relações e fontes de corroboração. |
 | `ai-search-testing` | Planejar e registrar benchmarks reproduzíveis entre engines. |
+| `answer-blocks` | Criar unidades de resposta autocontidas e verificáveis. |
+| `citation-engineering` | Mapear claims, lacunas e evidências necessárias. |
+
+## Camada de execução de conteúdo
+
+```text
+Intent Map
+    ↓
+Evidence Ledger
+    ↓
+Citation Opportunity Map
+    ↓
+Answer Block
+    ↓
+Revisão e benchmark
+```
+
+- `modules/intent-map.md`: traduz demanda em perguntas, contexto e formato.
+- `modules/evidence-ledger.md`: controla claims, fontes, datas, confiança, uso e risco.
+- `modules/citation-engineering.md`: define o que precisa ser provado.
+- `modules/answer-blocks.md`: transforma evidência liberada em conteúdo reutilizável.
 
 ## Uso rápido
 
@@ -68,4 +90,8 @@ Esta versão não inclui scraping, execução automática em engines, APIs propr
 
 ## Próxima evolução recomendada
 
-Adicionar evidence ledger operacional em CSV, intent map, módulos de citation engineering e answer blocks, fixtures de saída e um harness de avaliação repetida.
+Adicionar content brief, topical authority e competitor analysis. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos editoriais serem testados em casos reais.
+
+## Linguagem comercial
+
+`GEO OS` permanece como nome interno. Em materiais para decisores, priorizar linguagem direta como **AI Search Visibility System** ou **Sistema de Presença em Buscas por IA**: como a marca aparece, é entendida e é citada em respostas de IA.

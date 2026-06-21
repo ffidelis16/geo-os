@@ -1,0 +1,2 @@
+claim_id,page_url,section,claim,classification,source_url,source_title,source_type,evidence_type,published_at,accessed_at,reliability,confidence,allowed_use,risk,contradiction_status,owner,status,notes
+EXAMPLE-CLAIM-001,https://example.com/page,Example section,Claim fictício para demonstrar o contrato,[HIPÓTESE],https://example.com/source,Example source,example,observation,2026-01-01,2026-06-21,low,low,internal,low,not_checked,,example,Remover esta linha antes do uso

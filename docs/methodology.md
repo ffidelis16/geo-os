@@ -84,18 +84,33 @@ Exigir:
 - critérios estáveis;
 - denominadores visíveis.
 
-## Workflow do MVP
+## Workflow operacional
 
 1. **Escopo:** definir marca, categoria, páginas, locale, concorrentes e perguntas.
-2. **Ledger:** registrar fontes, datas, confiabilidade e conflitos.
+2. **Intent map:** transformar demanda em perguntas, follow-ups, entidades, evidências e formatos.
 3. **Entity map:** normalizar entidades e relações.
-4. **Diagnóstico:** aplicar a rubrica de prontidão com evidências.
-5. **Citabilidade:** aplicar a rubrica somente às páginas com material suficiente.
-6. **Benchmark:** executar prompts sob protocolo controlado.
-7. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
-8. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
-9. **Intervenção:** alterar uma unidade observável por ciclo quando possível.
-10. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
+4. **Evidence ledger:** registrar claims, fontes, datas, confiabilidade, confiança, uso e risco.
+5. **Diagnóstico:** aplicar a rubrica de prontidão com evidências.
+6. **Citabilidade:** aplicar a rubrica somente às páginas com material suficiente.
+7. **Citation engineering:** mapear claims bloqueados, lacunas e evidências necessárias.
+8. **Answer blocks:** criar unidades autocontidas apenas com claims liberados.
+9. **Benchmark:** executar prompts sob protocolo controlado.
+10. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
+11. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
+12. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
+
+## Ponte entre diagnóstico e execução
+
+`[FRAMEWORK PRÓPRIO]` A camada editorial usa quatro contratos:
+
+| Contrato | Pergunta respondida |
+|---|---|
+| Intent Map | O que a pessoa precisa decidir ou realizar? |
+| Evidence Ledger | O que pode ser afirmado, com qual fonte e risco? |
+| Citation Opportunity Map | O que ainda precisa ser provado ou limitado? |
+| Answer Block | Como responder com clareza sem exceder a evidência? |
+
+O fluxo não deve começar pelo answer block. Quando a evidência é insuficiente, a saída correta é bloquear, limitar ou remover o claim.
 
 ## Pontuação
 
@@ -149,3 +164,4 @@ Não usar apenas contagem de screenshots, volume bruto de menções ou uma únic
 - Scores são instrumentos de decisão, não indicadores universais.
 - Correlação entre intervenção e resultado não prova causalidade sem desenho adequado.
 - GEO não substitui SEO técnico, conteúdo útil, pesquisa de usuário, analytics ou estratégia de marca.
+- Answer blocks e citation engineering melhoram a disciplina editorial, mas não garantem seleção, absorção ou citação.

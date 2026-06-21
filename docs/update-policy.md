@@ -9,7 +9,7 @@ Manter o GEO OS útil sem transformar sinais voláteis em regras permanentes.
 Usar versionamento semântico:
 
 - `PATCH`: correções editoriais, links, exemplos e validações sem mudança de contrato.
-- `MINOR`: novos critérios, prompts ou campos opcionais compatíveis.
+- `MINOR`: novos módulos, skills, critérios, prompts ou campos opcionais compatíveis.
 - `MAJOR`: mudanças de escala, pesos, campos obrigatórios ou significado de métricas.
 
 Rubricas e datasets devem declarar `version` ou `schema_version`.
@@ -42,9 +42,9 @@ Fonte inferior pode gerar hipótese, mas não deve sobrescrever silenciosamente 
 ## Processo de mudança
 
 1. Registrar a nova fonte em `docs/source-ledger.md`.
-2. Identificar claims, skills, rubricas, templates e prompts afetados.
+2. Identificar claims, módulos, skills, rubricas, templates e prompts afetados.
 3. Classificar a mudança como fato, inferência, hipótese ou framework próprio.
-4. Atualizar arquivos canônicos em `skills/`, nunca apenas `.agents/skills/`.
+4. Atualizar primeiro o módulo canônico e depois as skills dependentes; nunca alterar apenas `.agents/skills/`.
 5. Ajustar testes quando houver mudança de contrato.
 6. Executar:
 
@@ -73,6 +73,7 @@ Remover ou rebaixar para `[HIPÓTESE]` quando a origem não puder ser recuperada
 - Não renomear IDs de critérios ou prompts sem necessidade.
 - Preferir campos novos opcionais em versões `MINOR`.
 - Para mudança `MAJOR`, documentar migração de CSV, JSON e YAML.
+- Tratar mudanças de headings obrigatórios em módulos e templates Markdown como mudança de contrato.
 - Manter conteúdo em PT-BR e nomes de arquivos em inglês.
 
 ## Depreciação
