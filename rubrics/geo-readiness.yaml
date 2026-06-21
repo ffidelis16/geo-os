@@ -1,0 +1,144 @@
+id: geo-readiness
+name: Prontidão GEO
+version: 0.1.0
+purpose: Avaliar se um escopo possui fundação técnica, editorial, semântica e de mensuração para trabalho GEO.
+
+scale:
+  min: 0
+  max: 4
+  labels:
+    0: ausente ou sem evidência
+    1: fraco e inconsistente
+    2: parcial
+    3: sólido
+    4: forte e reproduzível
+
+scoring_method:
+  formula: soma(score_do_criterio / 4 * peso)
+  maximum: 100
+  missing_evidence: Pontuar 0 e marcar como "sem evidência"; não presumir falha operacional.
+
+criteria:
+  - id: recoverability
+    name: Recuperabilidade
+    weight: 15
+    description: Páginas prioritárias podem ser descobertas, processadas e identificadas de forma consistente.
+    evidence_required:
+      - URLs canônicas e status de indexabilidade
+      - HTML ou renderização das páginas prioritárias
+      - robots.txt, directives ou evidência equivalente quando disponível
+    scoring:
+      0: Escopo inacessível ou sem evidência.
+      2: Acesso parcial, inconsistências ou dependência excessiva de renderização.
+      4: Acesso, canonicalização e conteúdo principal verificáveis nas páginas prioritárias.
+
+  - id: intent_coverage
+    name: Cobertura de intenção
+    weight: 12
+    description: Intenções conversacionais prioritárias possuem páginas ou unidades de resposta adequadas.
+    evidence_required:
+      - Mapa de intents ou prompt set
+      - Relação entre intent e página-alvo
+    scoring:
+      0: Não existe mapeamento.
+      2: Mapeamento parcial ou centrado apenas em keywords.
+      4: Intenções, restrições, follow-ups e páginas-alvo estão documentados.
+
+  - id: response_structure
+    name: Estrutura de resposta
+    weight: 13
+    description: O conteúdo apresenta definições, comparações, procedimentos e ressalvas em blocos extraíveis.
+    evidence_required:
+      - Amostra de páginas
+      - Inventário de answer units ou headings
+    scoring:
+      0: Conteúdo não responde claramente às intenções.
+      2: Existem respostas úteis, porém dispersas ou dependentes de contexto.
+      4: Blocos autônomos respondem intents específicas com contexto e ressalvas.
+
+  - id: evidence_density
+    name: Densidade de evidência
+    weight: 15
+    description: Claims importantes têm suporte, data, contexto e fonte identificável.
+    evidence_required:
+      - Claims prioritários
+      - Links ou referências correspondentes
+      - Datas e escopo das estatísticas
+    scoring:
+      0: Claims importantes não têm suporte.
+      2: Suporte irregular, secundário ou sem contexto.
+      4: Claims centrais são auditáveis e usam fontes adequadas ao risco.
+
+  - id: entity_coherence
+    name: Coerência de entidades
+    weight: 15
+    description: Nomes, tipos, relações e URLs das entidades são consistentes.
+    evidence_required:
+      - Mapa de entidades
+      - Conteúdo visível
+      - Dados estruturados ou perfis oficiais quando existentes
+    scoring:
+      0: Entidades centrais são ambíguas ou conflitantes.
+      2: Entidades principais existem, mas aliases e relações não estão normalizados.
+      4: Entidades e relações têm nomenclatura estável, fontes e governança.
+
+  - id: structured_meaning
+    name: Significado estruturado
+    weight: 10
+    description: Dados estruturados aplicáveis representam o conteúdo visível sem extrapolação.
+    evidence_required:
+      - Markup atual ou decisão documentada de não uso
+      - Correspondência com conteúdo visível
+    scoring:
+      0: Markup enganoso, conflitante ou sem avaliação.
+      2: Markup parcial ou genérico.
+      4: Markup aplicável, válido, coerente e limitado ao conteúdo visível.
+
+  - id: authority_signals
+    name: Sinais de autoridade
+    weight: 10
+    description: Autoria, organização, experiência e corroboração externa são claras e verificáveis.
+    evidence_required:
+      - Páginas de autor e organização
+      - Credenciais ou fontes de corroboração
+    scoring:
+      0: Responsabilidade editorial e identidade são opacas.
+      2: Sinais existem, mas são incompletos ou autocorroborados.
+      4: Autoria e organização são claras, consistentes e verificáveis.
+
+  - id: benchmark_readiness
+    name: Prontidão para benchmark
+    weight: 10
+    description: Existe protocolo reproduzível para medir presença, citação, absorção e precisão.
+    evidence_required:
+      - Prompt set versionado
+      - Protocolo de execução
+      - Estrutura de armazenamento de resultados
+    scoring:
+      0: Não existe método de medição.
+      2: Há testes pontuais sem repetição ou versionamento.
+      4: Protocolo, prompts, repetições, estados e métricas estão definidos.
+
+interpretation:
+  - min: 0
+    max: 30
+    label: não preparado
+    guidance: Corrigir fundações e estabelecer evidências antes de otimizações.
+  - min: 31
+    max: 55
+    label: frágil
+    guidance: Priorizar lacunas estruturais e de mensuração.
+  - min: 56
+    max: 75
+    label: operacional
+    guidance: Executar intervenções focadas e medir por ciclos.
+  - min: 76
+    max: 100
+    label: base forte
+    guidance: Concentrar em diferenciação, estabilidade e experimentação controlada.
+
+limitations:
+  - A rubrica mede prontidão observável, não probabilidade garantida de citação.
+  - O score depende do escopo, da qualidade da evidência e da data da coleta.
+  - Comparações exigem o mesmo protocolo e critérios.
+  - Avaliação humana continua obrigatória.

@@ -1,0 +1,2 @@
+run_id,prompt_id,prompt_version,engine,model_or_surface,web_mode,locale,run_timestamp,iteration,brand,competitors,response_status,brand_present,brand_recommended,target_domain_cited,target_url_cited,citation_support,absorption,entity_accuracy,competitors_present,cited_urls,response_file,evidence_file,reviewer,notes
+EXAMPLE-RUN-001,GEO-PTBR-001,0.1.0,example-engine,example-surface,unknown,pt-BR,2026-06-21T12:00:00-03:00,1,Example Brand,Example Competitor,example,false,false,false,false,not_evaluated,not_evaluated,not_evaluated,,,"",,,Remover esta linha antes do uso

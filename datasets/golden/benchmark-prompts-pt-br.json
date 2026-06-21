@@ -1,0 +1,170 @@
+{
+  "schema_version": "0.1.0",
+  "dataset_id": "geo-benchmark-prompts-pt-br",
+  "locale": "pt-BR",
+  "description": "Prompts parametrizados para benchmarks de presença, citação, absorção, precisão de entidade e comparação competitiva.",
+  "usage_notes": [
+    "Substituir todas as variáveis antes da execução.",
+    "Não alterar a redação durante uma mesma rodada.",
+    "Executar repetições e registrar engine, modo, locale e timestamp.",
+    "Avaliar critérios de comportamento; não comparar texto contra resposta exata."
+  ],
+  "prompts": [
+    {
+      "id": "GEO-PTBR-001",
+      "prompt": "Quais são as principais opções de {{category}} para {{audience}} no Brasil? Compare critérios relevantes e explique para quem cada opção faz sentido.",
+      "intent": "category-discovery",
+      "journey_stage": "awareness",
+      "required_variables": ["category", "audience", "brand", "competitors"],
+      "expected_criteria": {
+        "presence": "Registrar se a marca aparece e em qual contexto.",
+        "citation": "Registrar domínio, URL e claim associado a cada citação.",
+        "absorption": "Verificar se evidências ou diferenciais publicados pela marca aparecem na síntese.",
+        "competitor_comparison": "Registrar concorrentes, critérios usados e simetria da comparação."
+      }
+    },
+    {
+      "id": "GEO-PTBR-002",
+      "prompt": "Compare {{brand}} com {{competitor_1}} para {{use_case}}. Considere limitações, diferenciais verificáveis e perfil ideal de cliente.",
+      "intent": "brand-comparison",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "competitor_1", "use_case"],
+      "expected_criteria": {
+        "presence": "Verificar se ambas as entidades são identificadas corretamente.",
+        "citation": "Avaliar se claims comparativos têm fontes que realmente os sustentam.",
+        "absorption": "Identificar uso de dados, linguagem ou estrutura das páginas-alvo.",
+        "competitor_comparison": "Avaliar equilíbrio, critérios explícitos e ausência de claims inventados."
+      }
+    },
+    {
+      "id": "GEO-PTBR-003",
+      "prompt": "Para uma empresa com {{constraint}}, quando {{brand}} é uma boa escolha e quando não é?",
+      "intent": "fit-assessment",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "constraint"],
+      "expected_criteria": {
+        "presence": "Registrar menção, enquadramento e recomendação.",
+        "citation": "Verificar suporte para condições de fit e non-fit.",
+        "absorption": "Comparar a resposta com critérios publicados pela própria marca e fontes independentes.",
+        "competitor_comparison": "Registrar alternativas sugeridas e justificativas."
+      }
+    },
+    {
+      "id": "GEO-PTBR-004",
+      "prompt": "Quanto custa {{product_or_service}} da {{brand}} para {{scenario}}? Explique o que altera o preço e quais informações precisam ser confirmadas.",
+      "intent": "pricing",
+      "journey_stage": "consideration",
+      "required_variables": ["product_or_service", "brand", "scenario"],
+      "expected_criteria": {
+        "presence": "Verificar identificação correta do produto e da marca.",
+        "citation": "Checar fonte, data, moeda, escopo e condições do preço.",
+        "absorption": "Identificar se faixas, condições ou ressalvas da página oficial foram utilizadas.",
+        "competitor_comparison": "Registrar comparações de preço apenas quando a base for equivalente."
+      }
+    },
+    {
+      "id": "GEO-PTBR-005",
+      "prompt": "Quais evidências independentes existem sobre a qualidade e a confiabilidade da {{brand}} em {{category}}?",
+      "intent": "proof",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "category"],
+      "expected_criteria": {
+        "presence": "Registrar se a entidade correta é analisada.",
+        "citation": "Classificar independência, atualidade e pertinência das fontes.",
+        "absorption": "Verificar se as conclusões correspondem às evidências citadas.",
+        "competitor_comparison": "Registrar referências a padrões ou concorrentes sem transformar volume de menções em qualidade."
+      }
+    },
+    {
+      "id": "GEO-PTBR-006",
+      "prompt": "Quais são as limitações, riscos e reclamações recorrentes associados à {{brand}} ou ao {{product_or_service}}?",
+      "intent": "risk-review",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "product_or_service"],
+      "expected_criteria": {
+        "presence": "Verificar desambiguação da entidade.",
+        "citation": "Checar se reclamações e riscos têm fonte, período e contexto.",
+        "absorption": "Avaliar se ressalvas oficiais ou políticas da marca aparecem.",
+        "competitor_comparison": "Evitar comparação de volumes sem denominador compatível."
+      }
+    },
+    {
+      "id": "GEO-PTBR-007",
+      "prompt": "Como funciona {{process}} na {{brand}}? Descreva etapas, pré-requisitos, prazos e exceções.",
+      "intent": "procedure",
+      "journey_stage": "decision",
+      "required_variables": ["process", "brand"],
+      "expected_criteria": {
+        "presence": "Registrar identificação correta do processo e da marca.",
+        "citation": "Verificar se etapas e condições apontam para fontes adequadas.",
+        "absorption": "Comparar sequência e ressalvas com a documentação oficial.",
+        "competitor_comparison": "Registrar alternativas apenas quando o prompt ou a resposta as introduzir."
+      }
+    },
+    {
+      "id": "GEO-PTBR-008",
+      "prompt": "Qual solução de {{category}} atende melhor {{location}} considerando {{local_constraint}}?",
+      "intent": "local-discovery",
+      "journey_stage": "consideration",
+      "required_variables": ["category", "location", "local_constraint", "brand", "competitors"],
+      "expected_criteria": {
+        "presence": "Verificar se localização e entidade são interpretadas corretamente.",
+        "citation": "Checar fontes locais, disponibilidade e atualidade.",
+        "absorption": "Identificar uso de páginas locais, políticas ou dados específicos.",
+        "competitor_comparison": "Registrar cobertura local e critérios equivalentes entre opções."
+      }
+    },
+    {
+      "id": "GEO-PTBR-009",
+      "prompt": "O que diferencia {{brand}} em {{category}} segundo fontes próprias e independentes? Separe fatos de alegações promocionais.",
+      "intent": "differentiation",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "category"],
+      "expected_criteria": {
+        "presence": "Registrar diferenciais atribuídos à entidade correta.",
+        "citation": "Classificar fonte própria, independente e não verificável.",
+        "absorption": "Verificar quais diferenciais do conteúdo da marca influenciam a resposta.",
+        "competitor_comparison": "Checar se o diferencial é realmente distinto no conjunto competitivo."
+      }
+    },
+    {
+      "id": "GEO-PTBR-010",
+      "prompt": "Quais alternativas à {{brand}} existem para {{use_case}} e quais trade-offs devem orientar a escolha?",
+      "intent": "alternatives",
+      "journey_stage": "consideration",
+      "required_variables": ["brand", "use_case", "competitors"],
+      "expected_criteria": {
+        "presence": "Registrar se a marca é usada como referência e não confundida.",
+        "citation": "Verificar suporte dos trade-offs.",
+        "absorption": "Identificar se limitações ou critérios das fontes-alvo aparecem.",
+        "competitor_comparison": "Avaliar diversidade, critérios e equilíbrio entre alternativas."
+      }
+    },
+    {
+      "id": "GEO-PTBR-011",
+      "prompt": "Explique {{concept}} em linguagem simples e mostre como ele se relaciona com {{brand_or_topic}}. Inclua limites e fontes.",
+      "intent": "definition",
+      "journey_stage": "awareness",
+      "required_variables": ["concept", "brand_or_topic"],
+      "expected_criteria": {
+        "presence": "Verificar relação correta entre conceito e entidade ou tópico.",
+        "citation": "Checar fontes definicionais e claims externos.",
+        "absorption": "Comparar definição, exemplos e estrutura com a página-alvo.",
+        "competitor_comparison": "Registrar entidades alternativas somente quando relevantes."
+      }
+    },
+    {
+      "id": "GEO-PTBR-012",
+      "prompt": "Quais dados recentes ajudam a avaliar {{topic}} em {{market}}? Informe período, população, fonte e limitações.",
+      "intent": "evidence-research",
+      "journey_stage": "awareness",
+      "required_variables": ["topic", "market"],
+      "expected_criteria": {
+        "presence": "Registrar presença da marca apenas se ela for fonte ou objeto relevante.",
+        "citation": "Verificar data, população, metodologia e aderência de cada fonte.",
+        "absorption": "Identificar se dados publicados pelo domínio-alvo aparecem na resposta.",
+        "competitor_comparison": "Comparar fontes e concorrentes sem misturar estudos incompatíveis."
+      }
+    }
+  ]
+}

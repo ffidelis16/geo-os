@@ -1,0 +1,2 @@
+entity_id,canonical_name,entity_type,definition,aliases,canonical_url,parent_entity_id,relation_type,related_entity_id,locale,evidence_source,evidence_accessed_at,confidence,status,notes
+EXAMPLE-ORG-001,Example Organization,Organization,Organização fictícia usada apenas para demonstrar o contrato,Example Org,https://example.com,,,owns,EXAMPLE-PRODUCT-001,pt-BR,https://example.com/about,2026-06-21,low,example,Remover esta linha antes do uso

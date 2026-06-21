@@ -1,0 +1,140 @@
+id: citation-readiness
+name: Prontidão para citação
+version: 0.1.0
+purpose: Avaliar se uma página sustenta claims de forma clara, granular e verificável.
+
+scale:
+  min: 0
+  max: 4
+  labels:
+    0: ausente ou sem evidência
+    1: fraco e inconsistente
+    2: parcial
+    3: sólido
+    4: forte e reproduzível
+
+scoring_method:
+  formula: soma(score_do_criterio / 4 * peso)
+  maximum: 100
+  missing_evidence: Pontuar 0 e marcar como "sem evidência".
+
+criteria:
+  - id: claim_supportability
+    name: Sustentação de claims
+    weight: 18
+    description: Claims prioritários são explicitamente sustentados pelo conteúdo e por fontes adequadas.
+    evidence_required:
+      - Lista de claims prioritários
+      - Trechos da página
+      - Fontes correspondentes
+    scoring:
+      0: Claims centrais não têm suporte verificável.
+      2: Parte dos claims tem suporte, com lacunas ou fontes fracas.
+      4: Claims centrais têm suporte direto, contextualizado e auditável.
+
+  - id: attribution_clarity
+    name: Clareza de atribuição
+    weight: 12
+    description: Autor, organização responsável, data e propósito da página são identificáveis.
+    evidence_required:
+      - Byline ou responsável
+      - Datas relevantes
+      - Página de autor ou organização
+    scoring:
+      0: Responsabilidade e data são indeterminadas.
+      2: Identificação parcial ou inconsistente.
+      4: Responsabilidade, data e contexto editorial são claros.
+
+  - id: extractable_summary
+    name: Resumo extraível
+    weight: 14
+    description: A página apresenta resposta concisa e autônoma próxima à intenção correspondente.
+    evidence_required:
+      - Headings e primeiros blocos de resposta
+    scoring:
+      0: A resposta depende de leitura extensa ou não existe.
+      2: Há resumo, mas ele é vago ou incompleto.
+      4: Resumo direto contém resposta, escopo e ressalva necessária.
+
+  - id: claim_granularity
+    name: Granularidade de claims
+    weight: 12
+    description: Claims diferentes são separados em unidades que podem ser verificadas individualmente.
+    evidence_required:
+      - Estrutura de parágrafos, listas ou tabelas
+    scoring:
+      0: Claims heterogêneos aparecem fundidos.
+      2: Separação parcial, com blocos longos.
+      4: Cada unidade sustenta uma ideia principal verificável.
+
+  - id: source_hygiene
+    name: Higiene de fontes
+    weight: 14
+    description: Fontes têm autoria, data, pertinência e hierarquia compatíveis com o claim.
+    evidence_required:
+      - URLs ou referências usadas
+      - Data de acesso
+      - Classificação do tipo de fonte
+    scoring:
+      0: Fontes ausentes, circulares ou incompatíveis.
+      2: Fontes mistas, secundárias ou desatualizadas sem ressalva.
+      4: Fontes primárias ou adequadas, atuais e rastreáveis.
+
+  - id: comparison_clarity
+    name: Clareza comparativa
+    weight: 10
+    description: Comparações declaram critérios, escopo, período e base de avaliação.
+    evidence_required:
+      - Tabelas ou claims comparativos
+      - Base dos critérios
+    scoring:
+      0: Superlativos e comparações não têm base.
+      2: Critérios existem, mas são incompletos.
+      4: Comparação é simétrica, contextualizada e sustentada.
+
+  - id: procedural_clarity
+    name: Clareza procedural
+    weight: 10
+    description: Procedimentos indicam passos, condições, exceções e resultado esperado.
+    evidence_required:
+      - Instruções, listas de passos ou condições
+    scoring:
+      0: Procedimento ausente ou ambíguo.
+      2: Passos principais existem sem condições ou exceções.
+      4: Procedimento é executável, ordenado e limitado.
+
+  - id: contradiction_control
+    name: Controle de contradições
+    weight: 10
+    description: A página não conflita silenciosamente com outras fontes canônicas do mesmo ecossistema.
+    evidence_required:
+      - Comparação com páginas canônicas relacionadas
+      - Registro de conflitos
+    scoring:
+      0: Existem conflitos materiais sem tratamento.
+      2: Conflitos menores ou governança incompleta.
+      4: Claims canônicos estão alinhados e divergências são explicadas.
+
+interpretation:
+  - min: 0
+    max: 30
+    label: candidato fraco
+    guidance: Corrigir suporte, atribuição e claims antes de otimizar formato.
+  - min: 31
+    max: 55
+    label: inconsistente
+    guidance: Reestruturar unidades e elevar higiene de fontes.
+  - min: 56
+    max: 75
+    label: citável
+    guidance: Testar em benchmarks e corrigir lacunas específicas.
+  - min: 76
+    max: 100
+    label: candidato forte
+    guidance: Monitorar suporte real e estabilidade entre engines.
+
+limitations:
+  - Um conteúdo citável pode não ser selecionado por uma engine.
+  - Presença de citação não prova que a resposta foi integralmente sustentada.
+  - A rubrica não avalia autoridade de domínio de forma isolada.
+  - Avaliação humana da correspondência claim-fonte é obrigatória.

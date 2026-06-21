@@ -1,0 +1,140 @@
+id: entity-authority
+name: Autoridade de entidade
+version: 0.1.0
+purpose: Avaliar consistência, relações, identidade e corroboração de entidades prioritárias.
+
+scale:
+  min: 0
+  max: 4
+  labels:
+    0: ausente ou sem evidência
+    1: fraco e inconsistente
+    2: parcial
+    3: sólido
+    4: forte e reproduzível
+
+scoring_method:
+  formula: soma(score_do_criterio / 4 * peso)
+  maximum: 100
+  missing_evidence: Pontuar 0 e marcar como "sem evidência".
+
+criteria:
+  - id: canonical_naming
+    name: Nome canônico
+    weight: 15
+    description: Cada entidade prioritária possui nome principal estável e aliases documentados.
+    evidence_required:
+      - Mapa de entidades
+      - Uso no site e perfis oficiais
+    scoring:
+      0: Nome central é ambíguo ou varia sem regra.
+      2: Nome principal existe, mas aliases não têm governança.
+      4: Nome e aliases são consistentes, documentados e aplicados.
+
+  - id: identity_definition
+    name: Definição de identidade
+    weight: 12
+    description: Tipo, definição, URL canônica e identificadores distinguem a entidade.
+    evidence_required:
+      - Definição observável
+      - URL canônica
+      - Identificadores quando aplicáveis
+    scoring:
+      0: Entidade não pode ser distinguida.
+      2: Definição ou identificadores são parciais.
+      4: Identidade é clara, específica e verificável.
+
+  - id: relationship_depth
+    name: Profundidade das relações
+    weight: 13
+    description: Relações com produtos, pessoas, categorias, locais e organizações são explícitas.
+    evidence_required:
+      - Relações direcionais no mapa
+      - Evidência no conteúdo ou fonte
+    scoring:
+      0: Relações relevantes não estão modeladas.
+      2: Relações básicas existem sem direção ou prova suficiente.
+      4: Relações materiais são direcionais, sustentadas e atualizáveis.
+
+  - id: first_party_consistency
+    name: Consistência própria
+    weight: 14
+    description: Site, schema, perfis e documentos próprios descrevem a entidade de forma alinhada.
+    evidence_required:
+      - Amostra de páginas e perfis próprios
+      - Dados estruturados quando existentes
+    scoring:
+      0: Canais próprios se contradizem.
+      2: Alinhamento parcial com lacunas.
+      4: Identidade e relações são consistentes nos canais prioritários.
+
+  - id: third_party_corroboration
+    name: Corroboração externa
+    weight: 16
+    description: Fontes independentes confirmam identidade, atuação ou relações relevantes.
+    evidence_required:
+      - Fontes externas identificáveis
+      - Data e contexto da menção
+    scoring:
+      0: Não há corroboração ou ela é circular.
+      2: Há poucas fontes ou fontes de baixa independência.
+      4: Múltiplas fontes adequadas corroboram claims centrais.
+
+  - id: expertise_signals
+    name: Sinais de experiência e expertise
+    weight: 12
+    description: Pessoas e organização apresentam experiência, autoria e responsabilidade verificáveis.
+    evidence_required:
+      - Perfis de autor ou organização
+      - Credenciais, trabalhos ou experiência comprovável
+    scoring:
+      0: Expertise é apenas declarada.
+      2: Evidência parcial ou autocorroborada.
+      4: Expertise relevante é específica e verificável.
+
+  - id: topic_cluster_integrity
+    name: Integridade temática
+    weight: 10
+    description: Conteúdos de suporte reforçam relações coerentes entre entidade e tópicos prioritários.
+    evidence_required:
+      - Inventário de conteúdo
+      - Links e relações entre páginas
+    scoring:
+      0: Conteúdo é disperso ou contraditório.
+      2: Existem clusters parciais sem governança.
+      4: Cluster reforça entidades e relações sem duplicação conflitante.
+
+  - id: locale_consistency
+    name: Consistência por locale
+    weight: 8
+    description: Versões locais preservam identidade, relações e diferenciais sem traduções conflitantes.
+    evidence_required:
+      - Páginas ou perfis em cada locale avaliado
+    scoring:
+      0: Locales entram em conflito material.
+      2: Alinhamento parcial ou incompleto.
+      4: Locales preservam identidade e registram diferenças legítimas.
+
+interpretation:
+  - min: 0
+    max: 30
+    label: grafo fraco
+    guidance: Normalizar identidade e eliminar contradições.
+  - min: 31
+    max: 55
+    label: fragmentado
+    guidance: Fortalecer relações e corroboração.
+  - min: 56
+    max: 75
+    label: crível
+    guidance: Expandir evidências e integridade temática.
+  - min: 76
+    max: 100
+    label: autoridade forte
+    guidance: Manter governança, atualização e consistência multicanal.
+
+limitations:
+  - Autoridade de entidade não garante ranking, citação ou Knowledge Panel.
+  - Corroboração deve ser avaliada por qualidade, não apenas por volume.
+  - Entidades novas ou locais podem ter pouca evidência externa legítima.
+  - A rubrica não autoriza criação artificial de notoriedade.

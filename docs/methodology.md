@@ -1,0 +1,151 @@
+# Metodologia GEO OS
+
+## Tese operacional
+
+`[FRAMEWORK PRÓPRIO]` GEO é tratado neste repositório como uma disciplina aplicada sobre fundamentos de busca, conteúdo, entidades, evidência e avaliação. O objetivo não é controlar uma engine, mas aumentar a qualidade e a mensurabilidade dos ativos que podem ser recuperados, selecionados, citados e absorvidos em respostas.
+
+`[FATO]` O paper original de GEO formaliza visibilidade em motores generativos como um problema diferente do ranking linear e relata que os efeitos das intervenções variam por domínio. Fonte: Aggarwal et al., KDD 2024, registrada em `docs/source-ledger.md`.
+
+`[FATO]` O Google declara que suas experiências de AI Search não exigem otimizações técnicas especiais além das práticas fundamentais de SEO e elegibilidade existentes. Fonte: Google Search Central, registrada no ledger.
+
+## Camadas de avaliação
+
+### Recuperabilidade
+
+Pergunta: o conteúdo pode ser descoberto, acessado e identificado?
+
+Observar:
+
+- indexabilidade e canonicalização;
+- presença do conteúdo principal no HTML ou renderização disponível;
+- consistência de URLs, títulos, autores e datas;
+- restrições de crawler conhecidas.
+
+### Selecionabilidade
+
+Pergunta: o ativo é uma fonte candidata adequada para a intenção?
+
+Observar:
+
+- correspondência entre intent e página;
+- especificidade e informação incremental;
+- clareza do propósito da página;
+- atualidade compatível com o tema.
+
+Não inferir seleção apenas porque uma página ranqueia organicamente.
+
+### Citabilidade
+
+Pergunta: claims podem ser associados a suporte claro?
+
+Observar:
+
+- granularidade;
+- fonte, data e contexto;
+- autoria e responsabilidade;
+- comparações simétricas;
+- ressalvas e condições.
+
+`[FATO]` Pesquisas de verificabilidade mostram que uma citação apresentada por uma engine não garante suporte integral ao texto associado. Por isso, o benchmark verifica a correspondência claim-fonte.
+
+### Absorção
+
+Pergunta: evidências, linguagem, estrutura ou fatos do ativo contribuíram para a resposta?
+
+Absorção deve ser tratada como avaliação graduada e revisada por humano. Ausência de citação não permite concluir automaticamente ausência de influência; presença de citação também não prova absorção forte.
+
+### Autoridade de entidade
+
+Pergunta: a entidade é clara e corroborada?
+
+Observar:
+
+- nome canônico e aliases;
+- tipo e definição;
+- relações;
+- consistência própria;
+- corroboração independente;
+- expertise verificável;
+- alinhamento entre locales.
+
+Dados estruturados devem representar conteúdo visível. Eles ajudam a explicitar significado, mas não são promessa de citação.
+
+### Mensuração
+
+Pergunta: o resultado pode ser comparado de modo honesto?
+
+Exigir:
+
+- prompt set e versão;
+- engine, modo, locale e timestamp;
+- repetição;
+- resultado bruto;
+- estados de erro ou indisponibilidade;
+- critérios estáveis;
+- denominadores visíveis.
+
+## Workflow do MVP
+
+1. **Escopo:** definir marca, categoria, páginas, locale, concorrentes e perguntas.
+2. **Ledger:** registrar fontes, datas, confiabilidade e conflitos.
+3. **Entity map:** normalizar entidades e relações.
+4. **Diagnóstico:** aplicar a rubrica de prontidão com evidências.
+5. **Citabilidade:** aplicar a rubrica somente às páginas com material suficiente.
+6. **Benchmark:** executar prompts sob protocolo controlado.
+7. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
+8. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
+9. **Intervenção:** alterar uma unidade observável por ciclo quando possível.
+10. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
+
+## Pontuação
+
+Cada critério usa escala ordinal `0–4`:
+
+| Score | Interpretação |
+|---:|---|
+| 0 | ausente ou sem evidência |
+| 1 | fraco e inconsistente |
+| 2 | parcial |
+| 3 | sólido |
+| 4 | forte e reproduzível |
+
+Score ponderado:
+
+```text
+score_total = soma(score_do_criterio / 4 × peso)
+```
+
+Os pesos somam 100. O score deve ser acompanhado de cobertura de evidência. Um score aparentemente alto com baixa cobertura não é comparável a uma avaliação completa.
+
+## Classes de evidência
+
+| Classe | Uso |
+|---|---|
+| Documentação oficial | Comportamento e políticas declaradas por uma plataforma. |
+| Paper revisado por pares | Evidência científica com escopo e limitações descritos. |
+| Preprint | Evidência emergente; usar como direção, não consenso. |
+| Dados próprios | Evidência do projeto, desde que método e período estejam registrados. |
+| Curso ou material didático | Apoio operacional; claims devem ser triangulados. |
+| Vendor ou practitioner study | Hipótese ou evidência observacional com risco comercial. |
+
+## Métricas mínimas do benchmark
+
+- presença da marca;
+- recomendação explícita;
+- domínio ou URL citada;
+- suporte da citação;
+- absorção;
+- precisão da entidade;
+- concorrentes presentes;
+- estabilidade entre repetições;
+- taxa de erros ou estados não avaliáveis.
+
+Não usar apenas contagem de screenshots, volume bruto de menções ou uma única engine.
+
+## Limites
+
+- Engines e modelos mudam sem preservar comparabilidade perfeita.
+- Interfaces podem ocultar modelo, índice, personalização ou ativação de busca.
+- Scores são instrumentos de decisão, não indicadores universais.
+- Correlação entre intervenção e resultado não prova causalidade sem desenho adequado.
+- GEO não substitui SEO técnico, conteúdo útil, pesquisa de usuário, analytics ou estratégia de marca.

@@ -1,0 +1,84 @@
+# Política de atualização
+
+## Objetivo
+
+Manter o GEO OS útil sem transformar sinais voláteis em regras permanentes.
+
+## Versionamento
+
+Usar versionamento semântico:
+
+- `PATCH`: correções editoriais, links, exemplos e validações sem mudança de contrato.
+- `MINOR`: novos critérios, prompts ou campos opcionais compatíveis.
+- `MAJOR`: mudanças de escala, pesos, campos obrigatórios ou significado de métricas.
+
+Rubricas e datasets devem declarar `version` ou `schema_version`.
+
+## Gatilhos de revisão
+
+Revisar a metodologia quando ocorrer:
+
+- mudança oficial de documentação de uma plataforma;
+- publicação relevante revisada por pares;
+- alteração material no comportamento observado das engines;
+- falha recorrente em uso real;
+- novo requisito comercial, legal ou ético;
+- mudança incompatível em templates ou validações.
+
+Na ausência de gatilho, revisar o ledger e os links ao menos trimestralmente.
+
+## Hierarquia de fontes
+
+1. documentação oficial e especificações;
+2. papers revisados por pares;
+3. datasets ou documentação primária;
+4. preprints;
+5. estudos independentes reproduzíveis;
+6. materiais didáticos;
+7. relatórios de vendors, posts e opinião.
+
+Fonte inferior pode gerar hipótese, mas não deve sobrescrever silenciosamente fonte superior.
+
+## Processo de mudança
+
+1. Registrar a nova fonte em `docs/source-ledger.md`.
+2. Identificar claims, skills, rubricas, templates e prompts afetados.
+3. Classificar a mudança como fato, inferência, hipótese ou framework próprio.
+4. Atualizar arquivos canônicos em `skills/`, nunca apenas `.agents/skills/`.
+5. Ajustar testes quando houver mudança de contrato.
+6. Executar:
+
+```powershell
+python -m unittest discover -s tests -v
+python scripts/validate_output.py --root .
+```
+
+7. Registrar versão e motivo da alteração no commit.
+
+## Regras para estatísticas
+
+Toda estatística deve registrar:
+
+- fonte;
+- data de publicação ou período;
+- data de acesso;
+- população/amostra;
+- método conhecido;
+- limitação material.
+
+Remover ou rebaixar para `[HIPÓTESE]` quando a origem não puder ser recuperada.
+
+## Compatibilidade
+
+- Não renomear IDs de critérios ou prompts sem necessidade.
+- Preferir campos novos opcionais em versões `MINOR`.
+- Para mudança `MAJOR`, documentar migração de CSV, JSON e YAML.
+- Manter conteúdo em PT-BR e nomes de arquivos em inglês.
+
+## Depreciação
+
+Marcar item como `deprecated` antes de remover quando ele tiver consumidores conhecidos. Informar substituto, motivo e versão prevista para remoção.
+
+## Revisão humana
+
+O validador estrutural não determina se um claim é verdadeiro, se uma fonte é adequada ou se uma recomendação é estratégica. Toda release metodológica exige revisão humana desses pontos.
