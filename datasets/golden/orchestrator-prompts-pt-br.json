@@ -1,0 +1,278 @@
+{
+  "schema_version": "0.1.0",
+  "dataset_id": "geo-os-orchestrator-prompts-pt-br",
+  "locale": "pt-BR",
+  "description": "Cenários qualitativos para validar seleção de fluxo, suficiência mínima, lacunas, skills, templates, limitações e próximo comando do GEO OS Orchestrator.",
+  "usage_notes": [
+    "Avaliar roteamento, não a execução das skills recomendadas.",
+    "Penalizar fluxos maiores do que o necessário.",
+    "Não permitir skills ou templates inexistentes."
+  ],
+  "prompts": [
+    {
+      "id": "ORCH-AUDIT-001",
+      "flow": "audit-existing-content",
+      "prompt": "Tenho o texto completo de uma página e quero saber se ela está pronta para GEO. Público, intenção, entidade e fontes estão definidos.",
+      "provided_inputs": [
+        "conteúdo completo",
+        "target intent",
+        "público",
+        "entidade principal",
+        "fontes"
+      ],
+      "expected_skills": [
+        "extractability-audit",
+        "trust-signal-audit",
+        "geo-scorecard"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/extractability-audit-template.md",
+        "templates/trust-signal-audit-template.md",
+        "templates/geo-scorecard-template.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona auditoria de conteúdo existente.",
+        "minimal_sufficiency": "Limita o fluxo às duas auditorias e à consolidação no scorecard.",
+        "missing_inputs": "Não inventa lacunas quando os inputs mínimos foram fornecidos.",
+        "skill_validity": "Usa somente extractability-audit, trust-signal-audit e geo-scorecard.",
+        "template_guidance": "Indica os três templates de avaliação e o workflow selection.",
+        "limitations": "Informa que avaliação não garante seleção ou citação.",
+        "next_command": "Entrega comando iniciando por extractability-audit."
+      }
+    },
+    {
+      "id": "ORCH-PLAN-001",
+      "flow": "plan-new-content",
+      "prompt": "Quero criar um artigo novo sobre segurança de IA para pequenas empresas. Tenho tema e público, mas ainda não defini entidades nem fontes.",
+      "provided_inputs": [
+        "tema",
+        "público"
+      ],
+      "expected_skills": [
+        "entity-map",
+        "content-brief"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/entity-map.csv",
+        "templates/evidence-ledger.csv",
+        "templates/content-brief-template.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona planejamento de conteúdo novo.",
+        "minimal_sufficiency": "Não aciona answer-blocks, topical-authority ou citation-engineering antes dos requisitos.",
+        "missing_inputs": "Registra entidades, intenção e fontes como lacunas.",
+        "skill_validity": "Usa entity-map para desbloquear content-brief.",
+        "template_guidance": "Indica entity map, evidence ledger e content brief.",
+        "limitations": "Não redige o artigo final.",
+        "next_command": "Entrega comando para iniciar o entity-map com o tema e público."
+      }
+    },
+    {
+      "id": "ORCH-IMPROVE-001",
+      "flow": "improve-existing-content",
+      "prompt": "Melhore esta landing page usando os gaps já registrados no scorecard, no extractability audit e no trust signal audit. Não escreva a versão final.",
+      "provided_inputs": [
+        "landing page",
+        "geo-scorecard",
+        "extractability-audit",
+        "trust-signal-audit"
+      ],
+      "expected_skills": [
+        "rewrite-plan"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/rewrite-plan-template.md",
+        "templates/optimization-cycle-template.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona melhoria de conteúdo existente.",
+        "minimal_sufficiency": "Não repete auditorias já fornecidas.",
+        "missing_inputs": "Solicita intent ou entity somente se ausentes e materiais para o plano.",
+        "skill_validity": "Usa rewrite-plan como única skill executora.",
+        "template_guidance": "Indica rewrite plan e ciclo de otimização.",
+        "limitations": "Mantém o output no nível de plano, sem texto final.",
+        "next_command": "Entrega comando para rewrite-plan usando os gaps existentes."
+      }
+    },
+    {
+      "id": "ORCH-ENTITY-001",
+      "flow": "create-entity-map",
+      "prompt": "Normalize a marca, os produtos, os autores e os conceitos citados neste material em um mapa de entidades.",
+      "provided_inputs": [
+        "material com entidades"
+      ],
+      "expected_skills": [
+        "entity-map"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/entity-map.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona criação de mapa de entidades.",
+        "minimal_sufficiency": "Não adiciona planejamento editorial ou auditoria.",
+        "missing_inputs": "Registra fontes de corroboração ausentes.",
+        "skill_validity": "Usa somente entity-map.",
+        "template_guidance": "Indica entity-map.csv.",
+        "limitations": "Não inventa relações ou IDs.",
+        "next_command": "Entrega comando direto para entity-map."
+      }
+    },
+    {
+      "id": "ORCH-ANSWER-001",
+      "flow": "create-answer-blocks",
+      "prompt": "Crie answer blocks para três perguntas já mapeadas. Tenho as entidades, os claims liberados e o evidence ledger.",
+      "provided_inputs": [
+        "perguntas",
+        "entidades",
+        "claims liberados",
+        "evidence ledger"
+      ],
+      "expected_skills": [
+        "answer-blocks"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/answer-block-template.md",
+        "templates/evidence-ledger.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona criação de answer blocks.",
+        "minimal_sufficiency": "Não repete entity map ou citation engineering.",
+        "missing_inputs": "Confirma contexto, público ou restrições se forem materiais.",
+        "skill_validity": "Usa somente answer-blocks.",
+        "template_guidance": "Indica answer block e evidence ledger.",
+        "limitations": "Não promete extração ou citação.",
+        "next_command": "Entrega comando para answer-blocks com as três perguntas."
+      }
+    },
+    {
+      "id": "ORCH-EVIDENCE-001",
+      "flow": "map-evidence-citations",
+      "prompt": "Tenho uma página com afirmações sem fonte. Quero mapear qual evidência é necessária e onde há oportunidades de citação.",
+      "provided_inputs": [
+        "conteúdo da página",
+        "claims observados"
+      ],
+      "expected_skills": [
+        "citation-engineering"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/evidence-ledger.csv",
+        "templates/citation-opportunity-map.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona mapeamento de evidências e citações.",
+        "minimal_sufficiency": "Não cria answer blocks nem reescreve a página.",
+        "missing_inputs": "Registra fontes, datas e método ausentes.",
+        "skill_validity": "Usa somente citation-engineering.",
+        "template_guidance": "Indica evidence ledger e citation opportunity map.",
+        "limitations": "Descreve a evidência antes de sugerir fonte específica.",
+        "next_command": "Entrega comando para citation-engineering."
+      }
+    },
+    {
+      "id": "ORCH-BENCHMARK-001",
+      "flow": "plan-ai-search-benchmark",
+      "prompt": "Quero montar um benchmark manual de AI Search para comparar minha marca com três concorrentes em português do Brasil.",
+      "provided_inputs": [
+        "marca",
+        "concorrentes",
+        "locale"
+      ],
+      "expected_skills": [
+        "ai-search-testing"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/ai-search-benchmark.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona planejamento de benchmark de AI Search.",
+        "minimal_sufficiency": "Não aciona auditoria de conteúdo ou competitor-analysis.",
+        "missing_inputs": "Solicita prompt set, engines, modos e repetições.",
+        "skill_validity": "Usa somente ai-search-testing.",
+        "template_guidance": "Indica ai-search-benchmark.csv.",
+        "limitations": "Explicita volatilidade, personalização e ausência de causalidade.",
+        "next_command": "Entrega comando para ai-search-testing planejar o protocolo."
+      }
+    },
+    {
+      "id": "ORCH-REFRESH-001",
+      "flow": "prepare-content-refresh",
+      "prompt": "Tenho um artigo antigo com estatísticas vencidas e um gap de intenção já confirmado. Quero planejar o refresh sem reescrever tudo.",
+      "provided_inputs": [
+        "artigo existente",
+        "estatísticas vencidas",
+        "gap de intenção"
+      ],
+      "expected_skills": [
+        "content-refresh"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/content-refresh-plan.csv",
+        "templates/optimization-cycle-template.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona preparação de refresh.",
+        "minimal_sufficiency": "Não inicia rewrite-plan ou auditoria completa sem necessidade.",
+        "missing_inputs": "Solicita fontes atuais, owner e critério de reavaliação.",
+        "skill_validity": "Usa somente content-refresh.",
+        "template_guidance": "Indica refresh plan e optimization cycle.",
+        "limitations": "Não trata data antiga como prova automática de erro.",
+        "next_command": "Entrega comando para content-refresh."
+      }
+    },
+    {
+      "id": "ORCH-SCHEMA-001",
+      "flow": "map-schema-opportunity",
+      "prompt": "Mapeie oportunidades de schema para esta página de serviço. O conteúdo visível e o schema atual foram fornecidos.",
+      "provided_inputs": [
+        "conteúdo visível",
+        "schema atual"
+      ],
+      "expected_skills": [
+        "schema-opportunity"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/schema-opportunity-map.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona oportunidade de schema.",
+        "minimal_sufficiency": "Não implementa markup nem adiciona tipos por variedade.",
+        "missing_inputs": "Registra documentação oficial ou campos factuais ausentes.",
+        "skill_validity": "Usa somente schema-opportunity.",
+        "template_guidance": "Indica schema-opportunity-map.csv.",
+        "limitations": "Não promete rich result ou citação.",
+        "next_command": "Entrega comando para schema-opportunity."
+      }
+    },
+    {
+      "id": "ORCH-METHOD-001",
+      "flow": "consult-methodology",
+      "prompt": "Explique a diferença entre presença, citação, suporte da citação e absorção no método do GEO OS. Não execute auditoria.",
+      "provided_inputs": [
+        "pergunta metodológica"
+      ],
+      "expected_skills": [],
+      "expected_templates": [
+        "templates/workflow-selection-template.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona consulta de documentação e metodologia.",
+        "minimal_sufficiency": "Não aciona skill operacional.",
+        "missing_inputs": "Não exige ativo, entidade ou fontes quando a pergunta é conceitual.",
+        "skill_validity": "Mantém expected_skills vazio.",
+        "template_guidance": "Usa somente workflow selection quando o registro for necessário.",
+        "limitations": "Diferencia framework próprio de fatos externos.",
+        "next_command": "Aponta docs/methodology.md ou o módulo relevante, sem execução."
+      }
+    }
+  ]
+}

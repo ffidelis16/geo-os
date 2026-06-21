@@ -2,6 +2,12 @@
 
 O projeto usa histórico Git como fonte detalhada. Este arquivo resume as camadas publicáveis.
 
+## 2026-06-21 — Orquestração
+
+- Adicionado `geo-os-orchestrator` como roteador para o menor fluxo suficiente.
+- Adicionados contrato de seleção de workflow e dez cenários qualitativos de roteamento.
+- Estendida a validação para rejeitar fluxos, skills, templates e critérios inexistentes.
+
 ## 2026-06-21 — Consolidação da base de conhecimento
 
 - Aprofundados answer blocks, intent map, topical authority, trust signals e AI Search testing.

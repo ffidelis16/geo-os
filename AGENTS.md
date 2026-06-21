@@ -14,6 +14,16 @@ Manter um sistema operacional modular, auditável e seguro para publicação pú
 - Preservar compatibilidade com o padrão Agent Skills: diretório em kebab-case e `SKILL.md` com `name` e `description`.
 - Não criar novos módulos, adapters ou automações sem necessidade demonstrada.
 
+## Orquestração
+
+- Usar `geo-os-orchestrator` quando o pedido não indicar uma skill única ou permitir mais de uma rota plausível.
+- Tratar o orquestrador como roteador: classificar o pedido, selecionar o menor fluxo suficiente, registrar inputs faltantes e entregar o próximo comando.
+- Selecionar um fluxo principal e adicionar somente skills que desbloqueiem inputs essenciais.
+- Não executar todas as skills por padrão, não duplicar a metodologia das skills executoras e não reescrever conteúdo final.
+- Se o pedido for ambíguo, escolher a rota mais conservadora, marcar a suposição e solicitar apenas o próximo input mínimo.
+- Validar que toda skill e todo template recomendados existem no repositório.
+- Usar o overlay privado apenas como contexto complementar; nunca expor seu conteúdo, caminho ou síntese fechada no output público.
+
 ## Política de evidência
 
 - Marcar claims não triviais como `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]`, `[RECOMENDAÇÃO]` ou `[FRAMEWORK PRÓPRIO]`.
@@ -53,7 +63,7 @@ O repositório funciona em dois modos:
 Regras:
 
 - Tratar o overlay privado como fonte complementar e opcional, nunca como dependência obrigatória.
-- Não referenciar o overlay em contratos de `SKILL.md`, módulos, templates, scripts ou testes públicos.
+- Não tornar o overlay uma dependência obrigatória em `SKILL.md`, módulos, templates, scripts ou testes públicos; referências devem limitar-se ao uso opcional e seguro.
 - Tratar qualquer uso do overlay como síntese interna, não como citação pública.
 - Não copiar automaticamente conteúdo, caminhos, números voláteis ou fontes fechadas para outputs públicos ou arquivos rastreados pelo Git.
 - Ao promover conhecimento privado para o núcleo público, criar síntese autoral, registrar a decisão em `docs/source-ledger.md` e exigir fonte primária para claims técnicos.

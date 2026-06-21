@@ -14,6 +14,7 @@ import yaml
 
 
 SKILL_NAMES = (
+    "geo-os-orchestrator",
     "geo-diagnosis",
     "entity-map",
     "ai-search-testing",
@@ -45,6 +46,8 @@ STRATEGIC_SKILL_NAMES = {
 REQUIRED_FILES = (
     "README.md",
     "AGENTS.md",
+    "skills/geo-os-orchestrator/SKILL.md",
+    ".agents/skills/geo-os-orchestrator/SKILL.md",
     "skills/geo-diagnosis/SKILL.md",
     "skills/entity-map/SKILL.md",
     "skills/ai-search-testing/SKILL.md",
@@ -72,6 +75,7 @@ REQUIRED_FILES = (
     "modules/rewrite-plan.md",
     "modules/content-refresh.md",
     "modules/schema-opportunity.md",
+    "modules/geo-os-orchestrator.md",
     "rubrics/geo-readiness.yaml",
     "rubrics/citation-readiness.yaml",
     "rubrics/entity-authority.yaml",
@@ -92,10 +96,12 @@ REQUIRED_FILES = (
     "templates/content-refresh-plan.csv",
     "templates/schema-opportunity-map.csv",
     "templates/optimization-cycle-template.md",
+    "templates/workflow-selection-template.md",
     "datasets/golden/benchmark-prompts-pt-br.json",
     "datasets/golden/strategic-planning-prompts-pt-br.json",
     "datasets/golden/evaluation-prompts-pt-br.json",
     "datasets/golden/optimization-prompts-pt-br.json",
+    "datasets/golden/orchestrator-prompts-pt-br.json",
     "scripts/validate_output.py",
     "tests/test_validate_output.py",
     "docs/methodology.md",
@@ -232,6 +238,21 @@ OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS = (
     "critérios de sucesso",
     "reavaliação",
     "decisão",
+)
+
+WORKFLOW_SELECTION_TEMPLATE_SECTIONS = (
+    "pedido original",
+    "tipo de demanda",
+    "fluxo selecionado",
+    "fluxos descartados",
+    "justificativa",
+    "skills em ordem",
+    "inputs mínimos",
+    "inputs faltantes",
+    "templates",
+    "output path",
+    "limitações",
+    "comando pronto para execução",
 )
 
 README_PUBLIC_SECTIONS = (
@@ -554,6 +575,46 @@ EXPECTED_OPTIMIZATION_CRITERIA = (
     "over_recommendation_risk",
     "re_evaluation_criteria",
 )
+
+EXPECTED_ORCHESTRATOR_CRITERIA = (
+    "flow_selection",
+    "minimal_sufficiency",
+    "missing_inputs",
+    "skill_validity",
+    "template_guidance",
+    "limitations",
+    "next_command",
+)
+
+ORCHESTRATOR_FLOWS = {
+    "audit-existing-content",
+    "plan-new-content",
+    "improve-existing-content",
+    "create-entity-map",
+    "create-answer-blocks",
+    "map-evidence-citations",
+    "plan-ai-search-benchmark",
+    "prepare-content-refresh",
+    "map-schema-opportunity",
+    "consult-methodology",
+}
+
+ORCHESTRATOR_TEMPLATE_PATHS = {
+    "templates/workflow-selection-template.md",
+    "templates/extractability-audit-template.md",
+    "templates/trust-signal-audit-template.md",
+    "templates/geo-scorecard-template.md",
+    "templates/entity-map.csv",
+    "templates/evidence-ledger.csv",
+    "templates/content-brief-template.md",
+    "templates/rewrite-plan-template.md",
+    "templates/optimization-cycle-template.md",
+    "templates/answer-block-template.md",
+    "templates/citation-opportunity-map.csv",
+    "templates/ai-search-benchmark.csv",
+    "templates/content-refresh-plan.csv",
+    "templates/schema-opportunity-map.csv",
+}
 
 STRATEGIC_MODULES = {
     "content-brief",
@@ -1082,6 +1143,119 @@ def validate_optimization_prompts(dataset_path: Path) -> list[str]:
     return validate_optimization_prompt_data(data, str(dataset_path))
 
 
+def validate_orchestrator_prompt_data(data: Any, source_name: str) -> list[str]:
+    """Valida cenários qualitativos de roteamento do orquestrador."""
+    errors: list[str] = []
+    if not isinstance(data, dict):
+        return [f"{source_name}: raiz deve ser um objeto JSON"]
+
+    for field in ("schema_version", "locale", "prompts"):
+        if field not in data:
+            errors.append(f"{source_name}: campo obrigatório ausente: {field}")
+
+    if data.get("locale") != "pt-BR":
+        errors.append(f"{source_name}: locale deve ser pt-BR")
+
+    prompts = data.get("prompts")
+    if not isinstance(prompts, list):
+        errors.append(f"{source_name}: prompts deve ser uma lista")
+        return errors
+    if len(prompts) < 10:
+        errors.append(f"{source_name}: prompts deve conter ao menos 10 cenários")
+
+    prompt_ids: set[str] = set()
+    covered_flows: set[str] = set()
+    worker_skills = set(SKILL_NAMES) - {"geo-os-orchestrator"}
+
+    for index, prompt in enumerate(prompts, start=1):
+        prefix = f"{source_name}: prompt {index}"
+        if not isinstance(prompt, dict):
+            errors.append(f"{prefix} deve ser um objeto")
+            continue
+
+        for field in (
+            "id",
+            "flow",
+            "prompt",
+            "provided_inputs",
+            "expected_skills",
+            "expected_templates",
+            "expected_criteria",
+        ):
+            if field not in prompt:
+                errors.append(f"{prefix}: campo obrigatório ausente: {field}")
+
+        prompt_id = prompt.get("id")
+        if isinstance(prompt_id, str):
+            if prompt_id in prompt_ids:
+                errors.append(f"{prefix}: id duplicado: {prompt_id}")
+            prompt_ids.add(prompt_id)
+        else:
+            errors.append(f"{prefix}: id deve ser uma string")
+
+        flow = prompt.get("flow")
+        if flow not in ORCHESTRATOR_FLOWS:
+            errors.append(f"{prefix}: flow inválido: {flow}")
+        else:
+            covered_flows.add(flow)
+
+        prompt_text = prompt.get("prompt")
+        if not isinstance(prompt_text, str) or not prompt_text.strip():
+            errors.append(f"{prefix}: prompt deve ser uma string não vazia")
+
+        provided_inputs = prompt.get("provided_inputs")
+        if not isinstance(provided_inputs, list):
+            errors.append(f"{prefix}: provided_inputs deve ser uma lista")
+
+        expected_skills = prompt.get("expected_skills")
+        if not isinstance(expected_skills, list):
+            errors.append(f"{prefix}: expected_skills deve ser uma lista")
+        else:
+            for skill_name in expected_skills:
+                if skill_name not in worker_skills:
+                    errors.append(f"{prefix}: skill inválida: {skill_name}")
+
+        expected_templates = prompt.get("expected_templates")
+        if not isinstance(expected_templates, list) or not expected_templates:
+            errors.append(
+                f"{prefix}: expected_templates deve ser uma lista não vazia"
+            )
+        else:
+            for template_path in expected_templates:
+                if template_path not in ORCHESTRATOR_TEMPLATE_PATHS:
+                    errors.append(f"{prefix}: template inválido: {template_path}")
+
+        criteria = prompt.get("expected_criteria")
+        if not isinstance(criteria, dict):
+            errors.append(f"{prefix}: expected_criteria deve ser um objeto")
+            continue
+
+        for criterion in EXPECTED_ORCHESTRATOR_CRITERIA:
+            value = criteria.get(criterion)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(
+                    f"{prefix}: expected_criteria deve definir {criterion}"
+                )
+
+    missing_flows = ORCHESTRATOR_FLOWS - covered_flows
+    if missing_flows:
+        errors.append(
+            f"{source_name}: fluxos sem cenário: {', '.join(sorted(missing_flows))}"
+        )
+
+    return errors
+
+
+def validate_orchestrator_prompts(dataset_path: Path) -> list[str]:
+    """Carrega e valida o dataset do orquestrador."""
+    try:
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"{dataset_path}: {exc}"]
+
+    return validate_orchestrator_prompt_data(data, str(dataset_path))
+
+
 def validate_csv_headers(csv_path: Path, required_headers: list[str] | tuple[str, ...]) -> list[str]:
     """Valida se um template CSV contém os headers exigidos."""
     try:
@@ -1295,6 +1469,7 @@ def validate_repository(root: Path) -> list[str]:
         "rewrite-plan.md",
         "content-refresh.md",
         "schema-opportunity.md",
+        "geo-os-orchestrator.md",
     ):
         errors.extend(
             validate_markdown_sections(
@@ -1331,6 +1506,11 @@ def validate_repository(root: Path) -> list[str]:
     errors.extend(
         validate_optimization_prompts(
             root / "datasets" / "golden" / "optimization-prompts-pt-br.json"
+        )
+    )
+    errors.extend(
+        validate_orchestrator_prompts(
+            root / "datasets" / "golden" / "orchestrator-prompts-pt-br.json"
         )
     )
     errors.extend(
@@ -1427,6 +1607,12 @@ def validate_repository(root: Path) -> list[str]:
         validate_markdown_sections(
             root / "templates" / "optimization-cycle-template.md",
             OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "workflow-selection-template.md",
+            WORKFLOW_SELECTION_TEMPLATE_SECTIONS,
         )
     )
     errors.extend(

@@ -9,6 +9,7 @@
 - Rubricas e datasets tornam critérios explícitos.
 - Scripts validam estrutura; humanos avaliam estratégia e verdade.
 - O repositório público não contém fontes privadas.
+- A camada de orquestração seleciona trabalho; as skills executoras mantêm seus próprios contratos.
 
 ## Diretórios
 
@@ -29,18 +30,18 @@
 ## Fluxo operacional
 
 ```text
-Intent + Entity + Evidence
+Pedido em linguagem natural
             ↓
-Planejamento → Produção → Avaliação
-                           ↓
-                     Otimização
-                           ↓
-                    Reavaliação
-                           ↓
-                    Documentação
+geo-os-orchestrator
+            ↓
+menor fluxo suficiente
+            ↓
+skill executora → template → output → revisão humana
 ```
 
 Cada transição preserva origem, evidência, limitações e responsável.
+
+O `geo-os-orchestrator` é o roteador da camada de orquestração. Ele escolhe um fluxo principal, adiciona somente dependências que desbloqueiam inputs essenciais e encerra sua função ao entregar o próximo comando. Não duplica metodologia, não executa todas as skills e não produz conteúdo final.
 
 ## Skills canônicas e proxies
 
@@ -55,6 +56,7 @@ Não edite apenas o proxy. O validador rejeita divergência de metadados e refer
 - Templates Markdown exigem headings definidos por tipo.
 - CSVs exigem headers e largura consistente em todas as linhas.
 - JSONs exigem locale, IDs únicos, módulos válidos e critérios qualitativos.
+- O dataset do orquestrador exige os dez fluxos, skills e templates existentes, suficiência mínima, lacunas, limitações e próximo comando.
 - YAMLs exigem escala, pesos, evidências, interpretação e limitações.
 
 Mudança de heading, header ou critério pode ser mudança de contrato.
@@ -65,5 +67,6 @@ Mudança de heading, header ou critério pode ser mudança de contrato.
 - Não há integração com engines, analytics ou plataformas.
 - Não há sincronização automática entre outputs.
 - Não há julgamento automático de qualidade estratégica.
+- O orquestrador não é runtime, agente autônomo ou super-skill.
 - Não há material privado, transcrição, apostila ou slide no repositório.
 - Adapters de plataforma só devem existir quando houver necessidade demonstrada.

@@ -2,6 +2,25 @@
 
 Os exemplos usam o projeto fictício **Farol Urbano**, com domínio reservado `farol-urbano.example.invalid`.
 
+## Escolher um fluxo com o orquestrador
+
+Quando o pedido ainda não indica a skill correta:
+
+```text
+$geo-os-orchestrator Tenho uma landing page antiga, conheço os principais gaps e quero preparar uma atualização sem escrever o texto final.
+```
+
+Resultado esperado:
+
+- fluxo `prepare-content-refresh`;
+- `content-refresh` como skill mínima;
+- gaps, versão do ativo e critério de sucesso conferidos como inputs;
+- `templates/content-refresh-plan.csv` e `templates/optimization-cycle-template.md`;
+- output sugerido em `outputs/farol-urbano/workflow-selection.md`;
+- próximo comando pronto para executar a skill selecionada.
+
+O orquestrador registra rotas descartadas e não adiciona auditorias quando os gaps já estão disponíveis.
+
 ## Auditar um conteúdo
 
 Input mínimo:

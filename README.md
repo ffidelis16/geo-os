@@ -13,10 +13,12 @@ O repositório organiza metodologia, skills, rubricas, templates, datasets de te
 O fluxo central é:
 
 ```text
-Diagnosticar → Mapear → Planejar → Produzir → Auditar
-                                              ↓
-Publicar ← Demonstrar ← Documentar ← Reavaliar ← Otimizar
+Pedido → Orquestrar → Diagnosticar/Mapear/Planejar/Auditar/Otimizar
+                              ↓
+                 Documentar → Reavaliar
 ```
+
+O `geo-os-orchestrator` interpreta o pedido e seleciona o menor fluxo suficiente. Ele não executa todas as skills nem substitui a decisão estratégica humana.
 
 ## Para quem serve
 
@@ -77,6 +79,7 @@ O projeto também suporta um overlay privado opcional para sínteses e playbooks
 
 | Skill | Uso |
 |---|---|
+| `geo-os-orchestrator` | Classificar pedidos e selecionar o menor fluxo operacional suficiente. |
 | `geo-diagnosis` | Produzir diagnóstico de maturidade, evidências e prioridades GEO. |
 | `entity-map` | Normalizar entidades, aliases, relações e fontes de corroboração. |
 | `ai-search-testing` | Planejar e registrar benchmarks reproduzíveis entre engines. |
@@ -107,6 +110,14 @@ cd geo-os
 python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```
+
+Para começar por um pedido em linguagem natural:
+
+```text
+$geo-os-orchestrator Quero melhorar uma landing page existente sem reescrever o texto final.
+```
+
+O resultado indica fluxo, skills em ordem, inputs faltantes, templates, pasta em `outputs/`, limitações e o próximo comando operacional.
 
 Guia completo: [docs/getting-started.md](docs/getting-started.md).
 
@@ -161,6 +172,7 @@ Camadas disponíveis:
 - planejamento estratégico;
 - avaliação;
 - otimização;
+- orquestração;
 - publicação e documentação.
 
 Ainda fora do escopo: automação de engines, crawler, scraping, APIs externas, reescrita final e implementação automática de schema.

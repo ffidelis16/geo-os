@@ -66,6 +66,7 @@ As entradas abaixo registram influência metodológica sem expor caminho local, 
 | DEC-022 | `[FRAMEWORK PRÓPRIO]` | Operacionalizar answer units como `claim + contexto + evidência + takeaway`, com front-loading, formato adequado e CTA posterior à resposta. | LOC-001, LOC-002, LOC-006 e DEC-009 |
 | DEC-023 | `[FRAMEWORK PRÓPRIO]` | Avaliar autoridade tópica em relações dentro da página, entre páginas e com fontes externas. | LOC-006, DEC-011 e síntese metodológica |
 | DEC-024 | `[FRAMEWORK PRÓPRIO]` | Separar autoridade de autor, autoridade da organização e qualidade da evidência em auditorias de confiança. | LOC-006, DEC-015 e política de evidência |
+| DEC-025 | `[FRAMEWORK PRÓPRIO]` | Usar um orquestrador como roteador do menor fluxo suficiente, sem duplicar ou executar a metodologia das skills recomendadas. | Princípio de modularidade, contratos existentes e necessidade operacional do projeto |
 
 ## Fila de fontes para pesquisas estratégicas
 

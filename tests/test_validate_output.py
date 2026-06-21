@@ -347,6 +347,52 @@ OPTIMIZATION_PROMPT_CRITERIA = (
     "re_evaluation_criteria",
 )
 
+ORCHESTRATOR_FILES = {
+    "modules/geo-os-orchestrator.md",
+    "skills/geo-os-orchestrator/SKILL.md",
+    ".agents/skills/geo-os-orchestrator/SKILL.md",
+    "templates/workflow-selection-template.md",
+    "datasets/golden/orchestrator-prompts-pt-br.json",
+}
+
+ORCHESTRATOR_FLOWS = {
+    "audit-existing-content",
+    "plan-new-content",
+    "improve-existing-content",
+    "create-entity-map",
+    "create-answer-blocks",
+    "map-evidence-citations",
+    "plan-ai-search-benchmark",
+    "prepare-content-refresh",
+    "map-schema-opportunity",
+    "consult-methodology",
+}
+
+ORCHESTRATOR_PROMPT_CRITERIA = (
+    "flow_selection",
+    "minimal_sufficiency",
+    "missing_inputs",
+    "skill_validity",
+    "template_guidance",
+    "limitations",
+    "next_command",
+)
+
+WORKFLOW_SELECTION_SECTIONS = (
+    "pedido original",
+    "tipo de demanda",
+    "fluxo selecionado",
+    "fluxos descartados",
+    "justificativa",
+    "skills em ordem",
+    "inputs mínimos",
+    "inputs faltantes",
+    "templates",
+    "output path",
+    "limitações",
+    "comando pronto para execução",
+)
+
 PUBLICATION_FILES = {
     "docs/getting-started.md",
     "docs/architecture.md",
@@ -1019,6 +1065,114 @@ description: Use quando for necessário testar uma skill de exemplo.
         )
         self.assertTrue(any("over_recommendation_risk" in error for error in errors))
         self.assertTrue(any("re_evaluation_criteria" in error for error in errors))
+
+    def test_orchestrator_files_are_required(self) -> None:
+        self.assertTrue(
+            ORCHESTRATOR_FILES.issubset(set(self.validator.REQUIRED_FILES))
+        )
+
+    def test_orchestrator_skill_is_registered(self) -> None:
+        self.assertIn("geo-os-orchestrator", self.validator.SKILL_NAMES)
+
+    def test_orchestrator_is_documented_as_router(self) -> None:
+        required_values = {
+            "README.md": ("geo-os-orchestrator", "menor fluxo suficiente"),
+            "docs/architecture.md": ("camada de orquestração", "roteador"),
+            "docs/usage-examples.md": (
+                "## Escolher um fluxo com o orquestrador",
+                "$geo-os-orchestrator",
+            ),
+            "AGENTS.md": ("geo-os-orchestrator", "menor fluxo suficiente"),
+        }
+
+        for relative_path, markers in required_values.items():
+            content = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            for marker in markers:
+                with self.subTest(path=relative_path, marker=marker):
+                    self.assertIn(marker, content)
+
+    def test_orchestrator_module_and_skill_are_routers(self) -> None:
+        module = (
+            REPO_ROOT / "modules" / "geo-os-orchestrator.md"
+        ).read_text(encoding="utf-8").lower()
+        skill = (
+            REPO_ROOT / "skills" / "geo-os-orchestrator" / "SKILL.md"
+        ).read_text(encoding="utf-8").lower()
+
+        for content in (module, skill):
+            self.assertIn("menor fluxo suficiente", content)
+            self.assertIn("inputs faltantes", content)
+            self.assertIn("próximo comando", content)
+            self.assertIn("não executar todas", content)
+            self.assertIn("não reescrever conteúdo final", content)
+
+    def test_workflow_selection_template_has_required_sections(self) -> None:
+        template_path = REPO_ROOT / "templates" / "workflow-selection-template.md"
+        self.assertTrue(template_path.is_file(), template_path)
+        content = template_path.read_text(encoding="utf-8").lower()
+
+        for section in WORKFLOW_SELECTION_SECTIONS:
+            self.assertIn(f"## {section}", content)
+
+    def test_orchestrator_dataset_covers_ten_flows(self) -> None:
+        dataset_path = (
+            REPO_ROOT / "datasets" / "golden" / "orchestrator-prompts-pt-br.json"
+        )
+        self.assertTrue(dataset_path.is_file(), dataset_path)
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(data["locale"], "pt-BR")
+        self.assertGreaterEqual(len(data["prompts"]), 10)
+        self.assertEqual(
+            {prompt["flow"] for prompt in data["prompts"]},
+            ORCHESTRATOR_FLOWS,
+        )
+
+        valid_worker_skills = set(self.validator.SKILL_NAMES) - {
+            "geo-os-orchestrator"
+        }
+        for prompt in data["prompts"]:
+            self.assertTrue(
+                set(prompt["expected_skills"]).issubset(valid_worker_skills)
+            )
+            for template in prompt["expected_templates"]:
+                self.assertTrue((REPO_ROOT / template).is_file(), template)
+            for criterion in ORCHESTRATOR_PROMPT_CRITERIA:
+                self.assertIn(criterion, prompt["expected_criteria"])
+
+    def test_validate_orchestrator_prompts_rejects_invalid_contract(self) -> None:
+        validator = getattr(
+            self.validator,
+            "validate_orchestrator_prompt_data",
+            None,
+        )
+        self.assertTrue(callable(validator))
+        data = {
+            "schema_version": "0.1.0",
+            "locale": "pt-BR",
+            "prompts": [
+                {
+                    "id": "ORCH-001",
+                    "flow": "run-everything",
+                    "prompt": "Faça tudo.",
+                    "provided_inputs": [],
+                    "expected_skills": ["skill-inexistente"],
+                    "expected_templates": ["templates/inexistente.md"],
+                    "expected_criteria": {
+                        "flow_selection": "Selecionar fluxo.",
+                        "minimal_sufficiency": "Evitar excesso.",
+                    },
+                }
+            ],
+        }
+
+        errors = validator(data, "orchestrator.json")
+
+        self.assertTrue(any("flow inválido" in error for error in errors))
+        self.assertTrue(any("skill inválida" in error for error in errors))
+        self.assertTrue(any("template inválido" in error for error in errors))
+        self.assertTrue(any("missing_inputs" in error for error in errors))
+        self.assertTrue(any("next_command" in error for error in errors))
 
     def test_agents_declares_recommendation_marker(self) -> None:
         agents_content = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8")
