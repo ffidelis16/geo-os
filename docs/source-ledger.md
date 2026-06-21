@@ -48,6 +48,22 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | DEC-007 | `[FRAMEWORK PRÓPRIO]` | Separar confiabilidade da fonte, confiança na relação claim-evidência, uso permitido e risco no evidence ledger. | SRC-009 e necessidade de governança factual |
 | DEC-008 | `[INFERÊNCIA]` | Descrever a evidência necessária antes de sugerir uma fonte específica em citation engineering. | SRC-009 e política de prevenção de citation theatre |
 | DEC-009 | `[FRAMEWORK PRÓPRIO]` | Criar answer blocks somente após mapear intenção e liberar claims no evidence ledger. | LOC-001, LOC-002, DEC-006 e DEC-007 |
+| DEC-010 | `[FRAMEWORK PRÓPRIO]` | Usar o content brief como contrato central enriquecido por topical authority e competitor analysis. | DEC-006, DEC-007, DEC-008 e necessidade operacional do projeto |
+| DEC-011 | `[FRAMEWORK PRÓPRIO]` | Avaliar topical authority por entidades, relações, cobertura, profundidade, evidência e links, não por volume de páginas. | SRC-005, SRC-007 e síntese metodológica |
+| DEC-012 | `[INFERÊNCIA]` | Comparar concorrentes apenas por páginas equivalentes e critérios observáveis reduz conclusões inválidas. | Política de evidência do GEO OS |
+
+## Fila de fontes para pesquisas estratégicas
+
+Entradas `PENDING` são placeholders de pesquisa, não sustentam claims até serem preenchidas e revisadas.
+
+| ID | Escopo | Fonte necessária | Tipo preferido | Status | Uso previsto | Risco |
+|---|---|---|---|---|---|---|
+| PENDING-TA-001 | Autoridade tópica | Documentação ou paper sobre cobertura semântica e relações de entidades | fonte primária ou paper | pending | Revisar critérios de topical authority | Não usar como claim público antes da revisão |
+| PENDING-TA-002 | Links internos | Documentação oficial sobre descoberta e arquitetura de informação | documentação oficial | pending | Revisar critérios de links internos | Evitar transformar recomendação em fator de ranking garantido |
+| PENDING-COMP-001 | Concorrente analisado | URL e versão da página concorrente | fonte primária | pending | Competitor gap analysis | Registrar acesso e preservar evidência |
+| PENDING-COMP-002 | Autoria e confiança | Página de autor, organização ou política editorial | fonte primária | pending | Avaliar authorship/trust | Ausência não prova baixa qualidade |
+| PENDING-COMP-003 | Frescor | Data publicada, modificada ou evidência de atualização | fonte primária | pending | Avaliar freshness | Não usar aparência visual como data |
+| PENDING-SCHEMA-001 | Schema opportunity | Documentação oficial do tipo de structured data aplicável | documentação oficial | pending | Recomendar apenas markup compatível | Schema não garante citação ou exibição |
 
 ## Manutenção
 

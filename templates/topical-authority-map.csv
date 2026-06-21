@@ -1,0 +1,2 @@
+map_id,primary_entity,supporting_entity,relationship_type,topic_or_question,intent,coverage_status,current_url,depth_level,trust_signal,evidence_needed,cluster_opportunity,suggested_internal_link,editorial_priority,owner,status,notes
+EXAMPLE-TOPIC-001,Example Entity,Example Supporting Entity,related_to,Example question,definition,example,https://example.com/page,definition,Documentação oficial,Definição primária com data,example,https://example.com/target,medium,,example,Remover esta linha antes do uso

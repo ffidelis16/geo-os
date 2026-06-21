@@ -112,6 +112,50 @@ Exigir:
 
 O fluxo não deve começar pelo answer block. Quando a evidência é insuficiente, a saída correta é bloquear, limitar ou remover o claim.
 
+## Camada de planejamento estratégico
+
+`[FRAMEWORK PRÓPRIO]` O content brief funciona como contrato central, mas é iterativo:
+
+1. intent, entidades e evidências produzem um draft;
+2. topical authority verifica cobertura, relações e profundidade;
+3. competitor analysis identifica gaps observáveis em páginas comparáveis;
+4. os dois mapas refinam o brief;
+5. citation engineering e answer blocks executam o plano;
+6. benchmark e revisão humana avaliam o resultado.
+
+### Content brief
+
+Deve tornar explícitos:
+
+- target intent, audiência e estágio;
+- entidade principal, entidades de suporte e relações;
+- core claims e evidências;
+- oportunidades de citação e answer blocks;
+- frescor e qualidade mínima das fontes;
+- links internos;
+- riscos, suposições e limitações;
+- estrutura e critérios de aceite.
+
+### Topical authority
+
+Avalia cobertura e profundidade separadamente. Uma coleção extensa de páginas não constitui autoridade se as relações forem vagas, os conteúdos se contradisserem ou as evidências forem insuficientes.
+
+### Competitor analysis
+
+Compara páginas equivalentes por critérios observáveis. Não usa ranking, tamanho, backlinks, schema ou presença em IA como prova isolada de qualidade.
+
+### Avaliação qualitativa
+
+O dataset `strategic-planning-prompts-pt-br.json` define cenários e critérios esperados para:
+
+- completude dos outputs;
+- disciplina de evidência;
+- relações entre entidades;
+- limitações;
+- acionabilidade.
+
+As rubricas existentes permanecem transversais. Esta iteração não cria uma rubrica por skill porque o repositório não adota equivalência automática entre módulo e score.
+
 ## Pontuação
 
 Cada critério usa escala ordinal `0–4`:
@@ -165,3 +209,4 @@ Não usar apenas contagem de screenshots, volume bruto de menções ou uma únic
 - Correlação entre intervenção e resultado não prova causalidade sem desenho adequado.
 - GEO não substitui SEO técnico, conteúdo útil, pesquisa de usuário, analytics ou estratégia de marca.
 - Answer blocks e citation engineering melhoram a disciplina editorial, mas não garantem seleção, absorção ou citação.
+- Content briefs, mapas de autoridade e competitor gaps são artefatos de planejamento; precisam de validação em casos reais antes de automação.

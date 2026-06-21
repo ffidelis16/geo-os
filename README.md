@@ -40,6 +40,9 @@ Cada skill executa um trabalho específico. As rubricas definem critérios; os t
 | `ai-search-testing` | Planejar e registrar benchmarks reproduzíveis entre engines. |
 | `answer-blocks` | Criar unidades de resposta autocontidas e verificáveis. |
 | `citation-engineering` | Mapear claims, lacunas e evidências necessárias. |
+| `content-brief` | Transformar planejamento e evidência em contrato editorial executável. |
+| `topical-authority` | Mapear entidades, relações, cobertura, profundidade e clusters. |
+| `competitor-analysis` | Comparar concorrentes por critérios GEO observáveis e gaps. |
 
 ## Camada de execução de conteúdo
 
@@ -59,6 +62,34 @@ Revisão e benchmark
 - `modules/evidence-ledger.md`: controla claims, fontes, datas, confiança, uso e risco.
 - `modules/citation-engineering.md`: define o que precisa ser provado.
 - `modules/answer-blocks.md`: transforma evidência liberada em conteúdo reutilizável.
+
+## Camada de planejamento estratégico
+
+O content brief é o artefato central e passa por enriquecimento iterativo:
+
+```text
+Intent + Entity + Evidence
+          ↓
+Draft Content Brief
+     ↙           ↘
+Topical Map   Competitor Gaps
+     ↘           ↙
+Final Content Brief
+          ↓
+Citation Engineering → Answer Blocks → Benchmark
+```
+
+- `modules/content-brief.md`: contrato editorial completo.
+- `modules/topical-authority.md`: cobertura por entidades, relações e profundidade.
+- `modules/competitor-analysis.md`: comparação baseada em evidência e páginas equivalentes.
+
+Exemplos:
+
+```text
+$content-brief crie um brief para [tema] usando o intent map e o evidence ledger.
+$topical-authority mapeie lacunas de cobertura para [entidade principal].
+$competitor-analysis compare as URLs fornecidas para a intenção [intenção].
+```
 
 ## Uso rápido
 
@@ -90,7 +121,7 @@ Esta versão não inclui scraping, execução automática em engines, APIs propr
 
 ## Próxima evolução recomendada
 
-Adicionar content brief, topical authority e competitor analysis. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos editoriais serem testados em casos reais.
+Criar a Evaluation Layer com scorecard operacional, extractability audit e trust-signal audit. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos serem testados em casos reais.
 
 ## Linguagem comercial
 

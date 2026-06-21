@@ -85,6 +85,99 @@ ANSWER_BLOCK_SECTIONS = (
     "revisão de qualidade",
 )
 
+ITERATION_THREE_FILES = {
+    "modules/content-brief.md",
+    "modules/topical-authority.md",
+    "modules/competitor-analysis.md",
+    "templates/content-brief-template.md",
+    "templates/topical-authority-map.csv",
+    "templates/competitor-gap-analysis.csv",
+    "skills/content-brief/SKILL.md",
+    "skills/topical-authority/SKILL.md",
+    "skills/competitor-analysis/SKILL.md",
+    "datasets/golden/strategic-planning-prompts-pt-br.json",
+}
+
+STRATEGIC_SKILL_SECTIONS = (
+    "objetivo",
+    "quando usar",
+    "quando não usar",
+    "inputs",
+    "outputs",
+    "processo",
+    "restrições",
+    "critérios de qualidade",
+    "modos de falha",
+    "exemplo",
+)
+
+CONTENT_BRIEF_SECTIONS = (
+    "metadados",
+    "target intent e audiência",
+    "estágio de decisão",
+    "modelo de entidades",
+    "claims e evidências",
+    "oportunidades de citação",
+    "oportunidades de answer blocks",
+    "frescor e qualidade de fontes",
+    "links internos",
+    "riscos de conteúdo",
+    "suposições e limitações",
+    "estrutura recomendada",
+    "revisão de qualidade",
+)
+
+TOPICAL_AUTHORITY_HEADERS = (
+    "map_id",
+    "primary_entity",
+    "supporting_entity",
+    "relationship_type",
+    "topic_or_question",
+    "intent",
+    "coverage_status",
+    "current_url",
+    "depth_level",
+    "trust_signal",
+    "evidence_needed",
+    "cluster_opportunity",
+    "suggested_internal_link",
+    "editorial_priority",
+    "owner",
+    "status",
+    "notes",
+)
+
+COMPETITOR_GAP_HEADERS = (
+    "comparison_id",
+    "topic_or_intent",
+    "primary_entity",
+    "competitor",
+    "competitor_url",
+    "entity_coverage",
+    "structural_clarity",
+    "evidence_quality",
+    "citation_readiness",
+    "authorship_trust",
+    "freshness",
+    "content_modularity",
+    "answer_blocks",
+    "schema_opportunity",
+    "exploitable_gap",
+    "recommended_action",
+    "priority",
+    "evidence_source",
+    "accessed_at",
+    "notes",
+)
+
+STRATEGIC_PROMPT_CRITERIA = (
+    "required_outputs",
+    "evidence_discipline",
+    "entity_relationships",
+    "limitations",
+    "actionability",
+)
+
 
 def load_validator():
     """Carrega o validador diretamente do repositório."""
@@ -282,6 +375,120 @@ description: Use quando for necessário testar uma skill de exemplo.
         )
 
         self.assertEqual(errors, [])
+
+    def test_iteration_three_files_are_required(self) -> None:
+        self.assertTrue(
+            ITERATION_THREE_FILES.issubset(set(self.validator.REQUIRED_FILES))
+        )
+
+    def test_iteration_three_skills_are_registered(self) -> None:
+        self.assertTrue(
+            {"content-brief", "topical-authority", "competitor-analysis"}.issubset(
+                set(self.validator.SKILL_NAMES)
+            )
+        )
+
+    def test_iteration_three_modules_have_required_sections(self) -> None:
+        for module_name in (
+            "content-brief.md",
+            "topical-authority.md",
+            "competitor-analysis.md",
+        ):
+            module_path = REPO_ROOT / "modules" / module_name
+            self.assertTrue(module_path.is_file(), module_path)
+            content = module_path.read_text(encoding="utf-8").lower()
+            for section in MODULE_SECTIONS:
+                self.assertIn(f"## {section}", content, module_path)
+
+    def test_iteration_three_skills_have_strategic_contract_sections(self) -> None:
+        for skill_name in (
+            "content-brief",
+            "topical-authority",
+            "competitor-analysis",
+        ):
+            skill_path = REPO_ROOT / "skills" / skill_name / "SKILL.md"
+            self.assertTrue(skill_path.is_file(), skill_path)
+            _, body = self.validator.parse_skill_frontmatter(
+                skill_path.read_text(encoding="utf-8")
+            )
+            headings = body.lower()
+            for section in STRATEGIC_SKILL_SECTIONS:
+                self.assertIn(f"## {section}", headings, skill_path)
+
+    def test_content_brief_template_has_required_sections(self) -> None:
+        template_path = REPO_ROOT / "templates" / "content-brief-template.md"
+        self.assertTrue(template_path.is_file(), template_path)
+        content = template_path.read_text(encoding="utf-8").lower()
+
+        for section in CONTENT_BRIEF_SECTIONS:
+            self.assertIn(f"## {section}", content)
+
+    def test_topical_authority_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "topical-authority-map.csv",
+            TOPICAL_AUTHORITY_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_competitor_gap_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "competitor-gap-analysis.csv",
+            COMPETITOR_GAP_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_strategic_prompt_dataset_has_six_qualitative_scenarios(self) -> None:
+        dataset_path = (
+            REPO_ROOT
+            / "datasets"
+            / "golden"
+            / "strategic-planning-prompts-pt-br.json"
+        )
+        self.assertTrue(dataset_path.is_file(), dataset_path)
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["locale"], "pt-BR")
+        self.assertGreaterEqual(len(data["prompts"]), 6)
+        modules = {prompt["module"] for prompt in data["prompts"]}
+        self.assertEqual(
+            modules,
+            {"content-brief", "topical-authority", "competitor-analysis"},
+        )
+        for prompt in data["prompts"]:
+            for criterion in STRATEGIC_PROMPT_CRITERIA:
+                self.assertIn(criterion, prompt["expected_criteria"])
+
+    def test_validate_strategic_prompts_requires_qualitative_criteria(self) -> None:
+        validator = getattr(
+            self.validator,
+            "validate_strategic_prompt_data",
+            None,
+        )
+        self.assertTrue(callable(validator))
+        data = {
+            "schema_version": "0.1.0",
+            "locale": "pt-BR",
+            "prompts": [
+                {
+                    "id": "STRATEGIC-001",
+                    "module": "content-brief",
+                    "prompt": "Crie um brief.",
+                    "required_inputs": ["intent"],
+                    "expected_outputs": ["brief"],
+                    "expected_criteria": {
+                        "required_outputs": "Entregar brief.",
+                        "evidence_discipline": "Não inventar.",
+                    },
+                }
+            ],
+        }
+
+        errors = validator(data, "strategic.json")
+
+        self.assertTrue(any("entity_relationships" in error for error in errors))
+        self.assertTrue(any("limitations" in error for error in errors))
+        self.assertTrue(any("actionability" in error for error in errors))
 
     def test_repository_contract_is_valid(self) -> None:
         errors = self.validator.validate_repository(REPO_ROOT)

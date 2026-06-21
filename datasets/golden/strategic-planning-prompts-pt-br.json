@@ -1,0 +1,170 @@
+{
+  "schema_version": "0.1.0",
+  "dataset_id": "strategic-planning-prompts-pt-br",
+  "locale": "pt-BR",
+  "description": "Cenários qualitativos para avaliar content briefs, mapas de autoridade tópica e análises competitivas GEO sem exigir respostas textuais rígidas.",
+  "usage_notes": [
+    "Usar dados verificáveis quando o cenário fornecer fontes ou URLs.",
+    "Marcar dados ausentes como limitação; não inventar.",
+    "Avaliar os outputs e a disciplina de evidência, não a redação exata.",
+    "Preservar separação entre fato, inferência, hipótese e framework próprio."
+  ],
+  "prompts": [
+    {
+      "id": "STRATEGIC-PTBR-001",
+      "module": "content-brief",
+      "prompt": "Crie um brief GEO para uma página sobre {{topic}}, destinada a {{audience}} no estágio {{decision_stage}}. Use o intent map, o entity map e o evidence ledger fornecidos. Claims sem evidência devem permanecer bloqueados.",
+      "required_inputs": [
+        "target intent",
+        "audience",
+        "decision stage",
+        "entity map",
+        "evidence ledger"
+      ],
+      "expected_outputs": [
+        "brief editorial",
+        "entidades e relações",
+        "claims e evidências",
+        "answer blocks",
+        "citation opportunities",
+        "riscos e limitações"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Entregar todas as seções do content brief template com status explícito para claims.",
+        "evidence_discipline": "Não liberar claim sem evidência adequada ou classificação de bloqueio.",
+        "entity_relationships": "Explicar o papel e a relação entre entidade principal e entidades de suporte.",
+        "limitations": "Registrar dados ausentes, suposições e decisões que exigem revisão humana.",
+        "actionability": "Fornecer estrutura e critérios suficientes para pesquisa, redação e revisão."
+      }
+    },
+    {
+      "id": "STRATEGIC-PTBR-002",
+      "module": "content-brief",
+      "prompt": "Revise o brief fornecido para {{page_type}}. Identifique intents misturadas, entidades sem relação, claims promocionais, evidências insuficientes, answer blocks frágeis e riscos de desatualização. Entregue uma versão corrigida.",
+      "required_inputs": [
+        "draft brief",
+        "page type",
+        "canonical pages",
+        "evidence ledger"
+      ],
+      "expected_outputs": [
+        "diagnóstico do brief",
+        "brief corrigido",
+        "claims bloqueados",
+        "dependências",
+        "critérios de aceite"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Separar diagnóstico, correções e versão final do brief.",
+        "evidence_discipline": "Bloquear claims promocionais ou fontes inadequadas.",
+        "entity_relationships": "Remover entidades decorativas e manter relações necessárias.",
+        "limitations": "Explicitar o que não pode ser decidido com os dados fornecidos.",
+        "actionability": "Transformar cada problema material em correção verificável."
+      }
+    },
+    {
+      "id": "STRATEGIC-PTBR-003",
+      "module": "topical-authority",
+      "prompt": "Mapeie autoridade tópica para a entidade {{primary_entity}} no território {{topic_territory}}. Use o inventário de páginas e as perguntas fornecidas para identificar subentidades, relações, cobertura, profundidade, evidências, clusters e links.",
+      "required_inputs": [
+        "primary entity",
+        "topic territory",
+        "page inventory",
+        "intent map",
+        "entity map"
+      ],
+      "expected_outputs": [
+        "mapa de autoridade",
+        "lacunas de cobertura",
+        "níveis de profundidade",
+        "clusters",
+        "links internos",
+        "prioridades"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Preencher o contrato do topical authority map sem omitir status de cobertura.",
+        "evidence_discipline": "Indicar sinais de confiança e evidências necessárias por tópico.",
+        "entity_relationships": "Relacionar cada subentidade à entidade principal de forma explícita.",
+        "limitations": "Delimitar a fronteira temática e dados indisponíveis.",
+        "actionability": "Converter lacunas prioritárias em inputs claros para content briefs."
+      }
+    },
+    {
+      "id": "STRATEGIC-PTBR-004",
+      "module": "topical-authority",
+      "prompt": "Audite o mapa de autoridade tópica fornecido. Encontre tópicos sem relação, páginas redundantes, profundidade inflada, links genéricos, gaps irrelevantes e prioridades sem justificativa. Retorne o mapa revisado.",
+      "required_inputs": [
+        "topical authority map",
+        "entity map",
+        "audience",
+        "business objective"
+      ],
+      "expected_outputs": [
+        "problemas do mapa",
+        "relações corrigidas",
+        "duplicações",
+        "prioridades revisadas",
+        "mapa final"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Entregar diagnóstico e mapa corrigido com vocabulário controlado.",
+        "evidence_discipline": "Não declarar cobertura ou confiança sem evidência observável.",
+        "entity_relationships": "Eliminar tópicos sem relação necessária com a entidade principal.",
+        "limitations": "Registrar fronteiras e critérios que não puderam ser avaliados.",
+        "actionability": "Preservar apenas gaps que podem alimentar decisões editoriais."
+      }
+    },
+    {
+      "id": "STRATEGIC-PTBR-005",
+      "module": "competitor-analysis",
+      "prompt": "Compare {{brand}} e os concorrentes fornecidos para a intenção {{target_intent}}. Avalie páginas equivalentes por entidades, estrutura, evidência, citabilidade, autoria, frescor, modularidade, answer blocks e schema opportunities.",
+      "required_inputs": [
+        "brand",
+        "competitors",
+        "target intent",
+        "comparable URLs",
+        "access dates"
+      ],
+      "expected_outputs": [
+        "matriz competitiva",
+        "gaps",
+        "oportunidades de citação",
+        "oportunidades de answer blocks",
+        "ações recomendadas",
+        "limitações"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Preencher todos os critérios da competitor gap analysis para páginas comparáveis.",
+        "evidence_discipline": "Associar avaliações a URLs, datas e evidências observáveis.",
+        "entity_relationships": "Comparar cobertura e relações de entidades, não somente menções.",
+        "limitations": "Explicar assimetrias, indisponibilidade e fatores não avaliáveis.",
+        "actionability": "Transformar gaps em ações para topical authority ou content briefs."
+      }
+    },
+    {
+      "id": "STRATEGIC-PTBR-006",
+      "module": "competitor-analysis",
+      "prompt": "Revise a análise competitiva fornecida e remova conclusões baseadas apenas em word count, backlinks, presença de schema ou ranking. Reavalie comparabilidade, fontes, frescor, autoria e oportunidades exploráveis.",
+      "required_inputs": [
+        "draft competitor analysis",
+        "source URLs",
+        "target intent",
+        "evaluation date"
+      ],
+      "expected_outputs": [
+        "conclusões inválidas",
+        "critérios corrigidos",
+        "gaps sustentados",
+        "ações revisadas",
+        "matriz final"
+      ],
+      "expected_criteria": {
+        "required_outputs": "Distinguir achados válidos, não avaliáveis e removidos.",
+        "evidence_discipline": "Rejeitar proxies isolados como prova de qualidade ou citabilidade.",
+        "entity_relationships": "Manter comparação por cobertura semântica e relações relevantes.",
+        "limitations": "Explicitar diferenças entre tipos de página e dados disponíveis.",
+        "actionability": "Priorizar somente oportunidades sustentadas e legalmente seguras."
+      }
+    }
+  ]
+}

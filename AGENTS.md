@@ -56,6 +56,27 @@ A descrição deve ser curta, ter escopo claro e permitir acionamento correto. N
 - Manter atribuição próxima ao claim e preservar ressalvas materiais.
 - Usar `templates/evidence-ledger.csv`, `templates/citation-opportunity-map.csv` e `templates/answer-block-template.md`.
 
+## Sequência de planejamento estratégico
+
+Usar o seguinte ciclo, adaptando apenas quando o escopo justificar:
+
+1. Confirmar intent map, entity map e evidence ledger.
+2. Criar um draft do content brief com lacunas explícitas.
+3. Executar `topical-authority` para cobertura, profundidade e clusters.
+4. Executar `competitor-analysis` somente com páginas comparáveis.
+5. Consolidar o content brief final.
+6. Executar `citation-engineering` para claims e provas.
+7. Executar `answer-blocks` somente com claims liberados.
+8. Validar por revisão humana e benchmark.
+
+Regras:
+
+- `content-brief` é o artefato central; topical authority e competitor gaps devem alimentá-lo.
+- Não criar cluster, gap ou ação sem entidade, intenção e evidência observável.
+- Não usar word count, backlinks, ranking ou schema isolados como conclusão competitiva.
+- Toda análise deve registrar data, URLs, suposições, limitações e estados não avaliáveis.
+- Skills estratégicas devem incluir restrições, critérios de qualidade, modos de falha e exemplo.
+
 ## Rubricas
 
 - Usar escala ordinal de `0` a `4`.
@@ -89,4 +110,5 @@ O validador verifica estrutura e contratos de arquivo. Ele não substitui revis�
 - Seguir `docs/update-policy.md` para mudanças de versão.
 - Documentar mudanças incompatíveis nos contratos de CSV, JSON ou YAML.
 - Atualizar módulos canônicos antes de ajustar skills que dependem deles.
+- Revisar content briefs quando intent, evidência, mapa tópico ou cenário competitivo mudar materialmente.
 - Manter nomes de arquivos em inglês e conteúdo em português brasileiro.

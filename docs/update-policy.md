@@ -24,6 +24,7 @@ Revisar a metodologia quando ocorrer:
 - falha recorrente em uso real;
 - novo requisito comercial, legal ou ético;
 - mudança incompatível em templates ou validações.
+- alteração material de intent, entidade, oferta, regulação ou cenário competitivo.
 
 Na ausência de gatilho, revisar o ledger e os links ao menos trimestralmente.
 
@@ -55,6 +56,28 @@ python scripts/validate_output.py --root .
 
 7. Registrar versão e motivo da alteração no commit.
 
+## Atualização dos artefatos estratégicos
+
+### Content briefs
+
+Revisar quando mudar:
+
+- target intent ou audiência;
+- estágio de decisão;
+- core claims ou evidências;
+- entidade principal ou relações;
+- requisito de frescor;
+- estrutura canônica;
+- risco regulatório.
+
+### Topical authority maps
+
+Revisar quando houver novas páginas, mudança de taxonomia, duplicação, conflito, lacuna priorizada ou alteração relevante no entity map.
+
+### Competitor analyses
+
+Registrar sempre `accessed_at`. Reavaliar quando URLs mudarem, conteúdo for atualizado, concorrentes deixarem de ser comparáveis ou critérios de mercado mudarem.
+
 ## Regras para estatísticas
 
 Toda estatística deve registrar:
@@ -74,6 +97,7 @@ Remover ou rebaixar para `[HIPÓTESE]` quando a origem não puder ser recuperada
 - Preferir campos novos opcionais em versões `MINOR`.
 - Para mudança `MAJOR`, documentar migração de CSV, JSON e YAML.
 - Tratar mudanças de headings obrigatórios em módulos e templates Markdown como mudança de contrato.
+- Tratar mudança de headers nos mapas CSV e de critérios no dataset golden como mudança de contrato.
 - Manter conteúdo em PT-BR e nomes de arquivos em inglês.
 
 ## Depreciação
