@@ -209,7 +209,7 @@ O dataset `evaluation-prompts-pt-br.json` possui dois cenários por módulo e ve
 - limitações;
 - acionabilidade.
 
-`[INFERÊNCIA]` O material didático `apostila_geo_v2.html` reforça como sinais operacionais a combinação claim + contexto + evidência + takeaway, o uso de formatos discretos e a auditoria de autoria, datas, fontes, metodologia e limitações. Estatísticas e claims de mercado presentes no material não foram promovidos a fatos metodológicos sem fonte primária.
+`[INFERÊNCIA]` A síntese privada do curso revisada em 2026-06-21 reforça como sinais operacionais a combinação claim + contexto + evidência + takeaway, relações dentro da página, entre páginas e com fontes externas, além da auditoria de autoria, datas, fontes, metodologia e limitações. Ela também reforça que medição GEO complementa, mas não substitui, analytics e SEO. Estatísticas e claims de mercado presentes no material não foram promovidos a fatos metodológicos sem fonte primária.
 
 ## Camada de otimização
 
@@ -321,6 +321,7 @@ Não usar apenas contagem de screenshots, volume bruto de menções ou uma únic
 - Scores são instrumentos de decisão, não indicadores universais.
 - Correlação entre intervenção e resultado não prova causalidade sem desenho adequado.
 - GEO não substitui SEO técnico, conteúdo útil, pesquisa de usuário, analytics ou estratégia de marca.
+- Conteúdo de alto risco deve encaminhar a especialistas ou fontes qualificadas quando o projeto não puder sustentar expertise própria.
 - Answer blocks e citation engineering melhoram a disciplina editorial, mas não garantem seleção, absorção ou citação.
 - Content briefs, mapas de autoridade e competitor gaps são artefatos de planejamento; precisam de validação em casos reais antes de automação.
 - Scorecards e auditorias organizam julgamento humano; não determinam verdade, qualidade estratégica universal ou comportamento futuro de engines.

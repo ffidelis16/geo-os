@@ -1,37 +1,77 @@
 # GEO OS
 
-Sistema operacional modular para Generative Engine Optimization (GEO), criado para transformar diagnóstico, modelagem de entidades e testes de AI Search em processos versionáveis, auditáveis e portáteis.
+GEO OS é um sistema operacional modular, baseado em arquivos, para estudar, auditar e estruturar conteúdo orientado a Generative Engine Optimization, visibilidade em buscas por IA, clareza de entidades, prontidão para citação e avaliação de conteúdo.
 
-## Princípio central
+> GEO OS is a modular, file-based operating system for studying and structuring content for Generative Engine Optimization and AI Search.
 
-O GEO OS não promete ranking, citação ou recomendação em respostas geradas por IA. Ele organiza evidências e intervenções para melhorar:
+O projeto não promete ranqueamento, citação, tráfego ou presença garantida em mecanismos generativos.
 
-- **Recuperabilidade:** possibilidade de o conteúdo ser encontrado e processado.
-- **Selecionabilidade:** adequação como fonte candidata.
-- **Citabilidade:** clareza com que claims podem ser sustentados.
-- **Absorção:** contribuição observável do conteúdo para a resposta final.
-- **Autoridade de entidade:** consistência e corroboração das entidades.
-- **Mensuração:** capacidade de comparar resultados ao longo do tempo.
+## O que é o GEO OS
+
+O repositório organiza metodologia, skills, rubricas, templates, datasets de teste e validação estrutural. Ele trata GEO como disciplina emergente apoiada em fundamentos de busca, conteúdo, entidades, evidência e avaliação.
+
+O fluxo central é:
+
+```text
+Diagnosticar → Mapear → Planejar → Produzir → Auditar
+                                              ↓
+Publicar ← Demonstrar ← Documentar ← Reavaliar ← Otimizar
+```
+
+## Para quem serve
+
+- Pessoas estudando GEO e AI Search com método reproduzível.
+- Profissionais de conteúdo, SEO, Growth, CRO e Design.
+- Times que precisam separar evidência, inferência, hipótese e recomendação.
+- Pessoas desenvolvendo skills e workflows baseados em arquivos.
+- Contribuidores interessados em testar e melhorar o framework.
+
+Não é necessário ser desenvolvedor de carreira. O uso básico exige leitura de Markdown/CSV/JSON/YAML e Python para executar os testes.
+
+## O que o projeto faz
+
+- Estrutura diagnósticos e mapas de entidades.
+- Organiza claims, fontes, riscos e contradições.
+- Planeja conteúdo, answer blocks e citation engineering.
+- Audita extraibilidade, confiança e prontidão GEO.
+- Converte gaps em planos de reescrita, refresh e oportunidades de schema.
+- Define benchmarks qualitativos e ciclos de reavaliação.
+- Valida contratos de arquivos sem tentar substituir avaliação humana.
+
+## O que o projeto não faz
+
+- Não garante ranking, citação, recomendação, tráfego ou visibilidade.
+- Não executa crawler, scraping ou consultas automáticas a engines.
+- Não usa APIs externas ou dependências pesadas.
+- Não gera reescrita final automática.
+- Não implementa schema automaticamente.
+- Não determina se um claim é verdadeiro ou se uma estratégia é adequada.
+- Não inclui apostilas, slides, transcrições ou materiais privados usados no estudo.
 
 ## Arquitetura
 
 ```text
 geo-os/
-├── AGENTS.md
+├── .agents/skills/         # Proxies para descoberta pelo Codex
+├── .github/                # Templates de issues e pull requests
+├── datasets/golden/        # Cenários qualitativos e benchmarks
+├── docs/                   # Metodologia e documentação pública
+├── examples/               # Exemplos fictícios e seguros
+├── modules/                # Método operacional canônico
+├── rubrics/                # Rubricas ponderadas em escala 0–4
+├── scripts/                # Validação estrutural
 ├── skills/                 # Fonte canônica das skills
-├── .agents/skills/         # Descoberta nativa pelo Codex
-├── modules/                # Método operacional reutilizável
-├── rubrics/                # Critérios de pontuação 0–4
 ├── templates/              # Contratos de entregáveis
-├── datasets/golden/        # Prompts de benchmark reutilizáveis
-├── scripts/                # Validação determinística
-├── tests/                  # Fundação de qualidade do validador
-└── docs/                   # Metodologia, fontes e atualização
+├── tests/                  # Testes do validador e dos contratos
+├── AGENTS.md               # Regras para agentes
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
 ```
 
-Cada skill executa um trabalho específico. As rubricas definem critérios; os templates padronizam entregáveis; o dataset oferece cenários de teste; o script verifica a integridade estrutural. A avaliação estratégica continua sendo humana.
+Detalhes: [docs/architecture.md](docs/architecture.md).
 
-## Skills iniciais
+## Skills
 
 | Skill | Uso |
 |---|---|
@@ -40,143 +80,89 @@ Cada skill executa um trabalho específico. As rubricas definem critérios; os t
 | `ai-search-testing` | Planejar e registrar benchmarks reproduzíveis entre engines. |
 | `answer-blocks` | Criar unidades de resposta autocontidas e verificáveis. |
 | `citation-engineering` | Mapear claims, lacunas e evidências necessárias. |
-| `content-brief` | Transformar planejamento e evidência em contrato editorial executável. |
-| `topical-authority` | Mapear entidades, relações, cobertura, profundidade e clusters. |
-| `competitor-analysis` | Comparar concorrentes por critérios GEO observáveis e gaps. |
-| `geo-scorecard` | Consolidar sinais observáveis em score justificado, cobertura e prioridades. |
-| `extractability-audit` | Auditar blocos autossuficientes, ambiguidades e oportunidades de reestruturação. |
-| `trust-signal-audit` | Auditar autoria, fontes, frescor, metodologia, transparência e riscos. |
-| `rewrite-plan` | Converter gaps auditados em plano de reescrita por seção. |
-| `content-refresh` | Planejar atualização, remoção, expansão, consolidação ou comprovação. |
+| `content-brief` | Transformar planejamento e evidência em contrato editorial. |
+| `topical-authority` | Mapear cobertura, relações, profundidade e clusters. |
+| `competitor-analysis` | Comparar páginas equivalentes por critérios observáveis. |
+| `geo-scorecard` | Consolidar sinais em score justificado, cobertura e prioridades. |
+| `extractability-audit` | Auditar blocos, ambiguidades e dependência de contexto. |
+| `trust-signal-audit` | Auditar autoria, fontes, frescor, método e transparência. |
+| `rewrite-plan` | Converter gaps em plano de reescrita por seção. |
+| `content-refresh` | Planejar atualização, remoção, expansão ou consolidação. |
 | `schema-opportunity` | Mapear dados estruturados sustentados pelo conteúdo visível. |
 
-## Camada de execução de conteúdo
-
-```text
-Intent Map
-    ↓
-Evidence Ledger
-    ↓
-Citation Opportunity Map
-    ↓
-Answer Block
-    ↓
-Revisão e benchmark
-```
-
-- `modules/intent-map.md`: traduz demanda em perguntas, contexto e formato.
-- `modules/evidence-ledger.md`: controla claims, fontes, datas, confiança, uso e risco.
-- `modules/citation-engineering.md`: define o que precisa ser provado.
-- `modules/answer-blocks.md`: transforma evidência liberada em conteúdo reutilizável.
-
-## Camada de planejamento estratégico
-
-O content brief é o artefato central e passa por enriquecimento iterativo:
-
-```text
-Intent + Entity + Evidence
-          ↓
-Draft Content Brief
-     ↙           ↘
-Topical Map   Competitor Gaps
-     ↘           ↙
-Final Content Brief
-          ↓
-Citation Engineering → Answer Blocks → Benchmark
-```
-
-- `modules/content-brief.md`: contrato editorial completo.
-- `modules/topical-authority.md`: cobertura por entidades, relações e profundidade.
-- `modules/competitor-analysis.md`: comparação baseada em evidência e páginas equivalentes.
-
-Exemplos:
-
-```text
-$content-brief crie um brief para [tema] usando o intent map e o evidence ledger.
-$topical-authority mapeie lacunas de cobertura para [entidade principal].
-$competitor-analysis compare as URLs fornecidas para a intenção [intenção].
-```
-
-## Camada de avaliação
-
-A Evaluation Layer fecha o ciclo entre planejamento, produção, auditoria e otimização:
-
-```text
-Planejar → Produzir → Auditar → Priorizar → Otimizar → Reavaliar
-                         ↓
-     Extractability + Trust Signals + GEO Scorecard
-```
-
-- `modules/extractability-audit.md`: identifica respostas diretas, definições, listas, tabelas, passos, FAQs reais, claims, ambiguidades e dependência visual.
-- `modules/trust-signal-audit.md`: verifica autoria, organização, fontes, frescor, metodologia, transparência e consistência factual.
-- `modules/geo-scorecard.md`: consolida 16 dimensões ponderadas, cobertura, evidências, gaps e ações.
-- `datasets/golden/evaluation-prompts-pt-br.json`: testa diagnóstico, lacunas, evidência, riscos, limitações e acionabilidade em seis cenários.
-
-Exemplos:
-
-```text
-$extractability-audit audite este conteúdo para a intenção [intenção].
-$trust-signal-audit verifique autoria, fontes, método e frescor deste artigo.
-$geo-scorecard consolide as auditorias e priorize as correções.
-```
-
-## Camada de otimização
-
-A Optimization Layer fecha o ciclo entre avaliação e uma nova medição, sem executar reescrita final:
-
-```text
-Scorecard → Gaps → Priorização → Rewrite/Refresh Plan
-                              ↘ Schema Opportunities
-                                        ↓
-                         Optimization Cycle → Reavaliação
-```
-
-- `modules/rewrite-plan.md`: transforma gaps em intervenções por seção.
-- `modules/content-refresh.md`: decide o que manter, atualizar, remover, expandir, consolidar, provar ou republicar.
-- `modules/schema-opportunity.md`: registra tipos candidatos, propriedades, lacunas, riscos e validação.
-- `templates/optimization-cycle-template.md`: conecta auditoria, ação, critério de sucesso, reavaliação e decisão.
-- `datasets/golden/optimization-prompts-pt-br.json`: testa conversão de gaps, priorização, disciplina de evidência, limites e reavaliação.
-
-Exemplos:
-
-```text
-$rewrite-plan converta os gaps auditados em um plano por seção.
-$content-refresh planeje o refresh deste ativo sem reescrever o texto final.
-$schema-opportunity mapeie apenas tipos sustentados pelo conteúdo fornecido.
-```
+`skills/` é a fonte canônica. `.agents/skills/` contém apenas proxies de descoberta.
 
 ## Uso rápido
 
-Requisitos: Python 3.11+ e PyYAML.
+Requisitos:
+
+- Python 3.11+
+- PyYAML
 
 ```powershell
+git clone <URL-DO-REPOSITORIO>
+cd geo-os
 python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```
 
-Para usar uma skill no Codex, invoque-a explicitamente ou descreva uma tarefa compatível com seu `description`:
+Guia completo: [docs/getting-started.md](docs/getting-started.md).
 
-```text
-$geo-diagnosis audite as páginas prioritárias e gere um backlog baseado em evidências.
-```
+## Como usar os templates
+
+1. Escolha um fluxo em [docs/usage-examples.md](docs/usage-examples.md).
+2. Copie o template relevante para uma pasta local ignorada, como `outputs/`.
+3. Substitua a linha de exemplo nos CSVs.
+4. Preserve IDs, headers e headings obrigatórios.
+5. Registre fontes, datas, limitações e estados não avaliáveis.
+6. Reexecute testes e validador se alterar contratos do repositório.
+
+Exemplos preenchidos estão em [examples/](examples/).
 
 ## Convenções de evidência
 
 - `[FATO]`: sustentado por fonte verificável.
 - `[INFERÊNCIA]`: conclusão derivada de fatos explicitados.
 - `[HIPÓTESE]`: tese ainda não validada por teste suficiente.
+- `[RECOMENDAÇÃO]`: ação proposta a partir do diagnóstico.
 - `[FRAMEWORK PRÓPRIO]`: síntese metodológica criada no GEO OS.
 
-Toda afirmação técnica não óbvia deve indicar fonte e data de acesso. Estatísticas voláteis devem incluir período, população e limitações.
+Toda afirmação técnica não óbvia deve indicar fonte e data de acesso. Estatísticas voláteis devem incluir período, população, método conhecido e limitações.
 
-## Limites do MVP
+## Limitações e ética
 
-Esta versão não inclui scraping, execução automática em engines, APIs proprietárias, plugins, empacotamento multiplataforma ou julgamento automático de qualidade estratégica. Resultados de AI Search variam por engine, modelo, localização, personalização, data e repetição.
+GEO é um campo emergente. Resultados variam por engine, modelo, idioma, localização, personalização, data e repetição. Citações podem existir sem sustentar integralmente um claim.
 
-## Próxima evolução recomendada
+O projeto não deve ser usado para conteúdo oculto, spam, avaliações falsas, fontes inventadas, manipulação adversarial ou criação artificial de autoridade.
 
-Criar a Delivery Layer com client report, executive summary e roadmap 30-60-90. Reescrita final automática, implementação de schema, scripts de análise e automação externa continuam fora do escopo até os contratos serem testados em casos reais.
+Leia [docs/limitations-and-ethics.md](docs/limitations-and-ethics.md).
 
-## Linguagem comercial
+## Como contribuir
 
-`GEO OS` permanece como nome interno. Em materiais para decisores, priorizar linguagem direta como **AI Search Visibility System** ou **Sistema de Presença em Buscas por IA**: como a marca aparece, é entendida e é citada em respostas de IA.
+Antes de contribuir:
+
+```powershell
+python -m unittest discover -s tests -v
+python scripts/validate_output.py --root .
+```
+
+Não envie materiais privados, outputs com dados pessoais ou exemplos baseados em marcas reais sem necessidade. Consulte [docs/contribution-guide.md](docs/contribution-guide.md).
+
+## Status do projeto
+
+**Status:** release candidate para publicação pública.
+
+Camadas disponíveis:
+
+- fundação modular;
+- evidência e answer blocks;
+- planejamento estratégico;
+- avaliação;
+- otimização;
+- publicação e documentação.
+
+Ainda fora do escopo: automação de engines, crawler, scraping, APIs externas, reescrita final e implementação automática de schema.
+
+## Licença
+
+Distribuído sob a [MIT License](LICENSE).

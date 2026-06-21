@@ -347,6 +347,105 @@ OPTIMIZATION_PROMPT_CRITERIA = (
     "re_evaluation_criteria",
 )
 
+PUBLICATION_FILES = {
+    "docs/getting-started.md",
+    "docs/architecture.md",
+    "docs/usage-examples.md",
+    "docs/contribution-guide.md",
+    "docs/publishing-notes.md",
+    "docs/limitations-and-ethics.md",
+    "examples/sample-geo-audit.md",
+    "examples/sample-entity-map.csv",
+    "examples/sample-scorecard.md",
+    "examples/sample-rewrite-plan.md",
+    "examples/sample-optimization-cycle.md",
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/improvement_idea.md",
+    ".github/pull_request_template.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    ".gitignore",
+}
+
+README_PUBLIC_SECTIONS = (
+    "o que é o geo os",
+    "para quem serve",
+    "o que o projeto faz",
+    "o que o projeto não faz",
+    "arquitetura",
+    "uso rápido",
+    "como usar os templates",
+    "limitações e ética",
+    "como contribuir",
+    "status do projeto",
+)
+
+GETTING_STARTED_SECTIONS = (
+    "requisitos",
+    "início rápido",
+    "tour do repositório",
+    "primeiro fluxo",
+    "validação",
+)
+
+ARCHITECTURE_SECTIONS = (
+    "princípios",
+    "diretórios",
+    "fluxo operacional",
+    "skills canônicas e proxies",
+    "contratos",
+    "limites de arquitetura",
+)
+
+USAGE_EXAMPLES_SECTIONS = (
+    "auditar um conteúdo",
+    "criar um mapa de entidades",
+    "transformar gaps em plano de otimização",
+)
+
+LIMITATIONS_ETHICS_SECTIONS = (
+    "campo emergente",
+    "variabilidade dos resultados",
+    "ausência de garantias",
+    "evidência e rastreabilidade",
+    "usos proibidos",
+    "revisão humana",
+)
+
+SAMPLE_AUDIT_SECTIONS = (
+    "metadados",
+    "escopo",
+    "achados",
+    "prioridades",
+    "limitações",
+)
+
+SAMPLE_SCORECARD_SECTIONS = (
+    "contexto",
+    "pontuação resumida",
+    "evidências",
+    "principais gaps",
+    "limitações",
+)
+
+PUBLIC_GITIGNORE_ENTRIES = (
+    "private/",
+    "sources/",
+    "course-materials/",
+    "outputs/",
+    "exports/",
+    "reports/",
+    "*.pdf",
+    "*.docx",
+    "*.pptx",
+    "__pycache__/",
+    "*.pyc",
+    ".venv/",
+    "venv/",
+    ".DS_Store",
+    "Thumbs.db",
+)
+
 
 def load_validator():
     """Carrega o validador diretamente do repositório."""
@@ -915,6 +1014,94 @@ description: Use quando for necessário testar uma skill de exemplo.
         agents_content = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8")
 
         self.assertIn("[RECOMENDAÇÃO]", agents_content)
+
+    def test_publication_files_are_required(self) -> None:
+        self.assertTrue(PUBLICATION_FILES.issubset(set(self.validator.REQUIRED_FILES)))
+
+    def test_readme_has_public_project_contract(self) -> None:
+        readme_path = REPO_ROOT / "README.md"
+        content = readme_path.read_text(encoding="utf-8").lower()
+
+        for section in README_PUBLIC_SECTIONS:
+            self.assertIn(f"## {section}", content)
+        self.assertNotIn("delivery layer", content)
+        self.assertNotIn("linguagem comercial", content)
+
+    def test_public_docs_have_required_sections(self) -> None:
+        contracts = {
+            "getting-started.md": GETTING_STARTED_SECTIONS,
+            "architecture.md": ARCHITECTURE_SECTIONS,
+            "usage-examples.md": USAGE_EXAMPLES_SECTIONS,
+            "limitations-and-ethics.md": LIMITATIONS_ETHICS_SECTIONS,
+        }
+        for document_name, sections in contracts.items():
+            document_path = REPO_ROOT / "docs" / document_name
+            self.assertTrue(document_path.is_file(), document_path)
+            content = document_path.read_text(encoding="utf-8").lower()
+            for section in sections:
+                self.assertIn(f"## {section}", content, document_path)
+
+    def test_public_examples_have_required_contracts(self) -> None:
+        markdown_contracts = {
+            "sample-geo-audit.md": SAMPLE_AUDIT_SECTIONS,
+            "sample-scorecard.md": SAMPLE_SCORECARD_SECTIONS,
+            "sample-rewrite-plan.md": REWRITE_PLAN_SECTIONS,
+            "sample-optimization-cycle.md": OPTIMIZATION_CYCLE_SECTIONS,
+        }
+        for example_name, sections in markdown_contracts.items():
+            example_path = REPO_ROOT / "examples" / example_name
+            self.assertTrue(example_path.is_file(), example_path)
+            content = example_path.read_text(encoding="utf-8").lower()
+            for section in sections:
+                self.assertIn(f"## {section}", content, example_path)
+
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "examples" / "sample-entity-map.csv",
+            self.validator.ENTITY_MAP_HEADERS,
+        )
+        self.assertEqual(errors, [])
+
+    def test_gitignore_protects_private_and_generated_material(self) -> None:
+        gitignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+        for entry in PUBLIC_GITIGNORE_ENTRIES:
+            self.assertIn(entry, gitignore)
+
+    def test_license_and_changelog_are_public_ready(self) -> None:
+        license_content = (REPO_ROOT / "LICENSE").read_text(encoding="utf-8")
+        changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("MIT License", license_content)
+        for iteration in (
+            "Inicialização modular",
+            "Evidência e answer blocks",
+            "Planejamento estratégico",
+            "Avaliação",
+            "Otimização",
+            "Publicação e documentação",
+        ):
+            self.assertIn(iteration, changelog)
+
+    def test_validate_public_hygiene_rejects_personal_paths(self) -> None:
+        validator = getattr(self.validator, "validate_public_hygiene", None)
+        self.assertTrue(callable(validator))
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            (root / "docs").mkdir()
+            (root / "docs" / "unsafe.md").write_text(
+                r"Fonte em C:\Users\example\Downloads\course.pdf",
+                encoding="utf-8",
+            )
+
+            errors = validator(root)
+
+        self.assertTrue(any("caminho pessoal" in error for error in errors))
+
+    def test_repository_has_no_public_hygiene_violations(self) -> None:
+        errors = self.validator.validate_public_hygiene(REPO_ROOT)
+
+        self.assertEqual(errors, [])
 
     def test_repository_contract_is_valid(self) -> None:
         errors = self.validator.validate_repository(REPO_ROOT)

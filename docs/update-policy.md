@@ -22,7 +22,7 @@ Revisar a metodologia quando ocorrer:
 - publicação relevante revisada por pares;
 - alteração material no comportamento observado das engines;
 - falha recorrente em uso real;
-- novo requisito comercial, legal ou ético;
+- novo requisito de uso, publicação, legal ou ético;
 - mudança incompatível em templates ou validações.
 - alteração material de intent, entidade, oferta, regulação ou cenário competitivo.
 
@@ -101,6 +101,20 @@ Revisar rewrite plans, content refresh plans, schema opportunities e optimizatio
 - o critério de sucesso ou o protocolo de reavaliação.
 
 Encerrar cada ciclo com decisão explícita: `manter`, `revisar`, `expandir` ou `abandonar`. Não promover resultado esperado de `[HIPÓTESE]` para `[FATO]` sem evidência da reavaliação.
+
+### Publicação pública
+
+Revisar documentação e exemplos quando mudar:
+
+- posicionamento do projeto;
+- licença;
+- escopo público ou privado;
+- política de fontes;
+- estrutura de diretórios;
+- comandos de instalação e validação;
+- risco de exposição de material protegido ou dados pessoais.
+
+Antes de cada release, executar a checklist de `docs/publishing-notes.md` e revisar todos os arquivos rastreados.
 
 ## Regras para estatísticas
 

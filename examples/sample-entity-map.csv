@@ -1,0 +1,3 @@
+entity_id,canonical_name,entity_type,definition,aliases,canonical_url,parent_entity_id,relation_type,related_entity_id,locale,evidence_source,evidence_accessed_at,confidence,status,notes
+EXAMPLE-ORG-001,Farol Urbano,Organization,Projeto fictício de educação sobre consumo consciente,Farol,https://farol-urbano.example.invalid,,employs,EXAMPLE-PERSON-001,pt-BR,https://farol-urbano.example.invalid/sobre,2026-06-21,low,example,Nome e domínio fictícios
+EXAMPLE-PERSON-001,Lia Exemplo,Person,Autora fictícia usada apenas nesta demonstração,,https://farol-urbano.example.invalid/autores/lia,EXAMPLE-ORG-001,worksFor,EXAMPLE-ORG-001,pt-BR,https://farol-urbano.example.invalid/autores/lia,2026-06-21,low,example,Credenciais não representam pessoa real

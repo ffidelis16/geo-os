@@ -101,6 +101,23 @@ REQUIRED_FILES = (
     "docs/methodology.md",
     "docs/update-policy.md",
     "docs/source-ledger.md",
+    "docs/getting-started.md",
+    "docs/architecture.md",
+    "docs/usage-examples.md",
+    "docs/contribution-guide.md",
+    "docs/publishing-notes.md",
+    "docs/limitations-and-ethics.md",
+    "examples/sample-geo-audit.md",
+    "examples/sample-entity-map.csv",
+    "examples/sample-scorecard.md",
+    "examples/sample-rewrite-plan.md",
+    "examples/sample-optimization-cycle.md",
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/improvement_idea.md",
+    ".github/pull_request_template.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    ".gitignore",
 )
 
 REQUIRED_SKILL_SECTIONS = (
@@ -215,6 +232,105 @@ OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS = (
     "reavaliação",
     "decisão",
 )
+
+README_PUBLIC_SECTIONS = (
+    "o que é o geo os",
+    "para quem serve",
+    "o que o projeto faz",
+    "o que o projeto não faz",
+    "arquitetura",
+    "uso rápido",
+    "como usar os templates",
+    "limitações e ética",
+    "como contribuir",
+    "status do projeto",
+)
+
+GETTING_STARTED_SECTIONS = (
+    "requisitos",
+    "início rápido",
+    "tour do repositório",
+    "primeiro fluxo",
+    "validação",
+)
+
+ARCHITECTURE_SECTIONS = (
+    "princípios",
+    "diretórios",
+    "fluxo operacional",
+    "skills canônicas e proxies",
+    "contratos",
+    "limites de arquitetura",
+)
+
+USAGE_EXAMPLES_SECTIONS = (
+    "auditar um conteúdo",
+    "criar um mapa de entidades",
+    "transformar gaps em plano de otimização",
+)
+
+LIMITATIONS_ETHICS_SECTIONS = (
+    "campo emergente",
+    "variabilidade dos resultados",
+    "ausência de garantias",
+    "evidência e rastreabilidade",
+    "usos proibidos",
+    "revisão humana",
+)
+
+SAMPLE_AUDIT_SECTIONS = (
+    "metadados",
+    "escopo",
+    "achados",
+    "prioridades",
+    "limitações",
+)
+
+SAMPLE_SCORECARD_SECTIONS = (
+    "contexto",
+    "pontuação resumida",
+    "evidências",
+    "principais gaps",
+    "limitações",
+)
+
+PUBLIC_GITIGNORE_ENTRIES = (
+    "private/",
+    "sources/",
+    "course-materials/",
+    "outputs/",
+    "exports/",
+    "reports/",
+    "*.pdf",
+    "*.docx",
+    "*.pptx",
+    "__pycache__/",
+    "*.pyc",
+    ".venv/",
+    "venv/",
+    ".DS_Store",
+    "Thumbs.db",
+)
+
+PUBLIC_SCAN_ROOTS = {
+    ".github",
+    ".agents",
+    "datasets",
+    "docs",
+    "examples",
+    "modules",
+    "rubrics",
+    "skills",
+    "templates",
+}
+
+PUBLIC_ROOT_FILES = {
+    "README.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    ".gitignore",
+}
 
 ENTITY_MAP_HEADERS = (
     "entity_id",
@@ -1023,6 +1139,90 @@ def validate_markdown_sections(
     return errors
 
 
+def validate_required_substrings(
+    text_path: Path,
+    required_values: list[str] | tuple[str, ...],
+) -> list[str]:
+    """Valida a presença de valores obrigatórios em um arquivo textual."""
+    try:
+        content = text_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        return [f"{text_path}: {exc}"]
+
+    return [
+        f"{text_path}: valor obrigatório ausente: {value}"
+        for value in required_values
+        if value not in content
+    ]
+
+
+def validate_public_hygiene(root: Path) -> list[str]:
+    """Detecta caminhos pessoais e materiais privados em áreas públicas."""
+    root = root.resolve()
+    errors: list[str] = []
+    personal_path_patterns = (
+        re.compile(r"[A-Za-z]:[\\/]+Users[\\/]+", re.IGNORECASE),
+        re.compile(r"/Users/[^/\s]+/", re.IGNORECASE),
+        re.compile(r"\.codex[\\/]+attachments", re.IGNORECASE),
+    )
+    private_extensions = {".pdf", ".docx", ".pptx"}
+    text_extensions = {".md", ".csv", ".json", ".yaml", ".yml", ".html", ".txt"}
+
+    for path in root.rglob("*"):
+        if not path.is_file():
+            continue
+
+        relative = path.relative_to(root)
+        if ".git" in relative.parts:
+            continue
+        if set(relative.parts) & {
+            "private",
+            "sources",
+            "course-materials",
+            "outputs",
+            "exports",
+            "reports",
+            "__pycache__",
+        }:
+            continue
+
+        is_public_location = (
+            relative.name in PUBLIC_ROOT_FILES
+            if len(relative.parts) == 1
+            else relative.parts[0] in PUBLIC_SCAN_ROOTS
+        )
+        if not is_public_location:
+            continue
+
+        suffix = path.suffix.lower()
+        if suffix in private_extensions:
+            errors.append(f"{relative}: material privado não deve ser publicado")
+            continue
+
+        lowered_name = path.name.lower()
+        if suffix == ".html" and any(
+            marker in lowered_name
+            for marker in ("apostila", "course-material", "transcript")
+        ):
+            errors.append(f"{relative}: material de curso não deve ser publicado")
+
+        if suffix not in text_extensions and relative.name not in PUBLIC_ROOT_FILES:
+            continue
+
+        try:
+            content = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            errors.append(f"{relative}: {exc}")
+            continue
+
+        if any(pattern.search(content) for pattern in personal_path_patterns):
+            errors.append(f"{relative}: caminho pessoal encontrado")
+        if "data:image/" in content.lower():
+            errors.append(f"{relative}: imagem base64 incorporada não permitida")
+
+    return errors
+
+
 def validate_agents_discovery(root: Path) -> list[str]:
     """Valida a camada .agents/skills contra a fonte canônica."""
     errors: list[str] = []
@@ -1228,6 +1428,79 @@ def validate_repository(root: Path) -> list[str]:
             OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS,
         )
     )
+    errors.extend(
+        validate_markdown_sections(
+            root / "README.md",
+            README_PUBLIC_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "docs" / "getting-started.md",
+            GETTING_STARTED_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "docs" / "architecture.md",
+            ARCHITECTURE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "docs" / "usage-examples.md",
+            USAGE_EXAMPLES_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "docs" / "limitations-and-ethics.md",
+            LIMITATIONS_ETHICS_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "examples" / "sample-geo-audit.md",
+            SAMPLE_AUDIT_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "examples" / "sample-scorecard.md",
+            SAMPLE_SCORECARD_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "examples" / "sample-rewrite-plan.md",
+            REWRITE_PLAN_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "examples" / "sample-optimization-cycle.md",
+            OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "examples" / "sample-entity-map.csv",
+            ENTITY_MAP_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_required_substrings(
+            root / ".gitignore",
+            PUBLIC_GITIGNORE_ENTRIES,
+        )
+    )
+    errors.extend(
+        validate_required_substrings(
+            root / "LICENSE",
+            ("MIT License", "Copyright (c) 2026"),
+        )
+    )
+    errors.extend(validate_public_hygiene(root))
     errors.extend(validate_agents_discovery(root))
 
     agents_content = (root / "AGENTS.md").read_text(encoding="utf-8")
@@ -1249,7 +1522,10 @@ def validate_repository(root: Path) -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     """Cria o parser da linha de comando."""
     parser = argparse.ArgumentParser(
-        description="Valida estrutura, frontmatter, YAML, JSON e CSV do GEO OS."
+        description=(
+            "Valida estrutura, frontmatter, YAML, JSON, CSV e higiene pública "
+            "do GEO OS."
+        )
     )
     parser.add_argument(
         "--root",

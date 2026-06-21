@@ -25,16 +25,18 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | SRC-010 | [Yu et al. — Structural Feature Engineering for GEO](https://arxiv.org/abs/2603.29979) | preprint | Hipótese de estrutura macro, meso e micro como variável de citação | 2026-06-21 | Média | Preprint recente; resultados precisam de replicação independente. |
 | SRC-011 | [A Measurement Framework for GEO](https://arxiv.org/abs/2604.25707) | preprint | Distinção operacional entre seleção e absorção | 2026-06-21 | Média | Preprint recente; framework tratado como evidência emergente. |
 
-## Materiais locais fornecidos
+## Fontes privadas consultadas
 
-| ID | Arquivo | Tipo | Uso no GEO OS | Acesso | Confiabilidade | Limitações |
-|---|---|---|---|---|---|---|
-| LOC-001 | `C:\Users\ffide\Downloads\GEO Course.pdf` e `.docx` | curso institucional | AI question map, entity inventory e padrão de answer units | 2026-06-21 | Média | Material didático; alguns claims amplos exigem triangulação. |
-| LOC-002 | `C:\Users\ffide\Downloads\Sample Content Mapping Solution.pdf` e `.docx` | exemplo didático | Estrutura de templates e campos de mapeamento | 2026-06-21 | Média | Exemplo setorial fictício; não usar números como benchmark geral. |
-| LOC-003 | `C:\Users\ffide\Downloads\deep-research-report (19).md` | síntese de pesquisa | Arquitetura modular, riscos, roadmap e fontes candidatas | 2026-06-21 | Síntese | Tokens de citação originais não são referências finais; claims foram rechecados quando usados. |
-| LOC-004 | `C:\Users\ffide\Downloads\compass_artifact_wf-4b2a172a-02e5-4ba2-a2ce-de4451a5701e_text_markdown.md` | relatório estratégico | Táticas e hipóteses para backlog futuro | 2026-06-21 | Síntese | Contém números voláteis e fontes de vendors; não incorporados como regras nas rubricas. |
-| LOC-005 | `C:\Users\ffide\.codex\attachments\017e5b76-d3b4-447b-94b0-d06f315db013\pasted-text.txt` | histórico de conversa e briefing | Requisitos, decisões de arquitetura e limites do MVP | 2026-06-21 | Contextual | Não é fonte técnica independente. |
-| LOC-006 | `C:\Users\ffide\Downloads\apostila_geo_v2.html` | material didático e síntese operacional | Sinais de extraibilidade, answer units, autoria, fontes, frescor, metodologia, transparência e limitações | 2026-06-21 | Síntese | Estatísticas, percentuais e claims de vendors exigem verificação em fontes primárias antes de uso público. |
+As entradas abaixo registram influência metodológica sem expor caminho local, conteúdo fechado ou material proprietário.
+
+| ID | Fonte | Tipo | Publicável? | Uso no GEO OS | Acesso | Confiabilidade | Limitações |
+|---|---|---|---|---|---|---|---|
+| LOC-001 | Materiais privados de curso GEO | curso institucional | Não | AI question map, entity inventory e padrão de answer units | 2026-06-21 | Média | Claims amplos exigem triangulação; arquivos originais não integram o repositório. |
+| LOC-002 | Exercício privado de content mapping | exemplo didático | Não | Inspiração para campos de templates | 2026-06-21 | Média | Exemplo fechado não foi reproduzido; exemplos públicos foram criados do zero. |
+| LOC-003 | Síntese privada de pesquisa GEO | síntese de pesquisa | Não | Arquitetura modular, riscos e fontes candidatas | 2026-06-21 | Síntese | Marcadores internos não são referências finais; claims usados foram rechecados. |
+| LOC-004 | Relatório estratégico privado | relatório de síntese | Não | Hipóteses para backlog | 2026-06-21 | Síntese | Números voláteis e fontes de vendors não foram incorporados como regras. |
+| LOC-005 | Histórico privado de briefing | contexto de projeto | Não | Requisitos e decisões de arquitetura | 2026-06-21 | Contextual | Não é fonte técnica independente. |
+| LOC-006 | Síntese privada do curso, versão v3 | material didático com recursos visuais | Não | Extraibilidade, relações, autoria, fontes, frescor, metodologia, transparência e limites | 2026-06-21 | Síntese | Contém imagens originais incorporadas e não deve ser publicada; estatísticas exigem fonte primária. |
 
 ## Decisões derivadas
 
@@ -58,6 +60,8 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | DEC-016 | `[FRAMEWORK PRÓPRIO]` | Exigir origem do gap, ação, impacto, esforço, risco e critério de reavaliação em toda otimização. | Evaluation Layer e necessidade de ciclo fechado |
 | DEC-017 | `[INFERÊNCIA]` | Planejar a reescrita antes de produzir o texto reduz o risco de apagar ressalvas, inventar evidência ou expandir conteúdo sem gap real. | DEC-007, DEC-008, DEC-009 e Evaluation Layer |
 | DEC-018 | `[FATO]` | Oportunidades de schema devem representar conteúdo visível e não garantem exibição. | SRC-005, SRC-006 e SRC-007 |
+| DEC-019 | `[FRAMEWORK PRÓPRIO]` | Publicar apenas síntese autoral, templates próprios e exemplos fictícios; fontes privadas permanecem fora do Git. | Política de publicação e limites de direitos autorais |
+| DEC-020 | `[INFERÊNCIA]` | Medição GEO deve complementar analytics e SEO, e não substituir instrumentos existentes. | LOC-006 e limites metodológicos do projeto |
 
 ## Fila de fontes para pesquisas estratégicas
 
@@ -84,3 +88,10 @@ Ao adicionar claim metodológico:
 3. classificar confiabilidade;
 4. declarar limitações;
 5. ligar a fonte à decisão correspondente.
+
+Antes de publicação:
+
+1. remover caminhos pessoais;
+2. confirmar se cada fonte privada está marcada como não publicável;
+3. não copiar trechos extensos, imagens, slides ou exemplos exclusivos;
+4. manter apenas síntese transformada e autoral.

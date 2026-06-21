@@ -2,7 +2,7 @@
 
 ## Objetivo do repositório
 
-Manter um sistema operacional modular e auditável para GEO. O repositório deve separar metodologia, execução, evidência, avaliação e apresentação comercial.
+Manter um sistema operacional modular, auditável e seguro para publicação pública. O repositório deve separar metodologia, execução, evidência, avaliação, otimização e documentação.
 
 ## Regras de arquitetura
 
@@ -24,13 +24,24 @@ Manter um sistema operacional modular e auditável para GEO. O repositório deve
 - Registrar conflitos entre fontes; não escolher silenciosamente a versão mais conveniente.
 - Em evidence ledgers, registrar confiabilidade da fonte, confiança na relação claim-evidência, uso permitido e risco como campos distintos.
 
-## Limites comerciais e éticos
+## Limites de promessa e ética
 
 - Nunca prometer ranking, citação, inclusão, recomendação ou tráfego em sistemas de IA.
 - Não apresentar schema, `llms.txt`, keyword stuffing ou qualquer técnica isolada como garantia.
 - Não recomendar conteúdo oculto, claims sem suporte, avaliações falsas, spam de comunidade ou manipulação adversarial.
 - Comunicar GEO como melhoria de recuperabilidade, selecionabilidade, citabilidade, autoridade e capacidade de mensuração.
 - Informar que outputs de engines são variáveis e que benchmarks são fotografias controladas, não verdades permanentes.
+
+## Publicação e privacidade
+
+- Tratar o repositório como artefato público por padrão.
+- Nunca incluir caminhos pessoais, secrets, tokens, dados identificáveis ou outputs de projetos reais.
+- Não publicar apostilas, slides, prints, transcrições, PDFs, DOCX, PPTX ou imagens de materiais fechados.
+- Fontes privadas podem ser registradas genericamente no source ledger como influência não publicável.
+- Exemplos devem ser fictícios, usar domínios `.invalid` e declarar seu caráter demonstrativo.
+- Antes de publicar, revisar `git ls-files`, executar testes, validador e busca por caminhos pessoais.
+- Não criar linguagem de venda, proposta comercial ou promessa de resultado como parte da arquitetura principal.
+- Seguir `docs/publishing-notes.md` e `docs/limitations-and-ethics.md`.
 
 ## Contratos das skills
 
@@ -159,4 +170,5 @@ O validador verifica estrutura e contratos de arquivo. Ele não substitui revis�
 - Atualizar módulos canônicos antes de ajustar skills que dependem deles.
 - Revisar content briefs quando intent, evidência, mapa tópico ou cenário competitivo mudar materialmente.
 - Revisar planos de otimização quando gaps, fontes, conteúdo, owners ou critérios de sucesso mudarem.
+- Atualizar `CHANGELOG.md` e revisar higiene pública antes de cada release.
 - Manter nomes de arquivos em inglês e conteúdo em português brasileiro.

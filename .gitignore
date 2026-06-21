@@ -1,0 +1,27 @@
+# Private source material
+private/
+sources/
+course-materials/
+apostila*.html
+*course-material*.html
+*transcript*.txt
+*.pdf
+*.docx
+*.pptx
+
+# Local outputs
+outputs/
+exports/
+reports/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
