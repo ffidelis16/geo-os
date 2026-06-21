@@ -178,6 +178,102 @@ STRATEGIC_PROMPT_CRITERIA = (
     "actionability",
 )
 
+ITERATION_FOUR_FILES = {
+    "modules/geo-scorecard.md",
+    "modules/extractability-audit.md",
+    "modules/trust-signal-audit.md",
+    "templates/geo-scorecard-template.md",
+    "templates/geo-scorecard.csv",
+    "templates/extractability-audit-template.md",
+    "templates/trust-signal-audit-template.md",
+    "skills/geo-scorecard/SKILL.md",
+    "skills/extractability-audit/SKILL.md",
+    "skills/trust-signal-audit/SKILL.md",
+    "datasets/golden/evaluation-prompts-pt-br.json",
+}
+
+GEO_SCORECARD_SECTIONS = (
+    "metadados",
+    "conteúdo avaliado",
+    "contexto, intenção e público",
+    "pontuação por dimensão",
+    "evidências observadas",
+    "lacunas",
+    "recomendações e prioridades",
+    "limitações",
+    "próximos passos",
+)
+
+EXTRACTABILITY_AUDIT_SECTIONS = (
+    "metadados",
+    "asset e target intent",
+    "blocos extraíveis encontrados",
+    "blocos ausentes",
+    "seções frágeis",
+    "oportunidades de answer blocks",
+    "oportunidades de schema",
+    "recomendações de reestruturação",
+    "correções prioritárias",
+    "limitações",
+)
+
+TRUST_SIGNAL_AUDIT_SECTIONS = (
+    "metadados",
+    "asset e contexto",
+    "sinais de autor",
+    "sinais de organização",
+    "qualidade de fontes e evidências",
+    "frescor",
+    "metodologia",
+    "transparência e limitações",
+    "consistência factual",
+    "riscos de confiança",
+    "melhorias recomendadas",
+    "limitações da auditoria",
+)
+
+GEO_SCORECARD_HEADERS = (
+    "audit_id",
+    "audit_date",
+    "page_or_asset",
+    "target_intent",
+    "primary_entity",
+    "intent_alignment_score",
+    "entity_clarity_score",
+    "entity_relationship_score",
+    "evidence_quality_score",
+    "citation_readiness_score",
+    "answer_block_readiness_score",
+    "extractability_score",
+    "topical_completeness_score",
+    "trust_signal_score",
+    "freshness_score",
+    "source_transparency_score",
+    "structural_clarity_score",
+    "schema_opportunity_score",
+    "internal_linking_score",
+    "limitations_disclosure_score",
+    "actionability_score",
+    "total_score",
+    "priority",
+    "main_gap",
+    "recommended_action",
+    "evidence_reference",
+    "limitations",
+    "reviewer",
+    "notes",
+)
+
+EVALUATION_PROMPT_CRITERIA = (
+    "diagnosis",
+    "gap_identification",
+    "improvement_recommendations",
+    "evidence_needed",
+    "interpretation_risks",
+    "limitations",
+    "actionability",
+)
+
 
 def load_validator():
     """Carrega o validador diretamente do repositório."""
@@ -488,6 +584,119 @@ description: Use quando for necessário testar uma skill de exemplo.
 
         self.assertTrue(any("entity_relationships" in error for error in errors))
         self.assertTrue(any("limitations" in error for error in errors))
+        self.assertTrue(any("actionability" in error for error in errors))
+
+    def test_iteration_four_files_are_required(self) -> None:
+        self.assertTrue(
+            ITERATION_FOUR_FILES.issubset(set(self.validator.REQUIRED_FILES))
+        )
+
+    def test_iteration_four_skills_are_registered(self) -> None:
+        self.assertTrue(
+            {
+                "geo-scorecard",
+                "extractability-audit",
+                "trust-signal-audit",
+            }.issubset(set(self.validator.SKILL_NAMES))
+        )
+
+    def test_iteration_four_modules_have_required_sections(self) -> None:
+        for module_name in (
+            "geo-scorecard.md",
+            "extractability-audit.md",
+            "trust-signal-audit.md",
+        ):
+            module_path = REPO_ROOT / "modules" / module_name
+            self.assertTrue(module_path.is_file(), module_path)
+            content = module_path.read_text(encoding="utf-8").lower()
+            for section in MODULE_SECTIONS:
+                self.assertIn(f"## {section}", content, module_path)
+
+    def test_evaluation_templates_have_required_sections(self) -> None:
+        contracts = {
+            "geo-scorecard-template.md": GEO_SCORECARD_SECTIONS,
+            "extractability-audit-template.md": EXTRACTABILITY_AUDIT_SECTIONS,
+            "trust-signal-audit-template.md": TRUST_SIGNAL_AUDIT_SECTIONS,
+        }
+        for template_name, sections in contracts.items():
+            template_path = REPO_ROOT / "templates" / template_name
+            self.assertTrue(template_path.is_file(), template_path)
+            content = template_path.read_text(encoding="utf-8").lower()
+            for section in sections:
+                self.assertIn(f"## {section}", content, template_path)
+
+    def test_geo_scorecard_csv_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "geo-scorecard.csv",
+            GEO_SCORECARD_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_evaluation_prompt_dataset_has_six_scenarios(self) -> None:
+        dataset_path = (
+            REPO_ROOT / "datasets" / "golden" / "evaluation-prompts-pt-br.json"
+        )
+        self.assertTrue(dataset_path.is_file(), dataset_path)
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["locale"], "pt-BR")
+        self.assertGreaterEqual(len(data["prompts"]), 6)
+        modules = {prompt["module"] for prompt in data["prompts"]}
+        self.assertEqual(
+            modules,
+            {"geo-scorecard", "extractability-audit", "trust-signal-audit"},
+        )
+        for prompt in data["prompts"]:
+            for criterion in EVALUATION_PROMPT_CRITERIA:
+                self.assertIn(criterion, prompt["expected_criteria"])
+
+    def test_transversal_rubrics_include_evaluation_guidance(self) -> None:
+        for rubric_name in (
+            "geo-readiness.yaml",
+            "citation-readiness.yaml",
+            "entity-authority.yaml",
+        ):
+            data = yaml.safe_load(
+                (REPO_ROOT / "rubrics" / rubric_name).read_text(encoding="utf-8")
+            )
+            guidance = data.get("evaluation_layer")
+            self.assertIsInstance(guidance, dict, rubric_name)
+            self.assertTrue(guidance.get("audit_questions"), rubric_name)
+            self.assertTrue(guidance.get("positive_signals"), rubric_name)
+            self.assertTrue(guidance.get("negative_signals"), rubric_name)
+            self.assertTrue(guidance.get("action_rules"), rubric_name)
+
+    def test_validate_evaluation_prompts_requires_all_criteria(self) -> None:
+        validator = getattr(
+            self.validator,
+            "validate_evaluation_prompt_data",
+            None,
+        )
+        self.assertTrue(callable(validator))
+        data = {
+            "schema_version": "0.1.0",
+            "locale": "pt-BR",
+            "prompts": [
+                {
+                    "id": "EVAL-001",
+                    "module": "geo-scorecard",
+                    "prompt": "Avalie o conteúdo.",
+                    "provided_artifacts": ["content"],
+                    "expected_outputs": ["diagnosis"],
+                    "expected_criteria": {
+                        "diagnosis": "Diagnosticar.",
+                        "gap_identification": "Encontrar lacunas.",
+                    },
+                }
+            ],
+        }
+
+        errors = validator(data, "evaluation.json")
+
+        self.assertTrue(
+            any("improvement_recommendations" in error for error in errors)
+        )
+        self.assertTrue(any("interpretation_risks" in error for error in errors))
         self.assertTrue(any("actionability" in error for error in errors))
 
     def test_repository_contract_is_valid(self) -> None:

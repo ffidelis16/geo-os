@@ -94,10 +94,11 @@ Exigir:
 6. **Citabilidade:** aplicar a rubrica somente às páginas com material suficiente.
 7. **Citation engineering:** mapear claims bloqueados, lacunas e evidências necessárias.
 8. **Answer blocks:** criar unidades autocontidas apenas com claims liberados.
-9. **Benchmark:** executar prompts sob protocolo controlado.
-10. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
-11. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
-12. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
+9. **Avaliação:** auditar extraibilidade e sinais de confiança; consolidar no scorecard.
+10. **Benchmark:** executar prompts sob protocolo controlado.
+11. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
+12. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
+13. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
 
 ## Ponte entre diagnóstico e execução
 
@@ -156,6 +157,58 @@ O dataset `strategic-planning-prompts-pt-br.json` define cenários e critérios 
 
 As rubricas existentes permanecem transversais. Esta iteração não cria uma rubrica por skill porque o repositório não adota equivalência automática entre módulo e score.
 
+## Camada de avaliação
+
+`[FRAMEWORK PRÓPRIO]` A Evaluation Layer verifica o conteúdo produzido antes de recomendar otimização:
+
+```text
+Planejamento → Produção → Extractability Audit
+                         → Trust Signal Audit
+                         → GEO Scorecard
+                         → Backlog de otimização
+```
+
+### Extractability audit
+
+Avalia se respostas, definições, listas, tabelas, comparações, passos, FAQs, claims e dados funcionam como unidades autossuficientes. Paredes de texto, headings vagos, referências ambíguas, claims compostos, evidência distante e dependência visual são sinais de risco.
+
+`[INFERÊNCIA]` Um bloco mais curto não é necessariamente mais extraível. A unidade precisa preservar entidade, contexto, período, evidência e ressalvas materiais.
+
+### Trust signal audit
+
+Avalia sinais observáveis de:
+
+- autoria e credenciais verificáveis;
+- organização responsável;
+- correspondência entre fonte e claim;
+- evidência primária e independência;
+- datas, frescor e validade temporal;
+- metodologia;
+- transparência, conflitos e limitações;
+- consistência factual.
+
+Informação fora do input deve ser marcada como `não observado`. Ausência no material fornecido não prova inexistência.
+
+### GEO scorecard
+
+O scorecard consolida 16 dimensões ponderadas: intenção, clareza e relações de entidades, qualidade de evidência, citabilidade, answer blocks, extraibilidade, completude temática, confiança, frescor, transparência de fontes, estrutura, schema opportunities, links internos, limitações e acionabilidade.
+
+Cada dimensão usa `0–4` ou `N/A`. O total exclui dimensões não avaliadas do denominador e sempre informa cobertura. Toda nota exige justificativa e evidência; o score não representa probabilidade de ranking ou citação.
+
+### Avaliação qualitativa da camada
+
+O dataset `evaluation-prompts-pt-br.json` possui dois cenários por módulo e verifica:
+
+- diagnóstico;
+- identificação de gaps;
+- recomendações de melhoria;
+- evidência necessária;
+- riscos de interpretação;
+- limitações;
+- acionabilidade.
+
+`[INFERÊNCIA]` O material didático `apostila_geo_v2.html` reforça como sinais operacionais a combinação claim + contexto + evidência + takeaway, o uso de formatos discretos e a auditoria de autoria, datas, fontes, metodologia e limitações. Estatísticas e claims de mercado presentes no material não foram promovidos a fatos metodológicos sem fonte primária.
+
 ## Pontuação
 
 Cada critério usa escala ordinal `0–4`:
@@ -210,3 +263,4 @@ Não usar apenas contagem de screenshots, volume bruto de menções ou uma únic
 - GEO não substitui SEO técnico, conteúdo útil, pesquisa de usuário, analytics ou estratégia de marca.
 - Answer blocks e citation engineering melhoram a disciplina editorial, mas não garantem seleção, absorção ou citação.
 - Content briefs, mapas de autoridade e competitor gaps são artefatos de planejamento; precisam de validação em casos reais antes de automação.
+- Scorecards e auditorias organizam julgamento humano; não determinam verdade, qualidade estratégica universal ou comportamento futuro de engines.

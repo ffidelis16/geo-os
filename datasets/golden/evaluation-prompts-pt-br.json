@@ -1,0 +1,169 @@
+{
+  "schema_version": "0.1.0",
+  "dataset_id": "geo-os-evaluation-prompts-pt-br",
+  "locale": "pt-BR",
+  "description": "Cenários qualitativos para testar diagnóstico, disciplina de evidência e acionabilidade da Evaluation Layer.",
+  "usage_notes": [
+    "Avaliar comportamento e completude do output, não respostas textuais exatas.",
+    "Não permitir que o avaliador invente conteúdo, fontes, crawl ou sinais ausentes.",
+    "Exigir justificativa observável para scores, gaps e recomendações."
+  ],
+  "prompts": [
+    {
+      "id": "EVAL-SCORECARD-001",
+      "module": "geo-scorecard",
+      "prompt": "Aplique o GEO Scorecard ao artigo fornecido para a intenção informacional indicada. Justifique cada nota, informe cobertura e transforme os principais gaps em ações priorizadas.",
+      "provided_artifacts": [
+        "artigo completo com headings",
+        "target intent",
+        "público e entidade principal",
+        "fontes citadas no artigo"
+      ],
+      "expected_outputs": [
+        "score por dimensão",
+        "score total e cobertura",
+        "evidências observadas",
+        "gaps, prioridades e próximos passos"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Diferencia sinais fortes, fracos e não avaliáveis por dimensão.",
+        "gap_identification": "Relaciona gaps a trechos, sinais ausentes ou conflitos observáveis.",
+        "improvement_recommendations": "Recomenda correções específicas para intenção, entidades, evidência, estrutura e confiança.",
+        "evidence_needed": "Indica qual evidência falta para elevar cada score relevante.",
+        "interpretation_risks": "Alerta que o score não prevê ranking, seleção ou citação.",
+        "limitations": "Registra escopo, data, materiais ausentes e dimensões N/A.",
+        "actionability": "Prioriza ações por impacto, confiança, esforço e dependências."
+      }
+    },
+    {
+      "id": "EVAL-SCORECARD-002",
+      "module": "geo-scorecard",
+      "prompt": "O usuário forneceu apenas uma URL e uma descrição curta. Produza a resposta correta do GEO Scorecard sem alegar acesso ao conteúdo da página.",
+      "provided_artifacts": [
+        "URL não rastreada",
+        "descrição curta do ativo",
+        "target intent"
+      ],
+      "expected_outputs": [
+        "registro de escopo insuficiente",
+        "dimensões N/A",
+        "lista de inputs necessários",
+        "plano de avaliação"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Limita o diagnóstico ao que foi realmente fornecido.",
+        "gap_identification": "Distingue falta de input de falha do conteúdo.",
+        "improvement_recommendations": "Não prescreve refresh antes de observar o ativo.",
+        "evidence_needed": "Solicita texto, HTML, arquivo, fontes e sinais de autoria relevantes.",
+        "interpretation_risks": "Explica o risco de transformar ausência de acesso em score zero.",
+        "limitations": "Declara explicitamente que a URL não foi rastreada.",
+        "actionability": "Entrega uma sequência curta para completar a auditoria."
+      }
+    },
+    {
+      "id": "EVAL-EXTRACTABILITY-001",
+      "module": "extractability-audit",
+      "prompt": "Audite o conteúdo fornecido, que possui paredes de texto, headings genéricos e claims compostos. Identifique blocos extraíveis e proponha reestruturação sem remover contexto ou ressalvas.",
+      "provided_artifacts": [
+        "texto completo",
+        "estrutura de headings",
+        "target intent",
+        "evidence ledger parcial"
+      ],
+      "expected_outputs": [
+        "inventário de blocos",
+        "seções frágeis",
+        "answer block opportunities",
+        "correções prioritárias"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Avalia autonomia, contexto, granularidade, ambiguidade e dependência visual.",
+        "gap_identification": "Aponta localizações com claims fundidos, referências vagas e evidência distante.",
+        "improvement_recommendations": "Propõe definições, listas, tabelas, passos ou blocos somente quando adequados à intenção.",
+        "evidence_needed": "Encaminha claims sem suporte para citation engineering.",
+        "interpretation_risks": "Não confunde texto curto, bullets ou headings com extraibilidade automática.",
+        "limitations": "Não infere elementos visuais ou markup não fornecidos.",
+        "actionability": "Relaciona cada correção ao trecho, formato e resultado esperado."
+      }
+    },
+    {
+      "id": "EVAL-EXTRACTABILITY-002",
+      "module": "extractability-audit",
+      "prompt": "Revise uma auditoria de extraibilidade existente que recomenda FAQ e schema para todas as seções. Corrija excessos e preserve apenas oportunidades sustentadas pelo conteúdo visível.",
+      "provided_artifacts": [
+        "conteúdo da página",
+        "auditoria anterior",
+        "target intent",
+        "schema atual informado"
+      ],
+      "expected_outputs": [
+        "diagnóstico revisado",
+        "oportunidades mantidas e descartadas",
+        "riscos de interpretação",
+        "plano de reestruturação"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Distingue formatos úteis de padronização artificial.",
+        "gap_identification": "Identifica FAQs inventadas, tabelas sem simetria e schema sem correspondência visível.",
+        "improvement_recommendations": "Preserva apenas blocos que respondem perguntas ou tarefas reais.",
+        "evidence_needed": "Indica conteúdo visível ou prova necessária antes de recomendar schema.",
+        "interpretation_risks": "Explica que extraibilidade não garante recuperação ou citação.",
+        "limitations": "Restringe a análise ao conteúdo e ao schema fornecidos.",
+        "actionability": "Entrega decisões claras de manter, corrigir, criar ou remover."
+      }
+    },
+    {
+      "id": "EVAL-TRUST-001",
+      "module": "trust-signal-audit",
+      "prompt": "Audite um artigo técnico com byline, estatísticas, referências e data de atualização. Verifique autoria, organização, fontes, frescor, metodologia e transparência.",
+      "provided_artifacts": [
+        "artigo completo",
+        "byline e perfil do autor",
+        "lista de fontes",
+        "metodologia declarada",
+        "datas publicadas"
+      ],
+      "expected_outputs": [
+        "sinais fortes e fracos",
+        "lacunas de evidência",
+        "riscos de credibilidade",
+        "melhorias prioritárias"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Avalia autor, organização, claim-fonte, primariedade, frescor, método e conflitos.",
+        "gap_identification": "Separa credenciais declaradas de credenciais verificáveis e datas de revisão real.",
+        "improvement_recommendations": "Indica fonte, owner ou processo necessário para cada melhoria.",
+        "evidence_needed": "Especifica provas primárias, métodos ou registros de revisão faltantes.",
+        "interpretation_risks": "Não usa tom, design, schema ou volume de referências como proxy isolada de confiança.",
+        "limitations": "Registra sinais não observados e verificações externas não realizadas.",
+        "actionability": "Prioriza riscos materiais antes de melhorias cosméticas."
+      }
+    },
+    {
+      "id": "EVAL-TRUST-002",
+      "module": "trust-signal-audit",
+      "prompt": "Avalie um comparativo comercial com fontes secundárias conflitantes, autoria incompleta e metodologia ausente. Não conclua que informações não fornecidas inexistem.",
+      "provided_artifacts": [
+        "comparativo comercial",
+        "fontes secundárias",
+        "dados parciais de autoria",
+        "claims conflitantes"
+      ],
+      "expected_outputs": [
+        "diagnóstico calibrado",
+        "registro de conflitos",
+        "evidências necessárias",
+        "plano de correção"
+      ],
+      "expected_criteria": {
+        "diagnosis": "Marca autoria, metodologia e frescor como parciais ou não observados conforme o input.",
+        "gap_identification": "Registra conflitos sem selecionar silenciosamente a versão conveniente.",
+        "improvement_recommendations": "Recomenda fontes primárias, critérios comparáveis e transparência comercial.",
+        "evidence_needed": "Define prova necessária para claims comparativos e credenciais.",
+        "interpretation_risks": "Alerta para circularidade, viés comercial e falsa precisão.",
+        "limitations": "Não converte input ausente em afirmação de inexistência.",
+        "actionability": "Ordena bloqueios de publicação, correções e verificações."
+      }
+    }
+  ]
+}

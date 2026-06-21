@@ -43,6 +43,9 @@ Cada skill executa um trabalho específico. As rubricas definem critérios; os t
 | `content-brief` | Transformar planejamento e evidência em contrato editorial executável. |
 | `topical-authority` | Mapear entidades, relações, cobertura, profundidade e clusters. |
 | `competitor-analysis` | Comparar concorrentes por critérios GEO observáveis e gaps. |
+| `geo-scorecard` | Consolidar sinais observáveis em score justificado, cobertura e prioridades. |
+| `extractability-audit` | Auditar blocos autossuficientes, ambiguidades e oportunidades de reestruturação. |
+| `trust-signal-audit` | Auditar autoria, fontes, frescor, metodologia, transparência e riscos. |
 
 ## Camada de execução de conteúdo
 
@@ -91,6 +94,29 @@ $topical-authority mapeie lacunas de cobertura para [entidade principal].
 $competitor-analysis compare as URLs fornecidas para a intenção [intenção].
 ```
 
+## Camada de avaliação
+
+A Evaluation Layer fecha o ciclo entre planejamento, produção, auditoria e otimização:
+
+```text
+Planejar → Produzir → Auditar → Priorizar → Otimizar → Reavaliar
+                         ↓
+     Extractability + Trust Signals + GEO Scorecard
+```
+
+- `modules/extractability-audit.md`: identifica respostas diretas, definições, listas, tabelas, passos, FAQs reais, claims, ambiguidades e dependência visual.
+- `modules/trust-signal-audit.md`: verifica autoria, organização, fontes, frescor, metodologia, transparência e consistência factual.
+- `modules/geo-scorecard.md`: consolida 16 dimensões ponderadas, cobertura, evidências, gaps e ações.
+- `datasets/golden/evaluation-prompts-pt-br.json`: testa diagnóstico, lacunas, evidência, riscos, limitações e acionabilidade em seis cenários.
+
+Exemplos:
+
+```text
+$extractability-audit audite este conteúdo para a intenção [intenção].
+$trust-signal-audit verifique autoria, fontes, método e frescor deste artigo.
+$geo-scorecard consolide as auditorias e priorize as correções.
+```
+
 ## Uso rápido
 
 Requisitos: Python 3.11+ e PyYAML.
@@ -121,7 +147,7 @@ Esta versão não inclui scraping, execução automática em engines, APIs propr
 
 ## Próxima evolução recomendada
 
-Criar a Evaluation Layer com scorecard operacional, extractability audit e trust-signal audit. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos serem testados em casos reais.
+Criar a Optimization Layer para converter gaps avaliados em planos de refresh, experimentos e ciclos de reavaliação. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos serem testados em casos reais.
 
 ## Linguagem comercial
 

@@ -78,6 +78,18 @@ Revisar quando houver novas páginas, mudança de taxonomia, duplicação, confl
 
 Registrar sempre `accessed_at`. Reavaliar quando URLs mudarem, conteúdo for atualizado, concorrentes deixarem de ser comparáveis ou critérios de mercado mudarem.
 
+### Scorecards e auditorias
+
+Revisar o scorecard, extractability audit e trust signal audit quando mudar:
+
+- o conteúdo, sua versão ou o target intent;
+- a entidade principal, o público ou o estágio de decisão;
+- autoria, fontes, método, datas ou limitações;
+- a estrutura, os answer blocks ou os dados visíveis;
+- a versão das rubricas ou do protocolo de avaliação.
+
+Scores só podem ser comparados quando escopo, critérios, pesos e tratamento de `N/A` forem compatíveis. Toda reavaliação deve registrar data, versão do método, cobertura e evidências utilizadas.
+
 ## Regras para estatísticas
 
 Toda estatística deve registrar:

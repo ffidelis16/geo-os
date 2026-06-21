@@ -77,6 +77,28 @@ Regras:
 - Toda análise deve registrar data, URLs, suposições, limitações e estados não avaliáveis.
 - Skills estratégicas devem incluir restrições, critérios de qualidade, modos de falha e exemplo.
 
+## Sequência da camada de avaliação
+
+Executar avaliação sobre conteúdo fornecido, preservando esta ordem:
+
+1. Confirmar ativo, versão, intenção, público, entidade e escopo.
+2. Executar `extractability-audit` para estrutura e autonomia dos blocos.
+3. Executar `trust-signal-audit` para autoria, fontes, frescor, método e transparência.
+4. Consolidar no `geo-scorecard`.
+5. Transformar gaps em ações para content brief, citation engineering, answer blocks ou refresh.
+6. Reavaliar somente sob protocolo compatível.
+
+Regras:
+
+- Auditar antes de produzir recomendações de otimização.
+- Não afirmar crawl, acesso ou inspeção de uma URL quando somente a URL foi fornecida.
+- Toda nota deve ter justificativa e evidência observável.
+- Usar `N/A` para dimensão não avaliada no scorecard; não converter ausência de input em nota zero.
+- Informar cobertura e denominador ao apresentar score total.
+- Não usar score como probabilidade de ranking, seleção, citação ou tráfego.
+- Recomendações devem indicar problema, evidência necessária, prioridade e resultado esperado.
+- Skills de avaliação devem incluir restrições, critérios de qualidade, modos de falha e exemplo.
+
 ## Rubricas
 
 - Usar escala ordinal de `0` a `4`.

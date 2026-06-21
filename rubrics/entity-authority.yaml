@@ -1,6 +1,6 @@
 id: entity-authority
 name: Autoridade de entidade
-version: 0.1.0
+version: 0.2.0
 purpose: Avaliar consistência, relações, identidade e corroboração de entidades prioritárias.
 
 scale:
@@ -132,6 +132,28 @@ interpretation:
     max: 100
     label: autoridade forte
     guidance: Manter governança, atualização e consistência multicanal.
+
+evaluation_layer:
+  audit_questions:
+    - Nome, aliases, tipo, definição e URL canônica são consistentes?
+    - Relações com pessoas, produtos, categorias e organizações são explícitas?
+    - Autoria, credenciais e responsabilidade organizacional são verificáveis?
+    - Fontes independentes corroboram os claims centrais sem circularidade?
+  positive_signals:
+    - Identidade canônica estável nos canais próprios
+    - Relações direcionais sustentadas por evidência
+    - Credenciais específicas e verificáveis
+    - Corroboração independente e contextualizada
+  negative_signals:
+    - Variação de nome sem governança de aliases
+    - Relações implícitas ou contraditórias
+    - Expertise apenas declarada
+    - Corroboração circular ou baseada em fontes afiliadas
+  action_rules:
+    - Encaminhar inconsistências de identidade e relações para entity-map.
+    - Encaminhar autoria, credenciais e corroboração para trust-signal-audit.
+    - Registrar não observado quando o input não permitir verificar um sinal.
+    - Não usar volume de menções como prova isolada de autoridade.
 
 limitations:
   - Autoridade de entidade não garante ranking, citação ou Knowledge Panel.

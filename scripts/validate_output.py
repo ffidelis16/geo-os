@@ -22,12 +22,18 @@ SKILL_NAMES = (
     "content-brief",
     "topical-authority",
     "competitor-analysis",
+    "geo-scorecard",
+    "extractability-audit",
+    "trust-signal-audit",
 )
 
 STRATEGIC_SKILL_NAMES = {
     "content-brief",
     "topical-authority",
     "competitor-analysis",
+    "geo-scorecard",
+    "extractability-audit",
+    "trust-signal-audit",
 }
 
 REQUIRED_FILES = (
@@ -41,6 +47,9 @@ REQUIRED_FILES = (
     "skills/content-brief/SKILL.md",
     "skills/topical-authority/SKILL.md",
     "skills/competitor-analysis/SKILL.md",
+    "skills/geo-scorecard/SKILL.md",
+    "skills/extractability-audit/SKILL.md",
+    "skills/trust-signal-audit/SKILL.md",
     "modules/intent-map.md",
     "modules/evidence-ledger.md",
     "modules/answer-blocks.md",
@@ -48,6 +57,9 @@ REQUIRED_FILES = (
     "modules/content-brief.md",
     "modules/topical-authority.md",
     "modules/competitor-analysis.md",
+    "modules/geo-scorecard.md",
+    "modules/extractability-audit.md",
+    "modules/trust-signal-audit.md",
     "rubrics/geo-readiness.yaml",
     "rubrics/citation-readiness.yaml",
     "rubrics/entity-authority.yaml",
@@ -60,8 +72,13 @@ REQUIRED_FILES = (
     "templates/content-brief-template.md",
     "templates/topical-authority-map.csv",
     "templates/competitor-gap-analysis.csv",
+    "templates/geo-scorecard-template.md",
+    "templates/geo-scorecard.csv",
+    "templates/extractability-audit-template.md",
+    "templates/trust-signal-audit-template.md",
     "datasets/golden/benchmark-prompts-pt-br.json",
     "datasets/golden/strategic-planning-prompts-pt-br.json",
+    "datasets/golden/evaluation-prompts-pt-br.json",
     "scripts/validate_output.py",
     "tests/test_validate_output.py",
     "docs/methodology.md",
@@ -120,6 +137,46 @@ CONTENT_BRIEF_TEMPLATE_SECTIONS = (
     "suposições e limitações",
     "estrutura recomendada",
     "revisão de qualidade",
+)
+
+GEO_SCORECARD_TEMPLATE_SECTIONS = (
+    "metadados",
+    "conteúdo avaliado",
+    "contexto, intenção e público",
+    "pontuação por dimensão",
+    "evidências observadas",
+    "lacunas",
+    "recomendações e prioridades",
+    "limitações",
+    "próximos passos",
+)
+
+EXTRACTABILITY_AUDIT_TEMPLATE_SECTIONS = (
+    "metadados",
+    "asset e target intent",
+    "blocos extraíveis encontrados",
+    "blocos ausentes",
+    "seções frágeis",
+    "oportunidades de answer blocks",
+    "oportunidades de schema",
+    "recomendações de reestruturação",
+    "correções prioritárias",
+    "limitações",
+)
+
+TRUST_SIGNAL_AUDIT_TEMPLATE_SECTIONS = (
+    "metadados",
+    "asset e contexto",
+    "sinais de autor",
+    "sinais de organização",
+    "qualidade de fontes e evidências",
+    "frescor",
+    "metodologia",
+    "transparência e limitações",
+    "consistência factual",
+    "riscos de confiança",
+    "melhorias recomendadas",
+    "limitações da auditoria",
 )
 
 ENTITY_MAP_HEADERS = (
@@ -248,6 +305,38 @@ COMPETITOR_GAP_HEADERS = (
     "notes",
 )
 
+GEO_SCORECARD_HEADERS = (
+    "audit_id",
+    "audit_date",
+    "page_or_asset",
+    "target_intent",
+    "primary_entity",
+    "intent_alignment_score",
+    "entity_clarity_score",
+    "entity_relationship_score",
+    "evidence_quality_score",
+    "citation_readiness_score",
+    "answer_block_readiness_score",
+    "extractability_score",
+    "topical_completeness_score",
+    "trust_signal_score",
+    "freshness_score",
+    "source_transparency_score",
+    "structural_clarity_score",
+    "schema_opportunity_score",
+    "internal_linking_score",
+    "limitations_disclosure_score",
+    "actionability_score",
+    "total_score",
+    "priority",
+    "main_gap",
+    "recommended_action",
+    "evidence_reference",
+    "limitations",
+    "reviewer",
+    "notes",
+)
+
 EXPECTED_BENCHMARK_CRITERIA = (
     "presence",
     "citation",
@@ -263,10 +352,26 @@ EXPECTED_STRATEGIC_CRITERIA = (
     "actionability",
 )
 
+EXPECTED_EVALUATION_CRITERIA = (
+    "diagnosis",
+    "gap_identification",
+    "improvement_recommendations",
+    "evidence_needed",
+    "interpretation_risks",
+    "limitations",
+    "actionability",
+)
+
 STRATEGIC_MODULES = {
     "content-brief",
     "topical-authority",
     "competitor-analysis",
+}
+
+EVALUATION_MODULES = {
+    "geo-scorecard",
+    "extractability-audit",
+    "trust-signal-audit",
 }
 
 
@@ -406,6 +511,24 @@ def validate_rubric_data(data: Any, source_name: str) -> list[str]:
     limitations = data.get("limitations")
     if not isinstance(limitations, list) or not limitations:
         errors.append(f"{source_name}: limitations deve conter limites de uso")
+
+    evaluation_layer = data.get("evaluation_layer")
+    if evaluation_layer is not None:
+        if not isinstance(evaluation_layer, dict):
+            errors.append(f"{source_name}: evaluation_layer deve ser um objeto")
+        else:
+            for field in (
+                "audit_questions",
+                "positive_signals",
+                "negative_signals",
+                "action_rules",
+            ):
+                value = evaluation_layer.get(field)
+                if not isinstance(value, list) or not value:
+                    errors.append(
+                        f"{source_name}: evaluation_layer.{field} "
+                        "deve ser uma lista não vazia"
+                    )
 
     return errors
 
@@ -576,6 +699,98 @@ def validate_strategic_prompts(dataset_path: Path) -> list[str]:
     return validate_strategic_prompt_data(data, str(dataset_path))
 
 
+def validate_evaluation_prompt_data(data: Any, source_name: str) -> list[str]:
+    """Valida cenários qualitativos da camada de avaliação."""
+    errors: list[str] = []
+    if not isinstance(data, dict):
+        return [f"{source_name}: raiz deve ser um objeto JSON"]
+
+    for field in ("schema_version", "locale", "prompts"):
+        if field not in data:
+            errors.append(f"{source_name}: campo obrigatório ausente: {field}")
+
+    if data.get("locale") != "pt-BR":
+        errors.append(f"{source_name}: locale deve ser pt-BR")
+
+    prompts = data.get("prompts")
+    if not isinstance(prompts, list):
+        errors.append(f"{source_name}: prompts deve ser uma lista")
+        return errors
+    if len(prompts) < 6:
+        errors.append(f"{source_name}: prompts deve conter ao menos 6 cenários")
+
+    prompt_ids: set[str] = set()
+    covered_modules: set[str] = set()
+    for index, prompt in enumerate(prompts, start=1):
+        prefix = f"{source_name}: prompt {index}"
+        if not isinstance(prompt, dict):
+            errors.append(f"{prefix} deve ser um objeto")
+            continue
+
+        for field in (
+            "id",
+            "module",
+            "prompt",
+            "provided_artifacts",
+            "expected_outputs",
+            "expected_criteria",
+        ):
+            if field not in prompt:
+                errors.append(f"{prefix}: campo obrigatório ausente: {field}")
+
+        prompt_id = prompt.get("id")
+        if isinstance(prompt_id, str):
+            if prompt_id in prompt_ids:
+                errors.append(f"{prefix}: id duplicado: {prompt_id}")
+            prompt_ids.add(prompt_id)
+
+        module = prompt.get("module")
+        if module not in EVALUATION_MODULES:
+            errors.append(f"{prefix}: module inválido: {module}")
+        else:
+            covered_modules.add(module)
+
+        provided_artifacts = prompt.get("provided_artifacts")
+        if not isinstance(provided_artifacts, list) or not provided_artifacts:
+            errors.append(
+                f"{prefix}: provided_artifacts deve ser uma lista não vazia"
+            )
+
+        expected_outputs = prompt.get("expected_outputs")
+        if not isinstance(expected_outputs, list) or not expected_outputs:
+            errors.append(f"{prefix}: expected_outputs deve ser uma lista não vazia")
+
+        criteria = prompt.get("expected_criteria")
+        if not isinstance(criteria, dict):
+            errors.append(f"{prefix}: expected_criteria deve ser um objeto")
+            continue
+
+        for criterion in EXPECTED_EVALUATION_CRITERIA:
+            value = criteria.get(criterion)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(
+                    f"{prefix}: expected_criteria deve definir {criterion}"
+                )
+
+    missing_modules = EVALUATION_MODULES - covered_modules
+    if missing_modules:
+        errors.append(
+            f"{source_name}: módulos sem cenário: {', '.join(sorted(missing_modules))}"
+        )
+
+    return errors
+
+
+def validate_evaluation_prompts(dataset_path: Path) -> list[str]:
+    """Carrega e valida o dataset da camada de avaliação."""
+    try:
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"{dataset_path}: {exc}"]
+
+    return validate_evaluation_prompt_data(data, str(dataset_path))
+
+
 def validate_csv_headers(csv_path: Path, required_headers: list[str] | tuple[str, ...]) -> list[str]:
     """Valida se um template CSV contém os headers exigidos."""
     try:
@@ -688,6 +903,9 @@ def validate_repository(root: Path) -> list[str]:
         "content-brief.md",
         "topical-authority.md",
         "competitor-analysis.md",
+        "geo-scorecard.md",
+        "extractability-audit.md",
+        "trust-signal-audit.md",
     ):
         errors.extend(
             validate_markdown_sections(
@@ -714,6 +932,11 @@ def validate_repository(root: Path) -> list[str]:
             / "datasets"
             / "golden"
             / "strategic-planning-prompts-pt-br.json"
+        )
+    )
+    errors.extend(
+        validate_evaluation_prompts(
+            root / "datasets" / "golden" / "evaluation-prompts-pt-br.json"
         )
     )
     errors.extend(
@@ -762,6 +985,30 @@ def validate_repository(root: Path) -> list[str]:
         validate_csv_headers(
             root / "templates" / "competitor-gap-analysis.csv",
             COMPETITOR_GAP_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "geo-scorecard-template.md",
+            GEO_SCORECARD_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "templates" / "geo-scorecard.csv",
+            GEO_SCORECARD_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "extractability-audit-template.md",
+            EXTRACTABILITY_AUDIT_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "trust-signal-audit-template.md",
+            TRUST_SIGNAL_AUDIT_TEMPLATE_SECTIONS,
         )
     )
     errors.extend(validate_agents_discovery(root))

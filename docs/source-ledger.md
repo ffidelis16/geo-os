@@ -34,6 +34,7 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | LOC-003 | `C:\Users\ffide\Downloads\deep-research-report (19).md` | síntese de pesquisa | Arquitetura modular, riscos, roadmap e fontes candidatas | 2026-06-21 | Síntese | Tokens de citação originais não são referências finais; claims foram rechecados quando usados. |
 | LOC-004 | `C:\Users\ffide\Downloads\compass_artifact_wf-4b2a172a-02e5-4ba2-a2ce-de4451a5701e_text_markdown.md` | relatório estratégico | Táticas e hipóteses para backlog futuro | 2026-06-21 | Síntese | Contém números voláteis e fontes de vendors; não incorporados como regras nas rubricas. |
 | LOC-005 | `C:\Users\ffide\.codex\attachments\017e5b76-d3b4-447b-94b0-d06f315db013\pasted-text.txt` | histórico de conversa e briefing | Requisitos, decisões de arquitetura e limites do MVP | 2026-06-21 | Contextual | Não é fonte técnica independente. |
+| LOC-006 | `C:\Users\ffide\Downloads\apostila_geo_v2.html` | material didático e síntese operacional | Sinais de extraibilidade, answer units, autoria, fontes, frescor, metodologia, transparência e limitações | 2026-06-21 | Síntese | Estatísticas, percentuais e claims de vendors exigem verificação em fontes primárias antes de uso público. |
 
 ## Decisões derivadas
 
@@ -51,6 +52,9 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | DEC-010 | `[FRAMEWORK PRÓPRIO]` | Usar o content brief como contrato central enriquecido por topical authority e competitor analysis. | DEC-006, DEC-007, DEC-008 e necessidade operacional do projeto |
 | DEC-011 | `[FRAMEWORK PRÓPRIO]` | Avaliar topical authority por entidades, relações, cobertura, profundidade, evidência e links, não por volume de páginas. | SRC-005, SRC-007 e síntese metodológica |
 | DEC-012 | `[INFERÊNCIA]` | Comparar concorrentes apenas por páginas equivalentes e critérios observáveis reduz conclusões inválidas. | Política de evidência do GEO OS |
+| DEC-013 | `[FRAMEWORK PRÓPRIO]` | Consolidar avaliação em scorecard de 16 dimensões com nota justificada, cobertura e denominador ajustado. | Rubricas existentes, LOC-006 e necessidade operacional do projeto |
+| DEC-014 | `[INFERÊNCIA]` | Avaliar autonomia, contexto, granularidade e dependência visual é mais útil do que usar tamanho ou presença de bullets como proxy de extraibilidade. | LOC-001, LOC-006 e módulos de answer blocks |
+| DEC-015 | `[FRAMEWORK PRÓPRIO]` | Tratar confiança como verificabilidade observável de autoria, fonte, frescor, método, transparência e consistência. | SRC-009, LOC-006 e política de evidência |
 
 ## Fila de fontes para pesquisas estratégicas
 
@@ -64,6 +68,9 @@ Entradas `PENDING` são placeholders de pesquisa, não sustentam claims até ser
 | PENDING-COMP-002 | Autoria e confiança | Página de autor, organização ou política editorial | fonte primária | pending | Avaliar authorship/trust | Ausência não prova baixa qualidade |
 | PENDING-COMP-003 | Frescor | Data publicada, modificada ou evidência de atualização | fonte primária | pending | Avaliar freshness | Não usar aparência visual como data |
 | PENDING-SCHEMA-001 | Schema opportunity | Documentação oficial do tipo de structured data aplicável | documentação oficial | pending | Recomendar apenas markup compatível | Schema não garante citação ou exibição |
+| PENDING-TRUST-001 | Autoria e credenciais | Perfil oficial, currículo, registro profissional ou produção verificável | fonte primária | pending | Confirmar expertise relevante | Credencial declarada não equivale a credencial verificada |
+| PENDING-TRUST-002 | Metodologia | Método, amostra, período, critérios e limitações do dado citado | fonte primária | pending | Avaliar reprodutibilidade e risco | Ausência de método pode bloquear claims materiais |
+| PENDING-TRUST-003 | Conflitos de interesse | Disclosure editorial, vínculo comercial ou financiamento | fonte primária | pending | Avaliar transparência | Ausência no input deve ser registrada como não observada |
 
 ## Manutenção
 

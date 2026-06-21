@@ -1,6 +1,6 @@
 id: citation-readiness
 name: Prontidão para citação
-version: 0.1.0
+version: 0.2.0
 purpose: Avaliar se uma página sustenta claims de forma clara, granular e verificável.
 
 scale:
@@ -132,6 +132,28 @@ interpretation:
     max: 100
     label: candidato forte
     guidance: Monitorar suporte real e estabilidade entre engines.
+
+evaluation_layer:
+  audit_questions:
+    - Cada claim prioritário possui fonte adequada e correspondência verificável?
+    - A atribuição está próxima do claim e preserva período, escopo e ressalvas?
+    - Definições, resumos e comparações podem ser extraídos sem ambiguidade?
+    - Contradições internas ou entre fontes foram registradas?
+  positive_signals:
+    - Claims atômicos com suporte direto
+    - Resumos autossuficientes com contexto
+    - Fontes primárias ou adequadas ao risco
+    - Critérios comparativos simétricos
+  negative_signals:
+    - Estatísticas sem fonte, período ou população
+    - Referências distantes ou sem relação clara com o claim
+    - Claims heterogêneos fundidos no mesmo parágrafo
+    - Superlativos e comparações sem base explícita
+  action_rules:
+    - Encaminhar claims sem suporte para citation-engineering.
+    - Encaminhar respostas dispersas ou ambíguas para extractability-audit e answer-blocks.
+    - Bloquear publicação de claim material quando a evidência exigida não estiver liberada.
+    - Não interpretar citabilidade como probabilidade garantida de seleção por uma engine.
 
 limitations:
   - Um conteúdo citável pode não ser selecionado por uma engine.
