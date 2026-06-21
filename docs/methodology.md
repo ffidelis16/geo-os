@@ -95,10 +95,12 @@ Exigir:
 7. **Citation engineering:** mapear claims bloqueados, lacunas e evidências necessárias.
 8. **Answer blocks:** criar unidades autocontidas apenas com claims liberados.
 9. **Avaliação:** auditar extraibilidade e sinais de confiança; consolidar no scorecard.
-10. **Benchmark:** executar prompts sob protocolo controlado.
-11. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]` e `[FRAMEWORK PRÓPRIO]`.
-12. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
-13. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
+10. **Otimização:** converter gaps em rewrite plan, content refresh e schema opportunities.
+11. **Aprovação:** validar direção antes de reescrita ou implementação.
+12. **Benchmark:** executar prompts sob protocolo controlado.
+13. **Síntese:** separar `[FATO]`, `[INFERÊNCIA]`, `[HIPÓTESE]`, `[RECOMENDAÇÃO]` e `[FRAMEWORK PRÓPRIO]`.
+14. **Prioridade:** combinar impacto esperado, confiança, esforço e dependências.
+15. **Re-teste:** repetir o protocolo e registrar mudanças ambientais.
 
 ## Ponte entre diagnóstico e execução
 
@@ -209,6 +211,64 @@ O dataset `evaluation-prompts-pt-br.json` possui dois cenários por módulo e ve
 
 `[INFERÊNCIA]` O material didático `apostila_geo_v2.html` reforça como sinais operacionais a combinação claim + contexto + evidência + takeaway, o uso de formatos discretos e a auditoria de autoria, datas, fontes, metodologia e limitações. Estatísticas e claims de mercado presentes no material não foram promovidos a fatos metodológicos sem fonte primária.
 
+## Camada de otimização
+
+`[FRAMEWORK PRÓPRIO]` A Optimization Layer converte avaliação em ação sem pular diretamente para produção:
+
+```text
+Auditoria → Gap → Plano → Aprovação → Execução futura → Reavaliação → Decisão
+```
+
+### Origem dos gaps
+
+Toda recomendação deve apontar para pelo menos um artefato de origem:
+
+- geo-scorecard;
+- extractability audit;
+- trust signal audit;
+- content brief;
+- topical authority;
+- competitor analysis;
+- evidence ledger.
+
+Ausência de artefato não autoriza reconstruir uma auditoria imaginária. O plano deve registrar o input ausente e limitar a recomendação.
+
+### Rewrite plan
+
+Converte gaps em intervenções por seção: definição, answer block, lista, tabela, heading, relação entre entidades, evidência, fonte, limitação, consolidação ou remoção. O bloco sugerido descreve função e estrutura, não o texto final.
+
+### Content refresh
+
+Classifica ações como manter, atualizar, remover, expandir, consolidar, comprovar, reestruturar ou republicar. Data antiga é um sinal para investigação, não prova automática de erro. Concorrentes informam gaps observáveis, mas não definem um modelo universal.
+
+### Schema opportunity
+
+Mapeia tipos candidatos somente quando o conteúdo visível os sustenta. A oportunidade registra propriedades, campos ausentes, documentação aplicável, risco e validação. Implementação e garantia de exibição ficam fora desta camada.
+
+### Ciclo fechado
+
+O `optimization-cycle-template.md` registra:
+
+1. auditoria e baseline;
+2. gaps priorizados;
+3. ações planejadas;
+4. critérios de sucesso;
+5. reavaliação;
+6. decisão de manter, revisar, expandir ou abandonar.
+
+Cada ação exige impacto, esforço, risco, owner e critério observável. Resultados esperados permanecem `[HIPÓTESE]` até a reavaliação.
+
+### Avaliação qualitativa da camada
+
+O dataset `optimization-prompts-pt-br.json` contém dois cenários por módulo e verifica:
+
+- conversão de gaps em ações;
+- priorização;
+- separação entre evidência e inferência;
+- limitações;
+- risco de recomendação excessiva;
+- critério de reavaliação.
+
 ## Pontuação
 
 Cada critério usa escala ordinal `0–4`:
@@ -264,3 +324,4 @@ Não usar apenas contagem de screenshots, volume bruto de menções ou uma únic
 - Answer blocks e citation engineering melhoram a disciplina editorial, mas não garantem seleção, absorção ou citação.
 - Content briefs, mapas de autoridade e competitor gaps são artefatos de planejamento; precisam de validação em casos reais antes de automação.
 - Scorecards e auditorias organizam julgamento humano; não determinam verdade, qualidade estratégica universal ou comportamento futuro de engines.
+- Planos de otimização orientam execução futura; não substituem aprovação editorial, implementação técnica nem reavaliação.

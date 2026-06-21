@@ -55,6 +55,9 @@ Registro inicial das fontes que sustentam a arquitetura e a metodologia do GEO O
 | DEC-013 | `[FRAMEWORK PRÓPRIO]` | Consolidar avaliação em scorecard de 16 dimensões com nota justificada, cobertura e denominador ajustado. | Rubricas existentes, LOC-006 e necessidade operacional do projeto |
 | DEC-014 | `[INFERÊNCIA]` | Avaliar autonomia, contexto, granularidade e dependência visual é mais útil do que usar tamanho ou presença de bullets como proxy de extraibilidade. | LOC-001, LOC-006 e módulos de answer blocks |
 | DEC-015 | `[FRAMEWORK PRÓPRIO]` | Tratar confiança como verificabilidade observável de autoria, fonte, frescor, método, transparência e consistência. | SRC-009, LOC-006 e política de evidência |
+| DEC-016 | `[FRAMEWORK PRÓPRIO]` | Exigir origem do gap, ação, impacto, esforço, risco e critério de reavaliação em toda otimização. | Evaluation Layer e necessidade de ciclo fechado |
+| DEC-017 | `[INFERÊNCIA]` | Planejar a reescrita antes de produzir o texto reduz o risco de apagar ressalvas, inventar evidência ou expandir conteúdo sem gap real. | DEC-007, DEC-008, DEC-009 e Evaluation Layer |
+| DEC-018 | `[FATO]` | Oportunidades de schema devem representar conteúdo visível e não garantem exibição. | SRC-005, SRC-006 e SRC-007 |
 
 ## Fila de fontes para pesquisas estratégicas
 

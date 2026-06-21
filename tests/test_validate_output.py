@@ -274,6 +274,79 @@ EVALUATION_PROMPT_CRITERIA = (
     "actionability",
 )
 
+ITERATION_FIVE_FILES = {
+    "modules/rewrite-plan.md",
+    "modules/content-refresh.md",
+    "modules/schema-opportunity.md",
+    "templates/rewrite-plan-template.md",
+    "templates/content-refresh-plan.csv",
+    "templates/schema-opportunity-map.csv",
+    "templates/optimization-cycle-template.md",
+    "skills/rewrite-plan/SKILL.md",
+    "skills/content-refresh/SKILL.md",
+    "skills/schema-opportunity/SKILL.md",
+    "datasets/golden/optimization-prompts-pt-br.json",
+}
+
+REWRITE_PLAN_SECTIONS = (
+    "contexto",
+    "conteúdo avaliado",
+    "principais gaps",
+    "plano por seção",
+    "ações priorizadas",
+    "evidências necessárias",
+    "riscos",
+    "critérios de reavaliação",
+)
+
+OPTIMIZATION_CYCLE_SECTIONS = (
+    "auditoria de origem",
+    "gaps priorizados",
+    "ações planejadas",
+    "critérios de sucesso",
+    "reavaliação",
+    "decisão",
+)
+
+CONTENT_REFRESH_HEADERS = (
+    "asset",
+    "page_or_section",
+    "target_intent",
+    "observed_gap",
+    "refresh_action",
+    "evidence_needed",
+    "source_needed",
+    "impact_estimate",
+    "effort_estimate",
+    "priority",
+    "risk",
+    "owner",
+    "status",
+    "re_evaluation_criteria",
+)
+
+SCHEMA_OPPORTUNITY_HEADERS = (
+    "asset",
+    "page_or_section",
+    "schema_type",
+    "justification",
+    "required_content",
+    "required_properties",
+    "missing_fields",
+    "risk",
+    "priority",
+    "validation_criteria",
+)
+
+OPTIMIZATION_PROMPT_CRITERIA = (
+    "action_conversion",
+    "prioritization",
+    "evidence_inference_separation",
+    "limitations",
+    "over_recommendation_risk",
+    "re_evaluation_criteria",
+)
+
 
 def load_validator():
     """Carrega o validador diretamente do repositório."""
@@ -407,6 +480,22 @@ description: Use quando for necessário testar uma skill de exemplo.
             )
 
         self.assertTrue(any("entity_type" in error for error in errors))
+
+    def test_validate_csv_headers_detects_row_width_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            csv_path = Path(temp_dir) / "contract.csv"
+            csv_path.write_text(
+                "first,second,third\n"
+                "one,two\n",
+                encoding="utf-8",
+            )
+
+            errors = self.validator.validate_csv_headers(
+                csv_path,
+                ["first", "second", "third"],
+            )
+
+        self.assertTrue(any("linha 2" in error for error in errors))
 
     def test_validate_markdown_sections_detects_missing_heading(self) -> None:
         validator = getattr(self.validator, "validate_markdown_sections", None)
@@ -698,6 +787,134 @@ description: Use quando for necessário testar uma skill de exemplo.
         )
         self.assertTrue(any("interpretation_risks" in error for error in errors))
         self.assertTrue(any("actionability" in error for error in errors))
+
+    def test_iteration_five_files_are_required(self) -> None:
+        self.assertTrue(
+            ITERATION_FIVE_FILES.issubset(set(self.validator.REQUIRED_FILES))
+        )
+
+    def test_iteration_five_skills_are_registered(self) -> None:
+        self.assertTrue(
+            {"rewrite-plan", "content-refresh", "schema-opportunity"}.issubset(
+                set(self.validator.SKILL_NAMES)
+            )
+        )
+
+    def test_iteration_five_skills_have_strategic_contract_sections(self) -> None:
+        for skill_name in (
+            "rewrite-plan",
+            "content-refresh",
+            "schema-opportunity",
+        ):
+            skill_path = REPO_ROOT / "skills" / skill_name / "SKILL.md"
+            self.assertTrue(skill_path.is_file(), skill_path)
+            _, body = self.validator.parse_skill_frontmatter(
+                skill_path.read_text(encoding="utf-8")
+            )
+            headings = body.lower()
+            for section in STRATEGIC_SKILL_SECTIONS:
+                self.assertIn(f"## {section}", headings, skill_path)
+
+    def test_iteration_five_modules_have_required_sections(self) -> None:
+        for module_name in (
+            "rewrite-plan.md",
+            "content-refresh.md",
+            "schema-opportunity.md",
+        ):
+            module_path = REPO_ROOT / "modules" / module_name
+            self.assertTrue(module_path.is_file(), module_path)
+            content = module_path.read_text(encoding="utf-8").lower()
+            for section in MODULE_SECTIONS:
+                self.assertIn(f"## {section}", content, module_path)
+
+    def test_rewrite_plan_template_has_required_sections(self) -> None:
+        template_path = REPO_ROOT / "templates" / "rewrite-plan-template.md"
+        self.assertTrue(template_path.is_file(), template_path)
+        content = template_path.read_text(encoding="utf-8").lower()
+
+        for section in REWRITE_PLAN_SECTIONS:
+            self.assertIn(f"## {section}", content)
+
+    def test_optimization_cycle_template_has_required_sections(self) -> None:
+        template_path = (
+            REPO_ROOT / "templates" / "optimization-cycle-template.md"
+        )
+        self.assertTrue(template_path.is_file(), template_path)
+        content = template_path.read_text(encoding="utf-8").lower()
+
+        for section in OPTIMIZATION_CYCLE_SECTIONS:
+            self.assertIn(f"## {section}", content)
+
+    def test_content_refresh_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "content-refresh-plan.csv",
+            CONTENT_REFRESH_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_schema_opportunity_template_has_contract_headers(self) -> None:
+        errors = self.validator.validate_csv_headers(
+            REPO_ROOT / "templates" / "schema-opportunity-map.csv",
+            SCHEMA_OPPORTUNITY_HEADERS,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_optimization_prompt_dataset_has_six_scenarios(self) -> None:
+        dataset_path = (
+            REPO_ROOT / "datasets" / "golden" / "optimization-prompts-pt-br.json"
+        )
+        self.assertTrue(dataset_path.is_file(), dataset_path)
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["locale"], "pt-BR")
+        self.assertGreaterEqual(len(data["prompts"]), 6)
+        modules = {prompt["module"] for prompt in data["prompts"]}
+        self.assertEqual(
+            modules,
+            {"rewrite-plan", "content-refresh", "schema-opportunity"},
+        )
+        for prompt in data["prompts"]:
+            for criterion in OPTIMIZATION_PROMPT_CRITERIA:
+                self.assertIn(criterion, prompt["expected_criteria"])
+
+    def test_validate_optimization_prompts_requires_all_criteria(self) -> None:
+        validator = getattr(
+            self.validator,
+            "validate_optimization_prompt_data",
+            None,
+        )
+        self.assertTrue(callable(validator))
+        data = {
+            "schema_version": "0.1.0",
+            "locale": "pt-BR",
+            "prompts": [
+                {
+                    "id": "OPT-001",
+                    "module": "rewrite-plan",
+                    "prompt": "Converta os gaps em plano.",
+                    "provided_artifacts": ["geo-scorecard"],
+                    "expected_outputs": ["rewrite plan"],
+                    "expected_criteria": {
+                        "action_conversion": "Converter gaps em ações.",
+                        "prioritization": "Priorizar ações.",
+                    },
+                }
+            ],
+        }
+
+        errors = validator(data, "optimization.json")
+
+        self.assertTrue(
+            any("evidence_inference_separation" in error for error in errors)
+        )
+        self.assertTrue(any("over_recommendation_risk" in error for error in errors))
+        self.assertTrue(any("re_evaluation_criteria" in error for error in errors))
+
+    def test_agents_declares_recommendation_marker(self) -> None:
+        agents_content = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+
+        self.assertIn("[RECOMENDAÇÃO]", agents_content)
 
     def test_repository_contract_is_valid(self) -> None:
         errors = self.validator.validate_repository(REPO_ROOT)

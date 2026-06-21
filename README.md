@@ -46,6 +46,9 @@ Cada skill executa um trabalho específico. As rubricas definem critérios; os t
 | `geo-scorecard` | Consolidar sinais observáveis em score justificado, cobertura e prioridades. |
 | `extractability-audit` | Auditar blocos autossuficientes, ambiguidades e oportunidades de reestruturação. |
 | `trust-signal-audit` | Auditar autoria, fontes, frescor, metodologia, transparência e riscos. |
+| `rewrite-plan` | Converter gaps auditados em plano de reescrita por seção. |
+| `content-refresh` | Planejar atualização, remoção, expansão, consolidação ou comprovação. |
+| `schema-opportunity` | Mapear dados estruturados sustentados pelo conteúdo visível. |
 
 ## Camada de execução de conteúdo
 
@@ -117,6 +120,31 @@ $trust-signal-audit verifique autoria, fontes, método e frescor deste artigo.
 $geo-scorecard consolide as auditorias e priorize as correções.
 ```
 
+## Camada de otimização
+
+A Optimization Layer fecha o ciclo entre avaliação e uma nova medição, sem executar reescrita final:
+
+```text
+Scorecard → Gaps → Priorização → Rewrite/Refresh Plan
+                              ↘ Schema Opportunities
+                                        ↓
+                         Optimization Cycle → Reavaliação
+```
+
+- `modules/rewrite-plan.md`: transforma gaps em intervenções por seção.
+- `modules/content-refresh.md`: decide o que manter, atualizar, remover, expandir, consolidar, provar ou republicar.
+- `modules/schema-opportunity.md`: registra tipos candidatos, propriedades, lacunas, riscos e validação.
+- `templates/optimization-cycle-template.md`: conecta auditoria, ação, critério de sucesso, reavaliação e decisão.
+- `datasets/golden/optimization-prompts-pt-br.json`: testa conversão de gaps, priorização, disciplina de evidência, limites e reavaliação.
+
+Exemplos:
+
+```text
+$rewrite-plan converta os gaps auditados em um plano por seção.
+$content-refresh planeje o refresh deste ativo sem reescrever o texto final.
+$schema-opportunity mapeie apenas tipos sustentados pelo conteúdo fornecido.
+```
+
 ## Uso rápido
 
 Requisitos: Python 3.11+ e PyYAML.
@@ -147,7 +175,7 @@ Esta versão não inclui scraping, execução automática em engines, APIs propr
 
 ## Próxima evolução recomendada
 
-Criar a Optimization Layer para converter gaps avaliados em planos de refresh, experimentos e ciclos de reavaliação. Scripts de análise, automação externa e empacotamento continuam fora do escopo até os contratos serem testados em casos reais.
+Criar a Delivery Layer com client report, executive summary e roadmap 30-60-90. Reescrita final automática, implementação de schema, scripts de análise e automação externa continuam fora do escopo até os contratos serem testados em casos reais.
 
 ## Linguagem comercial
 

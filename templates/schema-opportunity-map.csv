@@ -1,0 +1,2 @@
+asset,page_or_section,schema_type,justification,required_content,required_properties,missing_fields,risk,priority,validation_criteria
+https://example.com/page,Example section,Article,Conteúdo editorial identificável,Título autoria e data visíveis,headline author datePublished,author,medium,high,Remover esta linha antes do uso

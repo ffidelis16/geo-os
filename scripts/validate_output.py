@@ -25,6 +25,9 @@ SKILL_NAMES = (
     "geo-scorecard",
     "extractability-audit",
     "trust-signal-audit",
+    "rewrite-plan",
+    "content-refresh",
+    "schema-opportunity",
 )
 
 STRATEGIC_SKILL_NAMES = {
@@ -34,6 +37,9 @@ STRATEGIC_SKILL_NAMES = {
     "geo-scorecard",
     "extractability-audit",
     "trust-signal-audit",
+    "rewrite-plan",
+    "content-refresh",
+    "schema-opportunity",
 }
 
 REQUIRED_FILES = (
@@ -50,6 +56,9 @@ REQUIRED_FILES = (
     "skills/geo-scorecard/SKILL.md",
     "skills/extractability-audit/SKILL.md",
     "skills/trust-signal-audit/SKILL.md",
+    "skills/rewrite-plan/SKILL.md",
+    "skills/content-refresh/SKILL.md",
+    "skills/schema-opportunity/SKILL.md",
     "modules/intent-map.md",
     "modules/evidence-ledger.md",
     "modules/answer-blocks.md",
@@ -60,6 +69,9 @@ REQUIRED_FILES = (
     "modules/geo-scorecard.md",
     "modules/extractability-audit.md",
     "modules/trust-signal-audit.md",
+    "modules/rewrite-plan.md",
+    "modules/content-refresh.md",
+    "modules/schema-opportunity.md",
     "rubrics/geo-readiness.yaml",
     "rubrics/citation-readiness.yaml",
     "rubrics/entity-authority.yaml",
@@ -76,9 +88,14 @@ REQUIRED_FILES = (
     "templates/geo-scorecard.csv",
     "templates/extractability-audit-template.md",
     "templates/trust-signal-audit-template.md",
+    "templates/rewrite-plan-template.md",
+    "templates/content-refresh-plan.csv",
+    "templates/schema-opportunity-map.csv",
+    "templates/optimization-cycle-template.md",
     "datasets/golden/benchmark-prompts-pt-br.json",
     "datasets/golden/strategic-planning-prompts-pt-br.json",
     "datasets/golden/evaluation-prompts-pt-br.json",
+    "datasets/golden/optimization-prompts-pt-br.json",
     "scripts/validate_output.py",
     "tests/test_validate_output.py",
     "docs/methodology.md",
@@ -177,6 +194,26 @@ TRUST_SIGNAL_AUDIT_TEMPLATE_SECTIONS = (
     "riscos de confiança",
     "melhorias recomendadas",
     "limitações da auditoria",
+)
+
+REWRITE_PLAN_TEMPLATE_SECTIONS = (
+    "contexto",
+    "conteúdo avaliado",
+    "principais gaps",
+    "plano por seção",
+    "ações priorizadas",
+    "evidências necessárias",
+    "riscos",
+    "critérios de reavaliação",
+)
+
+OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS = (
+    "auditoria de origem",
+    "gaps priorizados",
+    "ações planejadas",
+    "critérios de sucesso",
+    "reavaliação",
+    "decisão",
 )
 
 ENTITY_MAP_HEADERS = (
@@ -337,6 +374,36 @@ GEO_SCORECARD_HEADERS = (
     "notes",
 )
 
+CONTENT_REFRESH_HEADERS = (
+    "asset",
+    "page_or_section",
+    "target_intent",
+    "observed_gap",
+    "refresh_action",
+    "evidence_needed",
+    "source_needed",
+    "impact_estimate",
+    "effort_estimate",
+    "priority",
+    "risk",
+    "owner",
+    "status",
+    "re_evaluation_criteria",
+)
+
+SCHEMA_OPPORTUNITY_HEADERS = (
+    "asset",
+    "page_or_section",
+    "schema_type",
+    "justification",
+    "required_content",
+    "required_properties",
+    "missing_fields",
+    "risk",
+    "priority",
+    "validation_criteria",
+)
+
 EXPECTED_BENCHMARK_CRITERIA = (
     "presence",
     "citation",
@@ -362,6 +429,15 @@ EXPECTED_EVALUATION_CRITERIA = (
     "actionability",
 )
 
+EXPECTED_OPTIMIZATION_CRITERIA = (
+    "action_conversion",
+    "prioritization",
+    "evidence_inference_separation",
+    "limitations",
+    "over_recommendation_risk",
+    "re_evaluation_criteria",
+)
+
 STRATEGIC_MODULES = {
     "content-brief",
     "topical-authority",
@@ -372,6 +448,12 @@ EVALUATION_MODULES = {
     "geo-scorecard",
     "extractability-audit",
     "trust-signal-audit",
+}
+
+OPTIMIZATION_MODULES = {
+    "rewrite-plan",
+    "content-refresh",
+    "schema-opportunity",
 }
 
 
@@ -791,25 +873,128 @@ def validate_evaluation_prompts(dataset_path: Path) -> list[str]:
     return validate_evaluation_prompt_data(data, str(dataset_path))
 
 
+def validate_optimization_prompt_data(data: Any, source_name: str) -> list[str]:
+    """Valida cenários qualitativos da camada de otimização."""
+    errors: list[str] = []
+    if not isinstance(data, dict):
+        return [f"{source_name}: raiz deve ser um objeto JSON"]
+
+    for field in ("schema_version", "locale", "prompts"):
+        if field not in data:
+            errors.append(f"{source_name}: campo obrigatório ausente: {field}")
+
+    if data.get("locale") != "pt-BR":
+        errors.append(f"{source_name}: locale deve ser pt-BR")
+
+    prompts = data.get("prompts")
+    if not isinstance(prompts, list):
+        errors.append(f"{source_name}: prompts deve ser uma lista")
+        return errors
+    if len(prompts) < 6:
+        errors.append(f"{source_name}: prompts deve conter ao menos 6 cenários")
+
+    prompt_ids: set[str] = set()
+    covered_modules: set[str] = set()
+    for index, prompt in enumerate(prompts, start=1):
+        prefix = f"{source_name}: prompt {index}"
+        if not isinstance(prompt, dict):
+            errors.append(f"{prefix} deve ser um objeto")
+            continue
+
+        for field in (
+            "id",
+            "module",
+            "prompt",
+            "provided_artifacts",
+            "expected_outputs",
+            "expected_criteria",
+        ):
+            if field not in prompt:
+                errors.append(f"{prefix}: campo obrigatório ausente: {field}")
+
+        prompt_id = prompt.get("id")
+        if isinstance(prompt_id, str):
+            if prompt_id in prompt_ids:
+                errors.append(f"{prefix}: id duplicado: {prompt_id}")
+            prompt_ids.add(prompt_id)
+
+        module = prompt.get("module")
+        if module not in OPTIMIZATION_MODULES:
+            errors.append(f"{prefix}: module inválido: {module}")
+        else:
+            covered_modules.add(module)
+
+        provided_artifacts = prompt.get("provided_artifacts")
+        if not isinstance(provided_artifacts, list) or not provided_artifacts:
+            errors.append(
+                f"{prefix}: provided_artifacts deve ser uma lista não vazia"
+            )
+
+        expected_outputs = prompt.get("expected_outputs")
+        if not isinstance(expected_outputs, list) or not expected_outputs:
+            errors.append(f"{prefix}: expected_outputs deve ser uma lista não vazia")
+
+        criteria = prompt.get("expected_criteria")
+        if not isinstance(criteria, dict):
+            errors.append(f"{prefix}: expected_criteria deve ser um objeto")
+            continue
+
+        for criterion in EXPECTED_OPTIMIZATION_CRITERIA:
+            value = criteria.get(criterion)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(
+                    f"{prefix}: expected_criteria deve definir {criterion}"
+                )
+
+    missing_modules = OPTIMIZATION_MODULES - covered_modules
+    if missing_modules:
+        errors.append(
+            f"{source_name}: módulos sem cenário: {', '.join(sorted(missing_modules))}"
+        )
+
+    return errors
+
+
+def validate_optimization_prompts(dataset_path: Path) -> list[str]:
+    """Carrega e valida o dataset da camada de otimização."""
+    try:
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"{dataset_path}: {exc}"]
+
+    return validate_optimization_prompt_data(data, str(dataset_path))
+
+
 def validate_csv_headers(csv_path: Path, required_headers: list[str] | tuple[str, ...]) -> list[str]:
     """Valida se um template CSV contém os headers exigidos."""
     try:
         with csv_path.open("r", encoding="utf-8-sig", newline="") as csv_file:
             reader = csv.reader(csv_file)
-            headers = next(reader, [])
+            rows = list(reader)
     except (OSError, UnicodeError, csv.Error) as exc:
         return [f"{csv_path}: {exc}"]
 
+    headers = rows[0] if rows else []
+    errors: list[str] = []
     missing = [header for header in required_headers if header not in headers]
     if missing:
-        return [
+        errors.append(
             f"{csv_path}: colunas obrigatórias ausentes: {', '.join(missing)}"
-        ]
+        )
 
     if len(headers) != len(set(headers)):
-        return [f"{csv_path}: contém colunas duplicadas"]
+        errors.append(f"{csv_path}: contém colunas duplicadas")
 
-    return []
+    for line_number, row in enumerate(rows[1:], start=2):
+        if not row or not any(cell.strip() for cell in row):
+            continue
+        if len(row) != len(headers):
+            errors.append(
+                f"{csv_path}: linha {line_number} possui {len(row)} colunas; "
+                f"esperado: {len(headers)}"
+            )
+
+    return errors
 
 
 def validate_markdown_sections(
@@ -906,6 +1091,9 @@ def validate_repository(root: Path) -> list[str]:
         "geo-scorecard.md",
         "extractability-audit.md",
         "trust-signal-audit.md",
+        "rewrite-plan.md",
+        "content-refresh.md",
+        "schema-opportunity.md",
     ):
         errors.extend(
             validate_markdown_sections(
@@ -937,6 +1125,11 @@ def validate_repository(root: Path) -> list[str]:
     errors.extend(
         validate_evaluation_prompts(
             root / "datasets" / "golden" / "evaluation-prompts-pt-br.json"
+        )
+    )
+    errors.extend(
+        validate_optimization_prompts(
+            root / "datasets" / "golden" / "optimization-prompts-pt-br.json"
         )
     )
     errors.extend(
@@ -1011,10 +1204,34 @@ def validate_repository(root: Path) -> list[str]:
             TRUST_SIGNAL_AUDIT_TEMPLATE_SECTIONS,
         )
     )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "rewrite-plan-template.md",
+            REWRITE_PLAN_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "templates" / "content-refresh-plan.csv",
+            CONTENT_REFRESH_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_csv_headers(
+            root / "templates" / "schema-opportunity-map.csv",
+            SCHEMA_OPPORTUNITY_HEADERS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "optimization-cycle-template.md",
+            OPTIMIZATION_CYCLE_TEMPLATE_SECTIONS,
+        )
+    )
     errors.extend(validate_agents_discovery(root))
 
     agents_content = (root / "AGENTS.md").read_text(encoding="utf-8")
-    for marker in ("[FATO]", "[INFERÊNCIA]", "[HIPÓTESE]"):
+    for marker in ("[FATO]", "[INFERÊNCIA]", "[HIPÓTESE]", "[RECOMENDAÇÃO]"):
         if marker not in agents_content:
             errors.append(f"AGENTS.md: marcador obrigatório ausente: {marker}")
 

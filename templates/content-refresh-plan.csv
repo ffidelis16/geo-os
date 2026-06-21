@@ -1,0 +1,2 @@
+asset,page_or_section,target_intent,observed_gap,refresh_action,evidence_needed,source_needed,impact_estimate,effort_estimate,priority,risk,owner,status,re_evaluation_criteria
+https://example.com/page,Example section,Example intent,geo-scorecard:GAP-001 - Gap de exemplo,update,Evidência primária atualizada,Fonte oficial,medium,low,high,medium,,planned,Remover esta linha antes do uso

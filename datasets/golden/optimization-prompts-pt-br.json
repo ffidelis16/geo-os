@@ -1,0 +1,167 @@
+{
+  "schema_version": "0.1.0",
+  "dataset_id": "geo-os-optimization-prompts-pt-br",
+  "locale": "pt-BR",
+  "description": "Cenários qualitativos para testar a conversão de gaps auditados em planos de otimização e reavaliação.",
+  "usage_notes": [
+    "Avaliar planos e decisões, não reescritas finais.",
+    "Exigir origem do gap, classificação epistêmica e critério de reavaliação.",
+    "Não permitir promessas de ranking, citação ou presença em mecanismos generativos."
+  ],
+  "prompts": [
+    {
+      "id": "OPT-REWRITE-001",
+      "module": "rewrite-plan",
+      "prompt": "Converta os gaps do scorecard, do extractability audit e do trust signal audit em um plano de reescrita por seção. Não redija o conteúdo final.",
+      "provided_artifacts": [
+        "conteúdo completo",
+        "geo-scorecard",
+        "extractability-audit",
+        "trust-signal-audit",
+        "target intent e entity map"
+      ],
+      "expected_outputs": [
+        "gaps normalizados por origem",
+        "plano por seção",
+        "ações priorizadas",
+        "critérios de reavaliação"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Cada gap gera uma intervenção específica por seção ou um bloqueio justificado.",
+        "prioritization": "Impacto, esforço, risco, confiança e dependências orientam a ordem.",
+        "evidence_inference_separation": "Fatos observados, causas prováveis, hipóteses e recomendações permanecem separados.",
+        "limitations": "Registra conteúdo, fontes e sinais não fornecidos.",
+        "over_recommendation_risk": "Evita reescrita completa quando gaps locais são suficientes.",
+        "re_evaluation_criteria": "Cada ação possui auditoria e critério observável para revisão."
+      }
+    },
+    {
+      "id": "OPT-REWRITE-002",
+      "module": "rewrite-plan",
+      "prompt": "Revise um plano que já escreveu respostas finais, inventou fontes e recomendou answer blocks para todas as seções. Produza somente um plano corrigido.",
+      "provided_artifacts": [
+        "plano anterior",
+        "conteúdo original",
+        "evidence ledger parcial",
+        "auditoria de extraibilidade"
+      ],
+      "expected_outputs": [
+        "problemas do plano anterior",
+        "intervenções corrigidas",
+        "bloqueios de evidência",
+        "ciclo de reavaliação"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Substitui texto final por instruções, estrutura sugerida e critérios de aceite.",
+        "prioritization": "Remove ações sem gap e ordena as restantes por valor e risco.",
+        "evidence_inference_separation": "Fontes inventadas são removidas e lacunas ficam como evidência necessária.",
+        "limitations": "Declara quando o input não permite definir bloco, fonte ou entidade.",
+        "over_recommendation_risk": "Descarta answer blocks sem intent, claim ou evidência compatível.",
+        "re_evaluation_criteria": "Define como verificar cada correção sem depender de impressão geral."
+      }
+    },
+    {
+      "id": "OPT-REFRESH-001",
+      "module": "content-refresh",
+      "prompt": "Crie um plano de refresh para um artigo com estatísticas antigas, boa estrutura e algumas lacunas de intenção. Diferencie o que manter, atualizar, provar e expandir.",
+      "provided_artifacts": [
+        "artigo e data da versão",
+        "geo-scorecard",
+        "content brief",
+        "evidence ledger",
+        "intent map"
+      ],
+      "expected_outputs": [
+        "ações por seção",
+        "fontes necessárias",
+        "riscos e prioridades",
+        "próxima auditoria"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Converte desatualização, lacunas de intenção e evidência em ações distintas.",
+        "prioritization": "Claims materiais vencidos vêm antes de expansão opcional.",
+        "evidence_inference_separation": "Data antiga não é tratada como prova automática de erro factual.",
+        "limitations": "Registra ausência de analytics, histórico ou fontes verificadas.",
+        "over_recommendation_risk": "Preserva seções sólidas e evita atualizar o ativo inteiro sem necessidade.",
+        "re_evaluation_criteria": "Indica critérios e gatilho para repetir auditorias relevantes."
+      }
+    },
+    {
+      "id": "OPT-REFRESH-002",
+      "module": "content-refresh",
+      "prompt": "Planeje a consolidação de duas páginas parcialmente sobrepostas sem assumir canibalização nem remover URLs automaticamente.",
+      "provided_artifacts": [
+        "conteúdo das duas páginas",
+        "intents",
+        "entity map",
+        "topical authority map",
+        "links internos fornecidos"
+      ],
+      "expected_outputs": [
+        "diagnóstico de sobreposição",
+        "opções manter, consolidar ou diferenciar",
+        "riscos e dependências",
+        "critérios de decisão"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Relaciona sobreposição observada a ações por seção e ativo.",
+        "prioritization": "Prioriza preservação de função, evidência e relações antes da remoção.",
+        "evidence_inference_separation": "Risco de canibalização permanece inferência sem dados suficientes.",
+        "limitations": "Declara dados de tráfego, indexação ou conversão ausentes.",
+        "over_recommendation_risk": "Oferece diferenciação ou manutenção quando consolidação não está sustentada.",
+        "re_evaluation_criteria": "Define sinais necessários para decidir manter, revisar, expandir ou abandonar."
+      }
+    },
+    {
+      "id": "OPT-SCHEMA-001",
+      "module": "schema-opportunity",
+      "prompt": "Mapeie oportunidades de schema para uma página de serviço com autor, organização e breadcrumbs, sem implementar o markup.",
+      "provided_artifacts": [
+        "conteúdo visível",
+        "entity map",
+        "trust signal audit",
+        "schema atual",
+        "documentação oficial aplicável"
+      ],
+      "expected_outputs": [
+        "tipos candidatos",
+        "propriedades e campos ausentes",
+        "riscos",
+        "critérios de validação"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Converte conteúdo visível em oportunidades candidatas e bloqueios.",
+        "prioritization": "Adequação e completude vêm antes de variedade de tipos.",
+        "evidence_inference_separation": "Diferencia propriedades observadas de campos apenas candidatos.",
+        "limitations": "Registra documentação, conteúdo ou dados técnicos ausentes.",
+        "over_recommendation_risk": "Não recomenda tipos sem correspondência no ativo.",
+        "re_evaluation_criteria": "Exige sintaxe válida, correspondência factual e revisão humana."
+      }
+    },
+    {
+      "id": "OPT-SCHEMA-002",
+      "module": "schema-opportunity",
+      "prompt": "Revise uma proposta que recomenda FAQPage, HowTo e AggregateRating sem perguntas reais, processo claro ou avaliações legítimas.",
+      "provided_artifacts": [
+        "conteúdo da página",
+        "proposta de schema",
+        "fontes de reviews fornecidas",
+        "documentação oficial aplicável"
+      ],
+      "expected_outputs": [
+        "oportunidades descartadas ou bloqueadas",
+        "justificativas",
+        "conteúdo necessário",
+        "critérios de validação"
+      ],
+      "expected_criteria": {
+        "action_conversion": "Transforma inadequações em decisões not_applicable ou blocked.",
+        "prioritization": "Evita implementação de alto risco antes de corrigir conteúdo e evidência.",
+        "evidence_inference_separation": "Não trata possibilidade temática como conteúdo existente.",
+        "limitations": "Declara o que não pode ser validado com os materiais fornecidos.",
+        "over_recommendation_risk": "Rejeita FAQs, processos e ratings artificiais.",
+        "re_evaluation_criteria": "Define condições mínimas para reconsiderar cada oportunidade."
+      }
+    }
+  ]
+}

@@ -90,6 +90,18 @@ Revisar o scorecard, extractability audit e trust signal audit quando mudar:
 
 Scores só podem ser comparados quando escopo, critérios, pesos e tratamento de `N/A` forem compatíveis. Toda reavaliação deve registrar data, versão do método, cobertura e evidências utilizadas.
 
+### Planos de otimização
+
+Revisar rewrite plans, content refresh plans, schema opportunities e optimization cycles quando mudar:
+
+- o gap de origem ou sua prioridade;
+- o conteúdo, intent, entidade ou evidência;
+- a documentação oficial de schema;
+- o owner, dependência, risco ou esforço;
+- o critério de sucesso ou o protocolo de reavaliação.
+
+Encerrar cada ciclo com decisão explícita: `manter`, `revisar`, `expandir` ou `abandonar`. Não promover resultado esperado de `[HIPÓTESE]` para `[FATO]` sem evidência da reavaliação.
+
 ## Regras para estatísticas
 
 Toda estatística deve registrar:
