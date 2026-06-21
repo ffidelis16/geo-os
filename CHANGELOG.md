@@ -7,6 +7,7 @@ O projeto usa histórico Git como fonte detalhada. Este arquivo resume as camada
 - Adicionado `geo-os-orchestrator` como roteador para o menor fluxo suficiente.
 - Adicionados contrato de seleção de workflow e dez cenários qualitativos de roteamento.
 - Estendida a validação para rejeitar fluxos, skills, templates e critérios inexistentes.
+- Esclarecido que skills são acionadas no chat do Codex, não no CMD ou PowerShell.
 
 ## 2026-06-21 — Consolidação da base de conhecimento
 

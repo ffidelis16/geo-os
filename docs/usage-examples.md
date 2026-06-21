@@ -4,11 +4,13 @@ Os exemplos usam o projeto fictício **Farol Urbano**, com domínio reservado `f
 
 ## Escolher um fluxo com o orquestrador
 
-Quando o pedido ainda não indica a skill correta:
+Quando o pedido ainda não indica a skill correta, cole a instrução no **chat do Codex** aberto na raiz do projeto:
 
 ```text
 $geo-os-orchestrator Tenho uma landing page antiga, conheço os principais gaps e quero preparar uma atualização sem escrever o texto final.
 ```
+
+Não cole essa instrução no CMD ou PowerShell. O prefixo `$geo-os-orchestrator` aciona uma skill no Codex; não representa um executável do sistema operacional.
 
 Resultado esperado:
 

@@ -111,11 +111,13 @@ python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```
 
-Para começar por um pedido em linguagem natural:
+Para começar por um pedido em linguagem natural, abra o projeto no Codex e cole a instrução no **chat do Codex**:
 
 ```text
 $geo-os-orchestrator Quero melhorar uma landing page existente sem reescrever o texto final.
 ```
+
+Não execute no CMD: `$geo-os-orchestrator` não é um comando do Windows. O terminal continua sendo usado apenas para comandos como testes, validação e Git.
 
 O resultado indica fluxo, skills em ordem, inputs faltantes, templates, pasta em `outputs/`, limitações e o próximo comando operacional.
 

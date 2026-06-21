@@ -1091,6 +1091,21 @@ description: Use quando for necessário testar uma skill de exemplo.
                 with self.subTest(path=relative_path, marker=marker):
                     self.assertIn(marker, content)
 
+    def test_orchestrator_usage_distinguishes_codex_chat_from_terminal(self) -> None:
+        contracts = {
+            "README.md": ("chat do codex", "não execute no cmd"),
+            "docs/usage-examples.md": ("chat do codex", "cmd ou powershell"),
+            "templates/workflow-selection-template.md": ("chat do codex",),
+        }
+
+        for relative_path, markers in contracts.items():
+            content = (REPO_ROOT / relative_path).read_text(
+                encoding="utf-8"
+            ).lower()
+            for marker in markers:
+                with self.subTest(path=relative_path, marker=marker):
+                    self.assertIn(marker, content)
+
     def test_orchestrator_module_and_skill_are_routers(self) -> None:
         module = (
             REPO_ROOT / "modules" / "geo-os-orchestrator.md"

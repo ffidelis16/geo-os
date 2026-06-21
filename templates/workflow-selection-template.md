@@ -58,6 +58,8 @@
 
 ## Comando pronto para execução
 
+Cole o comando abaixo no **chat do Codex**, não no terminal:
+
 ```text
 $skill-name Execute a etapa selecionada usando os inputs disponíveis. Registre lacunas, limitações e outputs em outputs/<project-slug>/.
 ```
