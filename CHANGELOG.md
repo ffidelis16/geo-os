@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-23 — Audit hardening
+
+- Endurece a higiene pública para e-mails, caminhos Linux e arquivos novos não ignorados.
+- Torna `geo-diagnosis` e `competitor-analysis` expansões condicionais dos dez fluxos existentes.
+- Clarifica as fronteiras entre diagnóstico de domínio, scorecard por ativo e auditoria de extraibilidade.
+- Valida o contrato do relatório de auditoria e rejeita âncoras vazias em rubricas.
+- Documenta a não comparabilidade entre GEO Readiness e GEO Scorecard.
+
 O projeto usa histórico Git como fonte detalhada. Este arquivo resume as camadas publicáveis.
 
 ## 2026-06-21 — Orquestração

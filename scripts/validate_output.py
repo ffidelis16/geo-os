@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -192,6 +193,21 @@ GEO_SCORECARD_TEMPLATE_SECTIONS = (
     "próximos passos",
 )
 
+AUDIT_REPORT_TEMPLATE_SECTIONS = (
+    "metadados",
+    "resumo executivo",
+    "perguntas da auditoria",
+    "escopo e limitações",
+    "evidências",
+    "scorecards",
+    "diagnóstico",
+    "backlog priorizado",
+    "plano de teste",
+    "riscos",
+    "próximas ações",
+    "apêndice",
+)
+
 EXTRACTABILITY_AUDIT_TEMPLATE_SECTIONS = (
     "metadados",
     "asset e target intent",
@@ -334,18 +350,6 @@ PUBLIC_GITIGNORE_ENTRIES = (
     "Thumbs.db",
 )
 
-PUBLIC_SCAN_ROOTS = {
-    ".github",
-    ".agents",
-    "datasets",
-    "docs",
-    "examples",
-    "modules",
-    "rubrics",
-    "skills",
-    "templates",
-}
-
 PUBLIC_ROOT_FILES = {
     "README.md",
     "AGENTS.md",
@@ -353,6 +357,9 @@ PUBLIC_ROOT_FILES = {
     "LICENSE",
     ".gitignore",
 }
+
+PUBLIC_EMAIL_ALLOWLIST: frozenset[str] = frozenset()
+EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 ENTITY_MAP_HEADERS = (
     "entity_id",
@@ -601,12 +608,14 @@ ORCHESTRATOR_FLOWS = {
 
 ORCHESTRATOR_TEMPLATE_PATHS = {
     "templates/workflow-selection-template.md",
+    "templates/audit-report.md",
     "templates/extractability-audit-template.md",
     "templates/trust-signal-audit-template.md",
     "templates/geo-scorecard-template.md",
     "templates/entity-map.csv",
     "templates/evidence-ledger.csv",
     "templates/content-brief-template.md",
+    "templates/competitor-gap-analysis.csv",
     "templates/rewrite-plan-template.md",
     "templates/optimization-cycle-template.md",
     "templates/answer-block-template.md",
@@ -757,6 +766,14 @@ def validate_rubric_data(data: Any, source_name: str) -> list[str]:
         scoring = criterion.get("scoring")
         if not isinstance(scoring, dict) or not {0, 2, 4}.issubset(scoring):
             errors.append(f"{prefix}: scoring deve definir ao menos 0, 2 e 4")
+        elif any(
+            not isinstance(scoring.get(level), str)
+            or not scoring.get(level, "").strip()
+            for level in (0, 2, 4)
+        ):
+            errors.append(
+                f"{prefix}: âncoras de scoring 0, 2 e 4 não podem ser vazias"
+            )
 
     if weights and round(sum(weights), 6) not in {1.0, 100.0}:
         errors.append(
@@ -1331,19 +1348,65 @@ def validate_required_substrings(
     ]
 
 
-def validate_public_hygiene(root: Path) -> list[str]:
+def _hygiene_candidate_files(root: Path) -> list[Path]:
+    """Lista arquivos rastreados e não ignorados, com fallback sem Git."""
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "ls-files",
+                "--cached",
+                "--others",
+                "--exclude-standard",
+            ],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            check=True,
+        )
+    except (OSError, subprocess.SubprocessError, UnicodeError):
+        return [path for path in root.rglob("*") if path.is_file()]
+
+    return [
+        root / relative
+        for line in result.stdout.splitlines()
+        if (relative := line.strip())
+    ]
+
+
+def validate_public_hygiene(
+    root: Path,
+    email_allowlist: set[str] | frozenset[str] | None = None,
+) -> list[str]:
     """Detecta caminhos pessoais e materiais privados em áreas públicas."""
     root = root.resolve()
     errors: list[str] = []
+    allowed_emails = {
+        email.lower()
+        for email in (
+            PUBLIC_EMAIL_ALLOWLIST if email_allowlist is None else email_allowlist
+        )
+    }
     personal_path_patterns = (
-        re.compile(r"[A-Za-z]:[\\/]+Users[\\/]+", re.IGNORECASE),
-        re.compile(r"/Users/[^/\s]+/", re.IGNORECASE),
-        re.compile(r"\.codex[\\/]+attachments", re.IGNORECASE),
+        re.compile(r"[A-Za-z]:[\\/]+" + "Users" + r"[\\/]+", re.IGNORECASE),
+        re.compile("/" + "Users" + r"/[^/\s]+/", re.IGNORECASE),
+        re.compile("/" + "home" + r"/[^/\s]+/", re.IGNORECASE),
+        re.compile(r"\.codex[\\/]+" + "attachments", re.IGNORECASE),
     )
     private_extensions = {".pdf", ".docx", ".pptx"}
-    text_extensions = {".md", ".csv", ".json", ".yaml", ".yml", ".html", ".txt"}
+    text_extensions = {
+        ".md",
+        ".csv",
+        ".json",
+        ".yaml",
+        ".yml",
+        ".html",
+        ".txt",
+        ".py",
+    }
 
-    for path in root.rglob("*"):
+    for path in _hygiene_candidate_files(root):
         if not path.is_file():
             continue
 
@@ -1359,14 +1422,6 @@ def validate_public_hygiene(root: Path) -> list[str]:
             "reports",
             "__pycache__",
         }:
-            continue
-
-        is_public_location = (
-            relative.name in PUBLIC_ROOT_FILES
-            if len(relative.parts) == 1
-            else relative.parts[0] in PUBLIC_SCAN_ROOTS
-        )
-        if not is_public_location:
             continue
 
         suffix = path.suffix.lower()
@@ -1392,7 +1447,11 @@ def validate_public_hygiene(root: Path) -> list[str]:
 
         if any(pattern.search(content) for pattern in personal_path_patterns):
             errors.append(f"{relative}: caminho pessoal encontrado")
-        if "data:image/" in content.lower():
+        for email in EMAIL_PATTERN.findall(content):
+            if email.lower() not in allowed_emails:
+                errors.append(f"{relative}: e-mail não allowlistado: {email}")
+                break
+        if "data:" + "image/" in content.lower():
             errors.append(f"{relative}: imagem base64 incorporada não permitida")
 
     return errors
@@ -1565,6 +1624,12 @@ def validate_repository(root: Path) -> list[str]:
         validate_markdown_sections(
             root / "templates" / "geo-scorecard-template.md",
             GEO_SCORECARD_TEMPLATE_SECTIONS,
+        )
+    )
+    errors.extend(
+        validate_markdown_sections(
+            root / "templates" / "audit-report.md",
+            AUDIT_REPORT_TEMPLATE_SECTIONS,
         )
     )
     errors.extend(

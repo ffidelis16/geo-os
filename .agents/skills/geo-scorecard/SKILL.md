@@ -1,6 +1,6 @@
 ---
 name: geo-scorecard
-description: Use quando um conteúdo existente precisa ser pontuado e diagnosticado quanto a intenção, entidades, evidência, citabilidade, answer blocks, extraibilidade, confiança, frescor, estrutura, limitações e acionabilidade.
+description: Use quando um único ativo com conteúdo fornecido precisa ser pontuado e diagnosticado quanto a intenção, entidades, evidência, citabilidade, answer blocks, extraibilidade, confiança, frescor, estrutura e acionabilidade. Consolida auditorias; não é o primeiro diagnóstico de conteúdo bruto.
 ---
 
 # Fonte canônica

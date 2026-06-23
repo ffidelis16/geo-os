@@ -1,6 +1,6 @@
 ---
 name: geo-diagnosis
-description: Diagnostica prontidão GEO de sites, páginas ou ecossistemas de conteúdo. Use em auditorias de AI Search, definição de baseline, avaliação de citabilidade e criação de backlog priorizado baseado em evidências.
+description: Diagnostica prontidão GEO no escopo de domínio, site ou ecossistema de conteúdo, não um único ativo colado. Use para baseline de AI Search, avaliação de citabilidade e backlog priorizado baseado em evidências.
 ---
 
 # Diagnóstico GEO

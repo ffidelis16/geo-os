@@ -194,6 +194,7 @@ O validador verifica estrutura e contratos de arquivo. Ele não substitui revis�
 - Seguir `docs/update-policy.md` para mudanças de versão.
 - Documentar mudanças incompatíveis nos contratos de CSV, JSON ou YAML.
 - Atualizar módulos canônicos antes de ajustar skills que dependem deles.
+- O validador não detecta drift semântico entre módulo e skill. Enquanto a consolidação estiver adiada, revisar manualmente a skill correspondente sempre que o processo de um módulo mudar.
 - Revisar content briefs quando intent, evidência, mapa tópico ou cenário competitivo mudar materialmente.
 - Revisar planos de otimização quando gaps, fontes, conteúdo, owners ou critérios de sucesso mudarem.
 - Atualizar `CHANGELOG.md` e revisar higiene pública antes de cada release.

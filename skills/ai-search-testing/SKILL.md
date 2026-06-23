@@ -81,3 +81,4 @@ Opcionais: páginas-alvo, respostas anteriores, screenshots, parâmetros de cont
 - Misturar menção, recomendação, citação e absorção.
 - Forçar busca web e comparar com uma rodada sem busca.
 - Reportar percentuais sem informar amostra e repetições.
+- Tratar `notes` como contrato agregável: `unsupported_claims`, `fabricated_citations` e `entity_confusion` permanecem ali como limitação conhecida até recorrência em um segundo benchmark justificar novas colunas.

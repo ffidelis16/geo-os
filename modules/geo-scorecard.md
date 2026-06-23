@@ -6,6 +6,8 @@ Avaliar se um conteúdo existente está pronto para ser entendido, confiado, ext
 
 `[FRAMEWORK PRÓPRIO]` O scorecard consolida sinais observáveis. Ele não estima probabilidade de ranking ou citação e não substitui `geo-readiness.yaml`, `citation-readiness.yaml` ou `entity-authority.yaml`.
 
+`geo-readiness.yaml` avalia um domínio, site ou ecossistema como porta de entrada para o trabalho. O GEO Scorecard avalia um ativo específico. Ambos produzem um número de `0–100`, mas medem objetos diferentes e não são comparáveis entre si.
+
 ## Quando usar
 
 - Para auditar conteúdo fornecido pelo usuário.

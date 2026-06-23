@@ -1,6 +1,6 @@
 ---
 name: extractability-audit
-description: Use quando um conteúdo existente precisa ser auditado quanto a respostas diretas, definições, blocos autossuficientes, headings, listas, tabelas, comparações, passos, FAQs, claims, dados citáveis, ambiguidades e dependência visual.
+description: Use quando um ativo fornecido precisa ser auditado apenas quanto a estrutura e extraibilidade, incluindo respostas diretas, definições, blocos autossuficientes, headings, listas, tabelas, passos, FAQs, dados citáveis, ambiguidades e dependência visual. É uma subdimensão que alimenta o geo-scorecard.
 ---
 
 # Extractability Audit

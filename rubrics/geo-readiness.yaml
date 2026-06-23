@@ -2,6 +2,7 @@ id: geo-readiness
 name: Prontidão GEO
 version: 0.2.0
 purpose: Avaliar se um escopo possui fundação técnica, editorial, semântica e de mensuração para trabalho GEO.
+# Escopo: domínio/site como porta de entrada. Não comparar com o GEO Scorecard por ativo.
 
 scale:
   min: 0

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -484,6 +485,21 @@ SAMPLE_SCORECARD_SECTIONS = (
     "limitações",
 )
 
+AUDIT_REPORT_SECTIONS = (
+    "metadados",
+    "resumo executivo",
+    "perguntas da auditoria",
+    "escopo e limitações",
+    "evidências",
+    "scorecards",
+    "diagnóstico",
+    "backlog priorizado",
+    "plano de teste",
+    "riscos",
+    "próximas ações",
+    "apêndice",
+)
+
 PUBLIC_GITIGNORE_ENTRIES = (
     "private/",
     "sources/",
@@ -598,6 +614,39 @@ description: Use quando for necessário testar uma skill de exemplo.
         errors = self.validator.validate_rubric_data(rubric, "sample.yaml")
 
         self.assertTrue(any("0–4" in error for error in errors))
+
+    def test_validate_rubric_rejects_empty_scoring_anchor(self) -> None:
+        rubric = {
+            "id": "sample",
+            "name": "Rubrica de exemplo",
+            "version": "0.1.0",
+            "scale": {
+                "min": 0,
+                "max": 4,
+                "labels": {
+                    0: "ausente",
+                    1: "fraco",
+                    2: "parcial",
+                    3: "sólido",
+                    4: "forte",
+                },
+            },
+            "criteria": [
+                {
+                    "id": "criterion",
+                    "name": "Critério",
+                    "weight": 1.0,
+                    "evidence_required": ["Fonte verificável"],
+                    "scoring": {0: "", 2: "Parcial", 4: "Forte"},
+                }
+            ],
+            "interpretation": [{"min": 0, "max": 4, "label": "Base"}],
+            "limitations": ["Não substitui análise humana."],
+        }
+
+        errors = self.validator.validate_rubric_data(rubric, "sample.yaml")
+
+        self.assertTrue(any("não podem ser vazias" in error for error in errors))
 
     def test_validate_benchmark_requires_behavioral_criteria(self) -> None:
         benchmark = {
@@ -1155,6 +1204,39 @@ description: Use quando for necessário testar uma skill de exemplo.
             for criterion in ORCHESTRATOR_PROMPT_CRITERIA:
                 self.assertIn(criterion, prompt["expected_criteria"])
 
+    def test_orchestrator_dataset_covers_conditional_expansion_skills(self) -> None:
+        dataset_path = (
+            REPO_ROOT / "datasets" / "golden" / "orchestrator-prompts-pt-br.json"
+        )
+        data = json.loads(dataset_path.read_text(encoding="utf-8"))
+        prompts_by_id = {prompt["id"]: prompt for prompt in data["prompts"]}
+
+        self.assertIn("ORCH-DIAGNOSIS-001", prompts_by_id)
+        self.assertEqual(
+            prompts_by_id["ORCH-DIAGNOSIS-001"]["expected_skills"],
+            ["geo-diagnosis"],
+        )
+        self.assertIn("ORCH-COMPETITOR-001", prompts_by_id)
+        self.assertEqual(
+            prompts_by_id["ORCH-COMPETITOR-001"]["expected_skills"],
+            ["competitor-analysis"],
+        )
+
+    def test_evaluation_skill_descriptions_have_distinct_scopes(self) -> None:
+        expected_markers = {
+            "geo-diagnosis": "não um único ativo",
+            "geo-scorecard": "um único ativo com conteúdo fornecido",
+            "extractability-audit": "apenas quanto a estrutura e extraibilidade",
+        }
+
+        for skill_name, marker in expected_markers.items():
+            skill_path = REPO_ROOT / "skills" / skill_name / "SKILL.md"
+            metadata, _ = self.validator.parse_skill_frontmatter(
+                skill_path.read_text(encoding="utf-8")
+            )
+            with self.subTest(skill=skill_name):
+                self.assertIn(marker, metadata["description"].lower())
+
     def test_validate_orchestrator_prompts_rejects_invalid_contract(self) -> None:
         validator = getattr(
             self.validator,
@@ -1346,13 +1428,117 @@ description: Use quando for necessário testar uma skill de exemplo.
             root = Path(temp_dir)
             (root / "docs").mkdir()
             (root / "docs" / "unsafe.md").write_text(
-                r"Fonte em C:\Users\example\Downloads\course.pdf",
+                "Fonte em " + "C:" + r"\Users\example\Downloads\course.pdf",
                 encoding="utf-8",
             )
 
             errors = validator(root)
 
         self.assertTrue(any("caminho pessoal" in error for error in errors))
+
+    def test_validate_public_hygiene_rejects_linux_home_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            (root / "notes").mkdir()
+            (root / "notes" / "unsafe.md").write_text(
+                "Fonte em /" + "home/fernando/course.pdf",
+                encoding="utf-8",
+            )
+
+            errors = self.validator.validate_public_hygiene(root)
+
+        self.assertTrue(any("caminho pessoal" in error for error in errors))
+
+    def test_validate_public_hygiene_rejects_unlisted_public_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            subprocess.run(
+                ["git", "init"],
+                cwd=root,
+                capture_output=True,
+                check=True,
+            )
+            (root / "notes").mkdir()
+            (root / "notes" / "leak.md").write_text(
+                "Arquivo em " + "C:" + r"\Users\fernando\secret.txt",
+                encoding="utf-8",
+            )
+
+            errors = self.validator.validate_public_hygiene(root)
+
+        self.assertTrue(any("caminho pessoal" in error for error in errors))
+
+    def test_validate_public_hygiene_scans_python_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            (root / "scripts").mkdir()
+            (root / "scripts" / "unsafe.py").write_text(
+                'SOURCE = "' + "C:" + r'\Users\fernando\secret.txt"',
+                encoding="utf-8",
+            )
+
+            errors = self.validator.validate_public_hygiene(root)
+
+        self.assertTrue(any("caminho pessoal" in error for error in errors))
+
+    def test_validate_public_hygiene_rejects_email_unless_allowlisted(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            public_email = "public" + "@" + "example.com"
+            (root / "README.md").write_text(
+                f"Contato: {public_email}",
+                encoding="utf-8",
+            )
+
+            rejected = self.validator.validate_public_hygiene(root)
+            allowed = self.validator.validate_public_hygiene(
+                root,
+                email_allowlist={public_email},
+            )
+
+        self.assertTrue(any("e-mail não allowlistado" in error for error in rejected))
+        self.assertEqual(allowed, [])
+
+    def test_repository_validation_rejects_incomplete_audit_report(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "geo-os"
+            shutil.copytree(
+                REPO_ROOT,
+                root,
+                ignore=shutil.ignore_patterns(
+                    ".git",
+                    "private",
+                    "outputs",
+                    "sources",
+                    "__pycache__",
+                ),
+            )
+            audit_report = root / "templates" / "audit-report.md"
+            content = audit_report.read_text(encoding="utf-8")
+            audit_report.write_text(
+                content.replace("## Plano de teste", "### Plano de teste"),
+                encoding="utf-8",
+            )
+
+            errors = self.validator.validate_repository(root)
+
+        self.assertTrue(
+            any(
+                "audit-report.md" in error and "plano de teste" in error
+                for error in errors
+            )
+        )
+
+    def test_readiness_and_scorecard_are_documented_as_non_comparable(self) -> None:
+        scorecard = (REPO_ROOT / "modules" / "geo-scorecard.md").read_text(
+            encoding="utf-8"
+        ).lower()
+        readiness = (REPO_ROOT / "rubrics" / "geo-readiness.yaml").read_text(
+            encoding="utf-8"
+        ).lower()
+
+        self.assertIn("não são comparáveis", scorecard)
+        self.assertIn("não comparar com o geo scorecard", readiness)
 
     def test_repository_has_no_public_hygiene_violations(self) -> None:
         errors = self.validator.validate_public_hygiene(REPO_ROOT)

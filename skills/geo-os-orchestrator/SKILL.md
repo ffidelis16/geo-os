@@ -38,7 +38,7 @@ Opcionais: conteúdo, URL, intenção, público, entidade, fontes, auditorias, c
 ## Processo
 
 1. Preservar o pedido original.
-2. Classificar a demanda em um dos dez fluxos canônicos do módulo.
+2. Classificar a demanda em um dos dez fluxos canônicos do módulo, considerando suas expansões condicionais.
 3. Escolher o menor fluxo suficiente e descartar etapas sem necessidade demonstrada.
 4. Mapear somente skills existentes e ordenar dependências reais.
 5. Separar inputs disponíveis de inputs faltantes.

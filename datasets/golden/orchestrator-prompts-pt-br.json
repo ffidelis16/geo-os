@@ -42,6 +42,60 @@
       }
     },
     {
+      "id": "ORCH-DIAGNOSIS-001",
+      "flow": "audit-existing-content",
+      "prompt": "Quero diagnosticar a prontidão GEO do meu site inteiro e priorizar um backlog. Tenho objetivos, domínio, locale e uma lista inicial de URLs, mas não forneci o conteúdo completo de um único ativo.",
+      "provided_inputs": [
+        "objetivos",
+        "domínio",
+        "locale",
+        "lista inicial de URLs"
+      ],
+      "expected_skills": [
+        "geo-diagnosis"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/audit-report.md"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona auditoria de conteúdo existente com expansão para diagnóstico de domínio, site ou ecossistema.",
+        "minimal_sufficiency": "Não força scorecard por ativo nem as auditorias de extraibilidade e confiança sem conteúdo fornecido.",
+        "missing_inputs": "Registra páginas prioritárias, período, fontes e acessos ainda ausentes.",
+        "skill_validity": "Usa geo-diagnosis como expansão condicional do fluxo existente.",
+        "template_guidance": "Indica workflow selection e audit report.",
+        "limitations": "Não transforma ausência de acesso em falha do site nem promete citação.",
+        "next_command": "Entrega comando para geo-diagnosis com escopo de domínio."
+      }
+    },
+    {
+      "id": "ORCH-COMPETITOR-001",
+      "flow": "audit-existing-content",
+      "prompt": "Compare esta página com duas páginas concorrentes equivalentes para identificar gaps observáveis de entidades, evidência, estrutura e citabilidade. As três páginas e o objetivo competitivo foram fornecidos.",
+      "provided_inputs": [
+        "página principal",
+        "duas páginas concorrentes comparáveis",
+        "objetivo competitivo",
+        "target intent"
+      ],
+      "expected_skills": [
+        "competitor-analysis"
+      ],
+      "expected_templates": [
+        "templates/workflow-selection-template.md",
+        "templates/competitor-gap-analysis.csv"
+      ],
+      "expected_criteria": {
+        "flow_selection": "Seleciona auditoria de conteúdo existente com expansão competitiva.",
+        "minimal_sufficiency": "Não executa diagnóstico de domínio, benchmark de engines ou auditoria completa sem necessidade.",
+        "missing_inputs": "Solicita data, locale ou fontes somente quando forem materiais à comparação.",
+        "skill_validity": "Usa competitor-analysis como expansão condicional do fluxo existente.",
+        "template_guidance": "Indica workflow selection e competitor gap analysis.",
+        "limitations": "Não trata ranking, word count ou estrutura concorrente como prova de qualidade.",
+        "next_command": "Entrega comando para competitor-analysis com as páginas comparáveis."
+      }
+    },
+    {
       "id": "ORCH-PLAN-001",
       "flow": "plan-new-content",
       "prompt": "Quero criar um artigo novo sobre segurança de IA para pequenas empresas. Tenho tema e público, mas ainda não defini entidades nem fontes.",
