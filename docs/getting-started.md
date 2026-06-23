@@ -12,8 +12,8 @@ O projeto não precisa de banco, serviço externo, crawler ou chave de API.
 ## Início rápido
 
 ```powershell
-git clone <URL-DO-REPOSITORIO>
-cd geo-os
+git clone https://github.com/ffidelis16/GEO-OS.git
+cd GEO-OS
 python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```

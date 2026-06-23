@@ -35,8 +35,8 @@ Requisitos:
 - PyYAML.
 
 ```powershell
-git clone https://github.com/ffidelis16/geo-os.git
-cd geo-os
+git clone https://github.com/ffidelis16/GEO-OS.git
+cd GEO-OS
 python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```
@@ -238,7 +238,7 @@ python -m unittest discover -s tests -v
 python scripts/validate_output.py --root .
 ```
 
-Use [GitHub Issues](https://github.com/ffidelis16/geo-os/issues) para relatar bugs, inconsistências factuais ou propostas de melhoria.
+Use [GitHub Issues](https://github.com/ffidelis16/GEO-OS/issues) para relatar bugs, inconsistências factuais ou propostas de melhoria.
 
 Não envie materiais privados, outputs com dados pessoais ou exemplos baseados em marcas reais sem necessidade. Consulte [docs/contribution-guide.md](docs/contribution-guide.md).
 
